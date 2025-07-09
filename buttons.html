@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+width: 95%;
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: black;
+
+}
+.question-container {
+width: 100%;
+display: flex;
+justify-content: left;
+margin-bottom: 0vh;
+padding: 0.5vh 1vh;
+background-color: #021303;
+color: lime;
+font-weight: bold;
+  font-size: clamp(6px, 4vw, 4rem);
+border: 0.3vh solid lime;
+margin-top: 0.5vh;
+}
+
+.button-container {
+display: flex;
+width: 100%;
+margin-top: 2vh;
+margin-left: 1.7vh;
+height: 80vh;
+background-color: black;
+align-items: center;
+box-sizing: border-box;
+
+
+          overflow: hidden;
+scroll-behavior: smooth;
+gap: 1px;
+}
+
+.column {
+flex-shrink: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 200px;
+justify-content: space-around;
+width: 100%;
+min-width: 15vw;
+margin: 0.1vh 0.1vh;
+height: 100%;
+opacity: 1;
+transition: opacity 0.3s, transform 0.3s;
+box-sizing: border-box;
+}
+
+.column.active {
+opacity: 1;
+transform: scale(1);
+border: 0.2vh solid orange;
+}
+
+.column.active .translation-button {
+background-color: lightyellow;
+color: black;
+border: 0.2vh solid orange;
+}
+
+.translation-button {
+font-size: calc(2vh + 2vw);
+color: #FFFFFF;
+font-weight: bold;
+background-color: black;
+cursor: pointer;
+width: 100%;
+border: 0.1vh solid white;
+text-transform: uppercase;
+flex: 1;
+transition: background-color 0.3s;
+}
+
+.translation-button:hover {
+background-color: white;
+color: black;
+padding: 0;
+}
+
+.translation-button.correct {
+background-color: black;
+color: lime;
+border: 0.5vh solid lime;
+}
+
+.translation-button.incorrect {
+background-color: black;
+color: red;
+border: 0.5vh solid red;
+}
+
+.translation-button:selected {
+background-color: black;
+color: cyan;
+font-size: 2vh;
+padding: 0;
+}
+
+button[onclick="navigateTomainRECOGNIZER()"] {
+background-color:black;
+color:pink;
+font-weight:bold;
+margin-top:5vh;
+font-size: 3vh;
+border: 0.3vh solid red;
+
+}
+
+.correct-bg {
+background-color: green;
+transition: background-color 0.5s ease;
+}
+
+
+.incorrect-bg {
+background-color: red;
+transition: background-color 0.5s ease;
+}
+.translation-button.correct {
+background-color: black; /* Red background */
+color: lime;
+border: 0.5vh solid lime;
+
+}
+
+.translation-button.incorrect {
+background-color: black; /* Red background */
+color: red; /* White text */
+border: 0.5vh solid red;
+}
+
+
+
+</style>
+</head>
+<body>
+<div id="question-container" class="question-container"></div>
+<div class="button-container" id="button-container"></div>
+
+<script>
+const exceptions = [
+"un poco",
+"y,",
+"en el futuro",
+"ya que",
+"así que",
+"en la casa",
+"en la oficina",
+"en la avenida",
+"en el mercado",
+"en la biblioteca",
+"en la farmacia",
+"en el hospital",
+"en el museo",
+"en el restaurante",
+"en el banco",
+"en el parque",
+"en la calle",
+"en la tienda",
+"en la escuela",
+"en la casa",
+"en la oficina",
+"en la avenida",
+"en el mercado",
+"en la biblioteca",
+"en la farmacia",
+"en el hospital",
+"en el museo",
+"en el restaurante,",
+"en el banco",
+"en el parque",
+"en la calle",
+"en la tienda",
+"en la escuela",
+"si yo",
+"si tú",
+"si él",
+"si ella",
+"si nosotros",
+"si vosotros",
+"si ellos",
+
+];
+
+// Load data from localStorage
+const data = JSON.parse(localStorage.getItem("phraseGroups")) || [];
+
+// Generate combinations
+function generateCombinations(sections, index = 0, currentPhrase = "", currentTranslation = "", combinations = []) {
+if (index === sections.length) {
+combinations.push({
+phrase: currentPhrase.trim(),
+translation: currentTranslation.trim()
+});
+return;
+}
+
+sections[index].phrases.forEach((phrase, i) => {
+generateCombinations(
+sections,
+index + 1,
+currentPhrase + " " + phrase,
+currentTranslation + " " + sections[index].translations[i],
+combinations
+);
+});
+
+return combinations;
+}
+
+const combinations = generateCombinations(data);
+
+// Create columns by word position
+function createColumnsByWordPosition(translations) {
+const wordPositions = [];
+
+translations.forEach(translation => {
+let words = splitTranslation(translation);
+words.forEach((word, index) => {
+if (!wordPositions[index]) {
+wordPositions[index] = new Set();
+}
+wordPositions[index].add(word);
+});
+});
+
+return wordPositions.map(positionSet => Array.from(positionSet));
+}
+
+// Split translation into words
+// Split translation into words
+function splitTranslation(translation) {
+    let words = [];
+    let remainingText = translation;
+
+    while (remainingText) {
+        // Check if the remaining text starts with a full exception phrase
+        let matchedException = exceptions.find(exception => {
+            // Check if the exception is a full match at the start of the remaining text
+            return remainingText.startsWith(exception) && (remainingText[exception.length] === ' ' || remainingText[exception.length] === undefined);
+        });
+
+        if (matchedException) {
+            // If an exception is found, add the exception word to the words array
+            words.push(matchedException);
+            // Remove the exception word from the remaining text
+            remainingText = remainingText.slice(matchedException.length).trim();
+        } else {
+            // If no exception is found, split based on the first space
+            let firstSpaceIndex = remainingText.indexOf(' ');
+            if (firstSpaceIndex === -1) {
+                // If no space is found, the whole remaining text is a single word
+                words.push(remainingText);
+                remainingText = ""; // No text left to process
+            } else {
+                // If a space is found, split the word at the space
+                words.push(remainingText.slice(0, firstSpaceIndex));
+                remainingText = remainingText.slice(firstSpaceIndex + 1).trim();
+            }
+        }
+    }
+
+    return words;
+}
+
+// Shuffle array function
+function shuffleArray(array) {
+for (let i = array.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[array[i], array[j]] = [array[j], array[i]];
+}
+}
+
+// Create columns data
+const columnsData = createColumnsByWordPosition(combinations.map(({ translation }) => translation));
+
+let currentQuestionIndex = getRandomQuestionIndex();
+let currentColumnIndex = 0;
+
+// Get random question index
+function getRandomQuestionIndex() {
+return Math.floor(Math.random() * combinations.length);
+}
+
+function loadQuestion(index) {
+const { phrase, translation } = combinations[index];
+const currentTranslationWords = splitTranslation(translation);
+
+document.getElementById('question-container').innerText = `${phrase}`;
+const buttonContainer = document.getElementById('button-container');
+buttonContainer.innerHTML = ''; // Clear previous buttons
+
+let completedColumns = new Set();
+let currentColumnIndex = 0;
+
+columnsData.forEach((words, colIndex) => {
+const columnContainer = document.createElement('div');
+columnContainer.classList.add('column');
+
+shuffleArray(words);
+
+let displayedWords = words.includes(currentTranslationWords[colIndex])
+? [currentTranslationWords[colIndex], ...words.filter(word => word !== currentTranslationWords[colIndex])]
+: [currentTranslationWords[colIndex], ...words];
+
+displayedWords = displayedWords.slice(0, 10);
+shuffleArray(displayedWords);
+
+displayedWords.forEach(word => {
+const button = document.createElement('button');
+button.innerText = word;
+button.classList.add('translation-button');
+button.onclick = function () {
+if (currentTranslationWords[colIndex] === word) {
+button.classList.add('correct');
+speakWord(word);
+
+// Mark column as completed
+completedColumns.add(colIndex);
+
+// Automatically move to the next column
+moveToNextColumn(colIndex + 1);
+
+// Check if all columns are completed
+if (completedColumns.size === currentTranslationWords.length) {
+speakPhrase(translation); // Play the full translation phrase
+setTimeout(() => {
+currentQuestionIndex = getRandomQuestionIndex(); // Load next random question
+loadQuestion(currentQuestionIndex);
+}, 2000); // Delay for better UX
+}
+} else {
+button.classList.add('incorrect');
+}
+};
+columnContainer.appendChild(button);
+});
+
+buttonContainer.appendChild(columnContainer); // Append all columns at once
+});
+
+// Start by scrolling to the first column
+moveToNextColumn(0);
+
+function moveToNextColumn(columnIndex) {
+const columnElements = buttonContainer.getElementsByClassName('column');
+if (columnIndex < columnElements.length) {
+const nextColumn = columnElements[columnIndex];
+const columnOffset = nextColumn.offsetLeft;
+buttonContainer.scrollLeft = columnOffset; // Scroll to the column
+currentColumnIndex = columnIndex; // Update the current column index
+}
+}
+}
+
+function speakWord(word) {
+const utterance = new SpeechSynthesisUtterance(word);
+utterance.lang = 'es-ES';
+window.speechSynthesis.speak(utterance);
+}
+
+// Speak phrase
+function speakPhrase(phrase) {
+const utterance = new SpeechSynthesisUtterance(phrase);
+utterance.lang = 'es-ES';
+window.speechSynthesis.speak(utterance);
+}
+
+// Show column
+function showColumn(index) {
+const columns = document.querySelectorAll('.column');
+columns.forEach((col, colIndex) => {
+col.style.display = colIndex === index ? 'flex' : 'none';
+});
+}
+
+// Initialize with the first question
+loadQuestion(currentQuestionIndex);
+</script>
+</body>
+</html>

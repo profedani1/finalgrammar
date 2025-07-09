@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <style>
+    body {
+      width: 98.5%;
+      font-family: Arial, sans-serif;
+      margin-left: 0.5vh;
+      margin-top: -0.1vh;
+      background-color: black;
+    }
+
+    .container {
+     
+      background-color: black;
+      align-items: center;
+      justify-items: center;
+    }
+.answer {
+      padding: 2vh;
+      border: 0.5vh solid pink;
+      cursor: pointer;
+      background-color: black;
+      color: pink;
+      transition: background-color 0.3s ease;
+      font-size: 6vh;
+      width: 100%;
+  margin-top:1vh;
+    }
+    .question {
+    position: relative;
+    padding: 2vh 10vh;
+    border: 0.5vh solid lightgreen;
+    cursor: pointer;
+    background-color: black;
+    color: lightgreen;
+    transition: background-color 0.3s ease;
+    font-size: 3vh;
+            font-weight: bold;
+height:auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.question::before {
+    content: "\f130"; /* Font Awesome Unicode for microphone icon */
+    font-family: "Font Awesome 5 Free"; /* Font Awesome 5 Free or the specific version you're using */
+    font-weight: 900; /* For Font Awesome 5 Free, icons require font-weight */
+    position: absolute;
+    left: 3vh; /* Adjust position as needed */
+    font-size: 5vh; /* Adjust size to match button font-size */
+}
+
+.question span {
+    margin-left: 1vh; /* Space between icon and text */
+}
+.question:hover  {
+    border: 0.5vh solid darkgreen;
+      background-color: #D9FEE5;
+      color: darkgreen;
+    }
+    .answer:hover  {
+    border: 0.5vh solid #FE4164;
+      background-color: #FFECF2;
+      color: #FE4164;
+    }
+    .answer {
+    display: inline-block;
+    position: relative;
+    padding: 2vh 10vh;
+    font-size: 3vh; /* Adjust if needed */
+          text-transform: uppercase;
+      font-weight: bold;
+height:auto;
+
+    background-color: black;
+    color: pink;
+    border: 0.5vh solid pink;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.answer::before {
+    content: "\f028"; /* Font Awesome Unicode for speaker icon */
+    font-family: "Font Awesome 5 Free"; /* Font Awesome 5 Free or the specific version you're using */
+    font-weight: 900; /* For Font Awesome 5 Free, icons require font-weight */
+  height:auto;
+    position: absolute;
+    left: 2vh; /* Adjust position as needed */
+    font-size: 5vh; /* Adjust size to match button text */
+}
+
+.answer span {
+    margin-left: 8vh; /* Space between icon and text */
+}
+    .answer:active {
+      background-color: pink;
+      color: black;
+      border: 1vh solid red;
+    }
+
+    .question:active {
+      background-color: lightgreen;
+      color: black;
+      border: 1vh solid darkgreen;
+    }
+
+    .text-area-container {
+      grid-column: span 2;
+    }
+
+    .text-area-container div {
+      width: 100%;
+      height: auto;
+      font-size: 5vh;
+      padding: 0.1vh;
+      white-space: pre-wrap; /* Preserve whitespace */
+    }
+
+    .correct {
+      color: lime;
+    }
+
+    .incorrect {
+      color: #f44336;
+    }
+#sectionContainer{
+            margin-top: 2vh;
+align-items: center;
+      justify-items: center;
+      background-color: black;
+      text-align: center;
+  width:100%;
+    }
+    #sectionContainer button{
+    background-color: black;
+      font-size:6vh;
+      font-weight:bold;
+  color:white;
+      border: 0.5vh solid white;
+    }
+     #sectionContainer button:hover {
+    background-color: black;
+       animation: soft-vibrate 0.3s infinite; /* Apply vibration animation */
+  animation-timing-function: ease-in-out; 
+      color:yellow;
+      border: 0.5vh solid yellow;
+    }
+    
+    .playback-controls {
+            margin-top: 2vh;
+
+      background-color: black;
+      text-align: center;
+    }
+
+    .playback-controls button {
+      cursor: pointer;
+      display: inline-block;
+      font-weight: bold;
+      font-size: 4vh;
+      margin: 0.2vh;
+            width:30%;
+      background-color: black;
+color:white;
+            border: 0.5vh solid white;
+    }
+    
+    .playback-controls button:hover {
+      animation: soft-vibrate 0.3s infinite; /* Apply vibration animation */
+  animation-timing-function: ease-in-out; 
+      background-color: black;
+color:yellow;
+            border: 0.5vh solid yellow;
+    }
+
+    
+    #stopPlayback {
+  margin-bottom: 3vh;
+  background-color: transparent;
+  color: transparent;
+  font-weight: bold;
+  border: 1vh solid transparent;
+  font-size: 6vh;
+  width: 100%;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#stopPlayback.active {
+  background-color: black;
+  color: #f44336;
+  border: 1vh solid red;
+}
+
+#stopPlayback.active:hover {
+  background-color: red;
+  color: black;
+}
+
+
+    .disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    #playQuestions, #playAnswers, #playBoth:hover {
+      /* Add hover styles if needed */
+    }
+
+    #playBoth {
+    }
+
+    .navigation-controls {
+      text-align: center;
+      margin-top: 1vh;
+            margin-bottom: 1vh;
+
+    }
+
+    .navigation-controls button {
+      cursor: pointer;
+      font-size: 6vh;
+      font-weight:bold;
+      padding: 1vh;
+      margin: 0.1vh;
+      width:48%;
+            background-color: black;
+      color:white;
+      border: 0.5vh solid white;
+
+    }
+    
+    @keyframes soft-vibrate {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-0.5px, 0.5px); }
+  50% { transform: translate(0.5px, -0.5px); }
+  75% { transform: translate(-0.5px, -0.5px); }
+  100% { transform: translate(0, 0); }
+}
+
+  .navigation-controls button:hover {
+     background-color: black;
+color:yellow;
+            border: 0.5vh solid yellow;
+     animation: soft-vibrate 0.3s infinite; /* Apply vibration animation */
+  animation-timing-function: ease-in-out; 
+    }
+    .disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+      <div id="sectionContainer"></div>
+
+  <div class="playback-controls">
+    <button id="playQuestions">PLAY<br>ENGLISH</button>
+    <button id="playAnswers">PLAY<br>SPANISH</button>
+    <button id="playBoth">PLAY<br>BOTH</button>
+    <button id="stopPlayback">STOP</button>
+  </div>
+
+ 
+
+  <div class="navigation-controls">
+    <button id="previous" class="navigation-button">&lt;</button>
+    <button id="next" class="navigation-button">&gt;</button>
+  </div>
+ <div style="color: lightgreen; font-size: 3vh;"></div>
+
+
+
+ <div class="container" id="qaContainer">
+   
+  </div>
+ <script>
+  // Retrieve data from local storage
+  const data = JSON.parse(localStorage.getItem("phraseGroups")) || [];
+
+  // Get elements from the DOM
+  const container = document.getElementById('qaContainer');
+  const sectionContainer = document.getElementById('sectionContainer'); // Container for section buttons
+  const playQuestionsButton = document.getElementById('playQuestions');
+  const playAnswersButton = document.getElementById('playAnswers');
+  const playBothButton = document.getElementById('playBoth');
+  const stopPlaybackButton = document.getElementById('stopPlayback');
+  const previousButton = document.getElementById('previous');
+  const nextButton = document.getElementById('next');
+
+  let currentIndex = 0;
+  let isPlaying = false;
+  let playbackTimeoutId = null;
+  let currentSectionIndex = 0; // Track the current section
+
+  function createSectionButtons() {
+    sectionContainer.innerHTML = ''; // Clear existing section buttons
+
+    // Create a button for each section in the data
+    data.forEach((section, index) => {
+      const sectionButton = document.createElement('button');
+      sectionButton.textContent = ` ${index + 1}`;
+      sectionButton.addEventListener('click', () => {
+        currentSectionIndex = index; // Set the current section
+        currentIndex = 0; // Reset the current phrase/translation index
+        updateContent();
+      });
+      sectionContainer.appendChild(sectionButton);
+    });
+  }
+
+  function createContent() {
+    updateContent();
+  }
+
+  function updateContent() {
+    // Clear existing content
+    container.innerHTML = '';
+
+    // Access the current data set based on the selected section
+    const currentData = data[currentSectionIndex] || { phrases: [], translations: [] };
+
+    // Create question element
+    const questionButton = document.createElement('button');
+    questionButton.textContent = currentData.phrases[currentIndex] || 'No data';
+    questionButton.className = 'question';
+    questionButton.addEventListener('click', () => startRecognition(currentIndex));
+
+    // Create answer element
+    const answerButton = document.createElement('button');
+    answerButton.textContent = currentData.translations[currentIndex] || 'No data';
+    answerButton.className = 'answer';
+    answerButton.addEventListener('click', () => playUtterance(currentData.translations[currentIndex] || '', 'es-ES'));
+
+    // Create text area container
+    const textAreaContainer = document.createElement('div');
+    textAreaContainer.className = 'text-area-container';
+    const textArea = document.createElement('div');
+    textArea.id = `result-${currentIndex}`;
+    textAreaContainer.appendChild(textArea);
+
+    // Append to container
+    container.appendChild(questionButton);
+    container.appendChild(answerButton);
+    container.appendChild(textAreaContainer);
+  }
+
+  function playUtterance(text, lang) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function startRecognition(index) {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'es-ES';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    const currentData = data[currentSectionIndex] || { translations: [] };
+    const questionButton = document.querySelector('.question');
+    const answerButton = document.querySelector('.answer');
+    const textArea = document.getElementById(`result-${index}`);
+    answerButton.style.display = 'none';
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript.trim();
+      answerButton.style.display = 'inline-block';
+
+      const correctAnswer = currentData.translations[index] || '';
+      textArea.innerHTML = compareAnswers(transcript, correctAnswer);
+
+      if (transcript.toLowerCase() === correctAnswer.toLowerCase()) {
+        questionButton.style.backgroundColor = '#0b150b';
+      } else {
+        questionButton.style.backgroundColor = '#260d0f';
+        setTimeout(() => {
+          questionButton.style.backgroundColor = ''; // Reset the color after 3 seconds
+        }, 3000);
+      }
+    };
+
+    recognition.onspeechend = () => recognition.stop();
+    recognition.start();
+  }
+
+  function compareAnswers(userAnswer, correctAnswer) {
+    const userWords = userAnswer.split(' ');
+    const correctWords = correctAnswer.split(' ');
+    let result = '';
+
+    userWords.forEach((word, i) => {
+      if (word.toLowerCase() === correctWords[i]?.toLowerCase()) {
+        result += `<span class="correct">${word}</span> `;
+      } else {
+        result += `<span class="incorrect">${word}</span> `;
+      }
+    });
+
+    return result.trim();
+  }
+
+ function disableAllButtons() {
+    // Disable question and answer buttons
+    const qaButtons = document.querySelectorAll('.question, .answer');
+    qaButtons.forEach(button => button.classList.add('disabled'));
+
+    // Disable section buttons
+    const sectionButtons = document.querySelectorAll('#sectionContainer button');
+    sectionButtons.forEach(button => button.classList.add('disabled'));
+
+    // Disable navigation buttons
+    previousButton.classList.add('disabled');
+    nextButton.classList.add('disabled');
+
+    // Make STOP button opaque
+    stopPlaybackButton.classList.add('active');
+}
+
+function enableAllButtons() {
+    // Enable question and answer buttons
+    const qaButtons = document.querySelectorAll('.question, .answer');
+    qaButtons.forEach(button => button.classList.remove('disabled'));
+
+    // Enable section buttons
+    const sectionButtons = document.querySelectorAll('#sectionContainer button');
+    sectionButtons.forEach(button => button.classList.remove('disabled'));
+
+    // Enable navigation buttons
+    previousButton.classList.remove('disabled');
+    nextButton.classList.remove('disabled');
+
+    // Make STOP button transparent
+    stopPlaybackButton.classList.remove('active');
+}
+
+
+  function playQuestions() {
+    if (isPlaying) return;
+    isPlaying = true;
+    disableAllButtons();
+
+    let index = 0;
+    updateContentForPlayback(index);
+    playUtterance(data[currentSectionIndex]?.phrases[index] || '', 'en-US');
+    index++;
+
+    playbackTimeoutId = setInterval(() => {
+      if (index >= data[currentSectionIndex]?.phrases.length) {
+        clearInterval(playbackTimeoutId);
+        enableAllButtons();
+        isPlaying = false;
+        return;
+      }
+      updateContentForPlayback(index);
+      playUtterance(data[currentSectionIndex]?.phrases[index] || '', 'en-US');
+      index++;
+    }, 8000);
+  }
+
+  function playAnswers() {
+    if (isPlaying) return;
+    isPlaying = true;
+    disableAllButtons();
+
+    let index = 0;
+    updateContentForPlayback(index);
+    playUtterance(data[currentSectionIndex]?.translations[index] || '', 'es-ES');
+    index++;
+
+    playbackTimeoutId = setInterval(() => {
+      if (index >= data[currentSectionIndex]?.translations.length) {
+        clearInterval(playbackTimeoutId);
+        enableAllButtons();
+        isPlaying = false;
+        return;
+      }
+      updateContentForPlayback(index);
+      playUtterance(data[currentSectionIndex]?.translations[index] || '', 'es-ES');
+      index++;
+    }, 8000);
+  }
+
+  function playBoth() {
+    if (isPlaying) return;
+    isPlaying = true;
+    disableAllButtons();
+
+    let index = 0;
+    updateContentForPlayback(index);
+    playUtterance(data[currentSectionIndex]?.phrases[index] || '', 'en-US');
+    setTimeout(() => {
+      playUtterance(data[currentSectionIndex]?.translations[index] || '', 'es-ES');
+      index++;
+    }, 4000);
+
+    playbackTimeoutId = setInterval(() => {
+      if (index >= data[currentSectionIndex]?.phrases.length) {
+        clearInterval(playbackTimeoutId);
+        enableAllButtons();
+        isPlaying = false;
+        return;
+      }
+      updateContentForPlayback(index);
+      playUtterance(data[currentSectionIndex]?.phrases[index] || '', 'en-US');
+      setTimeout(() => {
+        playUtterance(data[currentSectionIndex]?.translations[index] || '', 'es-ES');
+        index++;
+      }, 4000);
+    }, 8000);
+  }
+
+  function updateContentForPlayback(index) {
+    // Update content to match the current playback index
+    const questionButton = document.querySelector('.question');
+    const answerButton = document.querySelector('.answer');
+    questionButton.textContent = data[currentSectionIndex]?.phrases[index] || 'No data';
+    answerButton.textContent = data[currentSectionIndex]?.translations[index] || 'No data';
+  }
+
+  function stopPlayback() {
+    clearInterval(playbackTimeoutId);
+    isPlaying = false;
+    enableAllButtons();
+  }
+
+  function showPrevious() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateContent();
+    }
+  }
+
+  function showNext() {
+    if (currentIndex < data[currentSectionIndex]?.phrases.length - 1) {
+      currentIndex++;
+      updateContent();
+    }
+  }
+
+  playQuestionsButton.addEventListener('click', playQuestions);
+  playAnswersButton.addEventListener('click', playAnswers);
+  playBothButton.addEventListener('click', playBoth);
+  stopPlaybackButton.addEventListener('click', stopPlayback);
+  previousButton.addEventListener('click', showPrevious);
+  nextButton.addEventListener('click', showNext);
+
+  createSectionButtons(); // Create section buttons on load
+  createContent();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            background-color: black;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 1vh;
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5vh;
+            box-sizing: border-box;
+            width: 50%;
+        }
+        #questionsColumn, #translationsColumn {
+            width: 100%;
+            background-color: black;
+            box-sizing: border-box;
+            padding: 2vh 0;
+        }
+        button {
+            width: 90%;
+            height: 11vh;
+            margin-top: 1vh;
+            font-size: 2.5vh;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            border: 0.7vh solid white;
+        }
+        .selected {
+            background-color: cyan;
+            color: black;
+        }
+        .matched {
+            border: 0.7vh solid lime;
+        }
+        .wrong {
+            background-color: darkred;
+            color: white;
+        }
+        #shuffleBtn {
+            margin-bottom: 2vh;
+            background-color: #191919;
+            color: white;
+            border: 0.7vh solid white;
+        }
+        .shuffle-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="shuffle-container">
+        <button id="shuffleBtn">Shuffle</button>
+    </div>
+    <div class="container">
+        <div class="column" id="questionsColumn">
+            <!-- Questions will be added here dynamically -->
+        </div>
+        <div class="column" id="translationsColumn">
+            <!-- Translations will be added here dynamically -->
+        </div>
+    </div>
+
+    <script>
+        let questions = [];
+        let currentQuestionIndex = 0;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const questionsJSON = localStorage.getItem('questions');
+            if (questionsJSON) {
+                try {
+                    questions = JSON.parse(questionsJSON);
+                    if (questions.length > 0) {
+                        createButtons();
+                    } else {
+                        console.warn('No questions available.');
+                    }
+                } catch (error) {
+                    console.error('Error loading questions:', error);
+                }
+            } else {
+                console.warn('No questions found in local storage.');
+            }
+        });
+
+        const questionsColumn = document.getElementById('questionsColumn');
+        const translationsColumn = document.getElementById('translationsColumn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+
+        let selectedQuestion = null;
+        let selectedTranslation = null;
+
+        function createButtons() {
+            questions.forEach((item, index) => {
+                const questionBtn = document.createElement('button');
+                questionBtn.innerText = item.question;
+                questionBtn.dataset.index = index;
+                questionBtn.addEventListener('click', () => selectButton(questionBtn, 'question'));
+                questionsColumn.appendChild(questionBtn);
+                
+                const translationBtn = document.createElement('button');
+                translationBtn.innerText = item.translation;
+                translationBtn.dataset.index = index;
+                translationBtn.addEventListener('click', () => selectButton(translationBtn, 'translation'));
+                translationsColumn.appendChild(translationBtn);
+            });
+        }
+
+        function selectButton(button, type) {
+            if (button.classList.contains('matched')) return;
+
+            if (type === 'question') {
+                if (selectedQuestion) selectedQuestion.classList.remove('selected');
+                selectedQuestion = button === selectedQuestion ? null : button;
+            } else if (type === 'translation') {
+                if (selectedTranslation) selectedTranslation.classList.remove('selected');
+                selectedTranslation = button === selectedTranslation ? null : button;
+            }
+
+            button.classList.toggle('selected');
+
+            if (selectedQuestion && selectedTranslation) {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const questionIndex = selectedQuestion.dataset.index;
+            const translationIndex = selectedTranslation.dataset.index;
+
+            if (questionIndex === translationIndex) {
+                selectedQuestion.classList.add('matched');
+                selectedTranslation.classList.add('matched');
+                selectedQuestion.classList.remove('selected');
+                selectedTranslation.classList.remove('selected');
+                selectedQuestion = null;
+                selectedTranslation = null;
+                checkCompletion();
+            } else {
+                selectedQuestion.classList.add('wrong');
+                selectedTranslation.classList.add('wrong');
+                setTimeout(() => {
+                    selectedQuestion.classList.remove('wrong');
+                    selectedTranslation.classList.remove('wrong');
+                    selectedQuestion.classList.remove('selected');
+                    selectedTranslation.classList.remove('selected');
+                    selectedQuestion = null;
+                    selectedTranslation = null;
+                }, 1000);
+            }
+        }
+
+        function checkCompletion() {
+            const matchedButtons = document.querySelectorAll('.matched');
+            if (matchedButtons.length === questions.length * 2) {
+                alert("Congratulations! You've matched all pairs.");
+            }
+        }
+
+        function shuffleTranslations() {
+            const translationsButtons = Array.from(translationsColumn.children);
+            for (let i = translationsButtons.length - 1; i >= 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                translationsColumn.appendChild(translationsButtons[j]);
+            }
+        }
+
+        shuffleBtn.addEventListener('click', shuffleTranslations);
+      
+       document.addEventListener('contextmenu', function(event) {
+      event.preventDefault(); // Disable right-click
+    });
+
+    document.addEventListener('mousedown', function(event) {
+      if (event.button === 0) { // Left-click
+        event.preventDefault();
+      }
+    });
+    </script>
+</body>
+</html>

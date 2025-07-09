@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            color: white;
+        }
+        .containerpr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 0.1vh; 
+        }
+
+.columns-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; 
+      margin-top:5vh;
+
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.questions-column button{
+    width: 99%;
+    height: 6.0vh;
+    margin-top: 0vh;
+    font-size: 2.4vh;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 0.2vh solid white;
+}
+.translations-column button {
+    width: 99%;
+    height: 6.0vh;
+    margin-top: 0vh;
+    font-size: 2.4vh;
+    cursor: pointer;
+    background-color: black;
+    color: transparent;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 0.2vh solid white;
+}
+
+/* Specific Button States for Questions and Translations */
+.questions-column button.selected{
+    background-color: #0c1c0c;
+    border: 0.25vh solid lime;    color: transparent;
+
+}
+
+.translations-column button.selected {
+    background-color: #0c1c0c;
+    color: transparent;
+    border: 0.25vh solid lime;
+}
+
+.questions-column button.matched,
+.translations-column button.matched {
+    border: 0.3vh solid lime;
+    color: lime;
+}
+
+.questions-column button.wrong,
+.translations-column button.wrong {
+    background-color: darkred;
+    color: white;
+}
+
+.questions-column button:hover {
+    background-color: lime;
+    color: black;
+}
+.translations-column button:hover {
+    background-color: lime;
+    color: transparent;
+}
+
+.questions-column button:active{
+    background-color: lime;
+    color: black;
+}
+
+
+.translations-column button:active {
+    background-color: #000C00;
+    color: transparent;
+        border: 0.3vh solid yellow;
+
+}
+
+/* Button Group for CATCH Button */
+.button {
+    background-color: white;
+    border: 0.2vh solid gray;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+ .button.voice-recognition {   width: 33.3%;
+
+}
+
+.button.choose {   width: 33.3%;
+}
+
+.button.catch {    width: 33.3%;
+}
+
+
+ .act-container {
+  display: flex; /* Use flexbox to align buttons horizontally */
+   width: 100%;
+height:10vh;
+}
+
+    </style>
+</head>
+<body>
+ 
+    
+    <div class="columns-container">
+        <div class="column questions-column" id="questionsColumn">
+            <!-- Questions will be added here dynamically -->
+        </div>
+        <div class="column translations-column" id="translationsColumn">
+            <!-- Translations will be added here dynamically -->
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Retrieve the JSON string from localStorage
+  const mistakeData = localStorage.getItem('mistakeData');
+
+  // If no mistakeData exists, alert the user and stop further execution
+  if (!mistakeData) {
+    console.error('No mistakeData found in localStorage.');
+    alert("No data found! Please check your saved phrases.");
+    return; // Stop further execution if no data is available
+  }
+
+  // Parse the JSON directly as an array of objects
+  const questionsArray = JSON.parse(mistakeData);
+
+  // Validate the JSON structure to ensure it matches the expected format
+  if (!Array.isArray(questionsArray) || !questionsArray.every(item => item.question && item.translation)) {
+    console.error('Invalid JSON structure in mistakeData.');
+    alert("Invalid data format! Please check your saved phrases.");
+    return;
+  }
+  recoveredPhrases = mistakeData; 
+  // Retrieve necessary DOM elements
+  const questionsColumn = document.getElementById('questionsColumn');
+  const translationsColumn = document.getElementById('translationsColumn');
+
+  let selectedQuestion = null;
+  let selectedTranslation = null;
+
+  // Function to update the UI with questions and translations
+  function updateQuestions() {
+    clearElement(questionsColumn);
+    clearElement(translationsColumn);
+
+    // Dynamically create buttons for questions and translations
+    questionsArray.forEach((item, index) => {
+      const questionBtn = document.createElement('button');
+      questionBtn.innerText = item.question;
+      questionBtn.dataset.index = index;
+      questionBtn.addEventListener('click', () => selectButton(questionBtn, 'question'));
+      questionsColumn.appendChild(questionBtn);
+
+      const translationBtn = document.createElement('button');
+      translationBtn.innerText = item.translation;
+      translationBtn.dataset.index = index;
+      translationBtn.clickedOnce = false;
+      translationBtn.addEventListener('click', () => selectButton(translationBtn, 'translation'));
+      translationsColumn.appendChild(translationBtn);
+    });
+
+    shuffleTranslations();
+  }
+
+  // Clear all child elements of a given DOM element
+  function clearElement(element) {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+  }
+
+  // Handle selection of question or translation buttons
+  function selectButton(button, type) {
+    if (type === 'translation') {
+      if (selectedTranslation) {
+        selectedTranslation.classList.remove('selected');
+        selectedTranslation.clickedOnce = false;
+      }
+
+      selectedTranslation = button;
+
+      if (!button.clickedOnce) {
+        speakTranslation(button.innerText);
+        button.clickedOnce = true;
+      } else {
+        button.classList.add('selected');
+      }
+    } else if (type === 'question') {
+      if (selectedQuestion) selectedQuestion.classList.remove('selected');
+      selectedQuestion = button;
+      button.classList.add('selected');
+    }
+
+    if (selectedQuestion && selectedTranslation) {
+      checkMatch();
+    }
+  }
+
+  // Text-to-speech for translations
+  function speakTranslation(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-ES';
+    speechSynthesis.speak(utterance);
+  }
+
+  // Check if selected question matches selected translation
+  function checkMatch() {
+    const questionIndex = selectedQuestion.dataset.index;
+    const translationIndex = selectedTranslation.dataset.index;
+
+    if (questionIndex === translationIndex) {
+      selectedQuestion.classList.add('matched');
+      selectedTranslation.classList.add('matched');
+      selectedQuestion = null;
+      selectedTranslation = null;
+      checkCompletion();
+    } else {
+      selectedQuestion.classList.add('wrong');
+      selectedTranslation.classList.add('wrong');
+      setTimeout(() => {
+        selectedQuestion.classList.remove('wrong');
+        selectedTranslation.classList.remove('wrong');
+      }, 1000);
+    }
+  }
+
+  // Check if all pairs have been matched
+  function checkCompletion() {
+    const matchedButtons = document.querySelectorAll('.matched');
+    if (matchedButtons.length === questionsArray.length * 2) {
+      setTimeout(() => {
+        alert("Congratulations! You've matched all pairs.");
+        updateQuestions();
+      }, 1000);
+    }
+  }
+
+  // Shuffle translation buttons for randomness
+  function shuffleTranslations() {
+    const translationsButtons = Array.from(translationsColumn.children);
+
+    for (let i = translationsButtons.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [translationsButtons[i], translationsButtons[j]] = [translationsButtons[j], translationsButtons[i]];
+    }
+
+    translationsButtons.forEach(button => translationsColumn.appendChild(button));
+  }
+
+  // Initialize the game
+  updateQuestions();
+});
+function navigateToVoiceRecognition() {
+  const questionsJSON = JSON.stringify(recoveredPhrases);
+  const url = `voicerecognition.html?questions=${encodeURIComponent(questionsJSON)}`;
+  window.location.href = url;
+}
+
+  function navigateTolisten() {
+    const questionsJSON = JSON.stringify(recoveredPhrases);
+    const url = `listen.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+  }
+      
+  function navigateTochoose() {
+    const questionsJSON = JSON.stringify(recoveredPhrases);
+    const url = `choose.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+  }
+
+  function navigateTomainCATCH() {
+    const questionsJSON = JSON.stringify(recoveredPhrases);
+    const url = `catch.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+  }
+</script>
+       <div class="act-container">
+<button class="button voice-recognition" onclick="navigateToVoiceRecognition()">SPEAK</button>
+
+<button class="button choose" onclick="navigateTochoose()">CHOOSE</button>
+
+<button class="button catch" onclick="navigateTomainCATCH()">CATCH</button>
+
+
+</div>
+</body>
+</html>
+

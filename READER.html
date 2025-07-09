@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.0.0/docxtemplater.js"></script>
+
+  <title>Text-to-Speech Player</title>
+  <style>
+ body {
+  font-family: 'Arial', sans-serif;
+  background-color: black;
+  text-align: center;
+     width: 95%;
+
+}
+
+#inputText {
+  width: 95%;
+  height: 60vh; /* Approximately 300px */
+  margin-top: 2vh; /* Approximately 30px */
+  margin-bottom: 1.5vh; /* Approximately 10px */
+  resize: none;
+  font-size: 2.3vh; /* Approximately 10px */
+}
+.dynamic-textarea {
+  width: 85%; /* Matches your existing width setting */
+  min-height: 40px; /* Minimum height to prevent collapse */
+  height: auto; /* Let JS control height */
+  max-height: none; /* Allow unrestricted growth */
+  resize: none; /* Disable manual resizing */
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  font-size: 2.3vh; /* Maintain existing font size */
+  border: 1px solid grey;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+  background-color: #fff;
+  outline: none; /* Remove focus outline */
+}
+
+/* Optional: Style the container holding the text area and button */
+.text-block {
+  display: flex;
+  gap: 0vh; /* Space between textarea and button */
+}
+
+
+#playpause, #speedControls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh; /* Space between buttons */
+    padding: 1vh;
+    position: relative;
+    width: 100%;
+    height: 10vh; /* Adjust the container height */
+}
+
+/* Specific button styles for play/pause section */
+#playpause button {
+    background-color: #d0d0d0; /* Light gray for a retro feel */
+    border: 2px solid #a0a0a0; /* Slightly darker border for depth */
+    border-radius: 2vh; /* Rounded edges for a classic button appearance */
+    color: #333; /* Dark text color */
+    font-family: 'Arial', sans-serif;
+    font-size: 3vh; /* Adjust font size using vh */
+    padding: 2vh 4vh;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Smooth transition for interactions */
+    box-shadow: 0.5vh 0.5vh 2vh rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Button hover and active states */
+#playpause button:hover {
+    background-color: #c0c0c0; /* Slightly darker on hover */
+}
+
+#playpause button:active {
+    background-color: #a0a0a0; /* Darker when clicked */
+    box-shadow: inset 0.5vh 0.5vh 2vh rgba(0, 0, 0, 0.4); /* Inner shadow for pressed effect */
+}
+
+/* Specific styles for play button */
+#playPauseButton {
+    background-color: #4caf50; /* Green for play button */
+    border-color: #388e3c;
+}
+
+#playPauseButton:hover {
+    background-color: #45a049;
+}
+
+#playPauseButton:active {
+    background-color: #388e3c;
+}
+
+/* Specific styles for stop button */
+#resetButton {
+    background-color: #f44336; /* Red for stop button */
+    border-color: #d32f2f;
+}
+
+#resetButton:hover {
+    background-color: #e53935;
+}
+
+#resetButton:active {
+    background-color: #d32f2f;
+}
+
+/* Speed control buttons styles */
+#speedControls button {
+    background-color: #fbc02d; /* Yellow for speed controls */
+    border-color: #f57f17;
+    font-size: 4vh; /* Larger font for visibility */
+    width: 8vh; /* Button width in vh */
+    height: 8vh; /* Button height in vh */
+    border-radius: 2vh; /* Rounded edges */
+}
+
+#speedControls button:hover {
+    background-color: #f9a825;
+}
+
+#speedControls button:active {
+    background-color: #f57f17;
+}
+
+/* Speed indicator */
+#speedIndicator {
+    font-size: 2vh;
+    font-weight: bold;
+    color: #333;
+    margin-top: 2vh;
+}
+#returnButton {
+    display: none; /* Initially hide the RETURN button */
+}
+#returnButton {
+}
+
+
+
+    
+button[onclick="processText()"] {
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #4CAF50; /* Green color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 20px 0;
+}
+
+/* Change color on hover */
+button[onclick="processText()"]:hover {
+    background-color: #45a049;
+}
+
+/* Hide button by default when processing starts */
+button[onclick="processText()"].hidden {
+    display: none;
+}
+
+.play-button {
+    background-color: transparent; /* Green background */
+    color: lime; /* White text */
+    border: 0.5vh solid lime;
+    font-size: 4VH;
+position: absolute;
+  left:84%;
+  font-weight: bold;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.3s, transform 0.2s;
+width:8vh;
+  height:9vh;
+  
+    }
+
+.play-button:hover {
+    background-color: darkgreen; /* Darker green on hover */
+}
+
+.play-button:active {
+    transform: scale(0.95); /* Slightly shrink when clicked */
+    background-color: red; border: 0.5vh solid red;    color: red; /* White text */
+
+}
+
+.play-button[data-playing="true"] {
+ transform: scale(0.95); /* Slightly shrink when clicked */
+    background-color: #570e0c; border: 0.5vh solid red;    color: red; }
+
+.play-button[data-playing="true"]:hover {
+   
+}
+
+.text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Adds spacing between elements */
+}
+
+.textarea-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Ensures button is aligned below textarea */
+}
+#uploadButton {
+    background-color: brown;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#uploadButton:hover {
+    background-color: #e68900;
+}
+
+/* Save Button Styling */
+#saveButton {
+    background-color: brown;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#saveButton:hover {
+    background-color: #e68900;
+}
+
+/* Confirm Save Button Styling */
+#confirmSaveButton {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out;
+    margin-left: 10px;
+}
+
+#confirmSaveButton:hover {
+    background-color: #0056b3;
+}
+
+#fileNameContainer {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#fileNameInput {
+    padding: 8px;
+    width: 70%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+#confirmSaveButton {
+    background-color: #007BFF;
+    margin-left: 10px;
+}
+
+#confirmSaveButton:hover {
+    background-color: #0056b3;
+}
+
+/* File List Dropdown */
+.file-list {
+    margin-top: 15px;
+}
+
+#savedFiles {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+}
+#returnButton {
+    display: none; /* Initially hide the RETURN button */
+    /* You can add additional styles here for the button */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#returnButton:hover {
+    background-color: #0056b3;
+}
+    #voiceSelect {
+position:absolute;
+      top:-2vh;
+      right:0vh;
+      font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    width: 250px;
+    margin-top: 20px;
+    transition: border-color 0.3s ease;
+    display: none; /* Initially hidden */
+}
+
+/* Focus Effect for Select */
+#voiceSelect:focus {
+    border-color: #4CAF50; /* Highlight the border color when focused */
+    outline: none;
+}
+
+/* Styling for Options */
+#voiceSelect option {
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Hover Effect for Options */
+#voiceSelect option:hover {
+    background-color: #f1f1f1;
+}
+       #speedIndicator { display: none;
+}
+       #speedIndicator {
+  margin-top: 1.5vh; /* Approximately 10px */
+  height: 1vh; /* Approximately 20px */
+  background: red;
+      color:black;
+  border-radius: 0.4vh; /* Approximately 3px */
+  overflow: hidden;
+  transition: width 0.5s ease;
+}
+    #deleteButton{
+          background-color: transparent;
+            font-size: 10vh;
+border:none;
+      position:absolute;
+      top:15vh;
+      right:0vh;
+
+}
+  </style>
+</head>
+  <body>
+  <div id="OPT">
+<select id="voiceSelect">
+    
+</select>
+<button id="returnButton">RETURN</button>  
+</div>
+
+ <div id="playpause" style="display: none;"> 
+    <button id="playPauseButton" onclick="togglePlayPause()">►</button>
+    <button id="resetButton" onclick="stopPlaying()">⏹</button>
+</div>
+
+<div id="speedControls" style="display: none;">
+    <button onclick="increaseSpeed()">+</button>
+    <button onclick="decreaseSpeed()">-</button>
+</div>
+
+<div id="speedIndicator"></div>
+<button id="uploadButton">UPLOAD</button>
+<button id="saveButton">SAVE</button>
+
+<!-- File name input container -->
+<div id="fileNameContainer" style="display: none;">
+    <input type="text" id="fileNameInput" placeholder="Enter file name...">
+    <button id="confirmSaveButton">CONFIRM</button>
+</div>
+
+<div class="file-list">
+    <select id="savedFiles" onchange="loadFileFromStorage()">
+        <option value="">Select a saved file...</option>
+    </select>
+<button id="deleteButton" style="display:none;">🚮</button>
+</div>
+
+<!-- File Input for Upload -->
+<input type="file" id="fileInput" style="display:none" accept=".txt, .docx, .rtf, .html"/>
+
+<textarea id="inputText" placeholder="escribe o pega tu texto aqui"></textarea>
+<button onclick="processText()">START</button>
+<div id="output"></div>
+
+
+
+<script>
+  document.getElementById('returnButton').addEventListener('click', function() {
+  window.location.href = 'index.html';
+});
+function processText() {
+    // Hide specified elements when processing starts
+    document.getElementById("uploadButton").style.display = 'none';
+    document.getElementById("saveButton").style.display = 'none';
+    document.getElementById("fileNameContainer").style.display = 'none';
+    document.querySelector(".file-list").style.display = 'none';
+    document.getElementById("fileInput").style.display = 'none';
+
+    // Hide the RETURN button initially
+    document.getElementById("returnButton").style.display = 'none';
+
+    // Show the speed indicator when processing starts
+    document.getElementById("speedIndicator").style.display = 'block';
+    const inputText = document.getElementById("inputText").value;
+    const outputDiv = document.getElementById("output");
+    const inputTextArea = document.getElementById("inputText");
+    const processButton = document.querySelector("button[onclick='processText()']");
+
+    // Hide the original input text area after processing
+    inputTextArea.style.display = 'none';
+
+    // Hide the PROCESS button when clicked
+    processButton.style.display = 'none';
+
+    outputDiv.innerHTML = ""; // Clear previous output
+
+    let sentences = inputText.match(/[^.!?,]+[.!?,]?/g) || []; // Split by commas, periods, and question/exclamation marks
+    let tempText = "";
+
+    sentences.forEach(sentence => {
+        let potentialText = (tempText + " " + sentence).trim();
+
+        if (potentialText.length > 200) {
+            if (tempText) {
+                createTextArea(tempText.trim()); // Save the last full phrase
+            }
+            tempText = sentence.trim(); // Start a new text block
+        } else {
+            tempText = potentialText; // Keep adding to the same block
+        }
+    });
+
+    if (tempText) {
+        createTextArea(tempText.trim()); // Save remaining text
+    }
+
+    // Show the play, stop, and speed control buttons after processing
+    document.getElementById("playpause").style.display = 'block';
+    document.getElementById("speedControls").style.display = 'block';
+
+    // Show the RETURN button after processing
+    document.getElementById("returnButton").style.display = 'block';
+
+    // Show the output and voice select elements after processing
+    document.getElementById("output").style.display = 'block';
+    document.getElementById("voiceSelect").style.display = 'block';
+}
+
+
+let synth = window.speechSynthesis;
+let utterance = new SpeechSynthesisUtterance();
+let isPlaying = false;
+let isPaused = false;
+let dynamicButtonPlaying = false; // Track if a dynamic button is playing
+
+// Reset all play buttons and main play button
+function resetAllPlayButtons() {
+    document.querySelectorAll(".play-button").forEach(button => {
+        button.textContent = "►";
+        button.dataset.playing = "false";
+    });
+    document.getElementById("playPauseButton").textContent = "►"; // Reset main button
+    isPlaying = false;
+    isPaused = false;
+    dynamicButtonPlaying = false;
+    synth.cancel();
+}
+
+function createTextArea(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.classList.add("dynamic-textarea");
+
+    // Temporarily set height to auto for proper calculation
+    textArea.style.height = "auto";
+    document.body.appendChild(textArea); // Append to DOM to measure scrollHeight
+    textArea.style.height = textArea.scrollHeight + "px";
+    document.body.removeChild(textArea); // Remove from body and add correctly later
+
+    // Adjust height dynamically as user types
+    textArea.addEventListener("input", function () {
+        this.style.height = "auto"; // Reset height to recalculate
+        this.style.height = this.scrollHeight + "px"; // Adjust based on content
+    });
+
+    const playButton = document.createElement("button");
+    playButton.textContent = "▶";
+    playButton.classList.add("play-button");
+    playButton.dataset.playing = "false";
+
+    playButton.onclick = function () {
+        // Reset background color for all text areas
+        document.querySelectorAll(".dynamic-textarea").forEach(area => {
+            area.style.backgroundColor = ""; // Reset background for non-playing text areas
+        });
+
+        // Reset main play button if it was playing
+        if (isPlaying || isPaused) {
+            resetMainPlayButton();
+        }
+
+        if (playButton.dataset.playing === "true") {
+            synth.cancel();
+            playButton.textContent = "►";
+            playButton.dataset.playing = "false";
+            dynamicButtonPlaying = false;
+        } else {
+            resetAllPlayButtons(); // Stop all playing instances before starting a new one
+            utterance.text = text;
+            synth.speak(utterance);
+            playButton.textContent = "◼";
+            playButton.dataset.playing = "true";
+            textArea.style.backgroundColor = "#f4f5d3"; // Highlight current text area
+            dynamicButtonPlaying = true;
+
+            utterance.onend = function () {
+                playButton.textContent = "►";
+                playButton.dataset.playing = "false";
+                dynamicButtonPlaying = false;
+                textArea.style.backgroundColor = ""; // Reset background color when done
+            };
+        }
+    };
+
+    const outputDiv = document.getElementById("output");
+    const container = document.createElement("div");
+    container.classList.add("text-block");
+    container.appendChild(textArea);
+    container.appendChild(playButton);
+    outputDiv.appendChild(container);
+}
+
+function resetMainPlayButton() {
+    synth.cancel();
+    isPlaying = false;
+    isPaused = false;
+    document.getElementById("playPauseButton").textContent = "►";
+}
+
+// Play all text areas sequentially (Main Play Button)
+function startPlaying() {
+    let textAreas = document.querySelectorAll('.dynamic-textarea');
+    let currentIndex = 0;
+
+    if (textAreas.length === 0) {
+        alert('Please enter and process some text.');
+        return;
+    }
+
+  function smoothScrollTo(element, duration = 1500) {
+    const targetPosition = element.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 2.5);
+    const startPosition = window.scrollY;
+    const startTime = performance.now();
+
+    function scrollStep(currentTime) {
+        const elapsedTime = currentTime - startTime;
+        const progress = Math.min(elapsedTime / duration, 1); // Ensure progress doesn't exceed 1
+        const easeInOutQuad = progress < 0.5 
+            ? 2 * progress * progress 
+            : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        
+        window.scrollTo(0, startPosition + (targetPosition - startPosition) * easeInOutQuad);
+
+        if (progress < 1) {
+            requestAnimationFrame(scrollStep);
+        }
+    }
+
+    requestAnimationFrame(scrollStep);
+}
+
+function speakNext() {
+    if (currentIndex < textAreas.length) {
+        const currentTextArea = textAreas[currentIndex];
+        utterance.text = currentTextArea.value;
+        currentTextArea.style.backgroundColor = "#f4f5d3"; // Highlight current text area
+        smoothScrollTo(currentTextArea, 1200); // Slow and smooth scrolling (adjust time as needed)
+
+        synth.speak(utterance);
+        currentIndex++;
+    } else {
+        resetMainPlayButton();
+    }
+}
+
+utterance.onend = function () {
+    textAreas[currentIndex - 1].style.backgroundColor = "";
+    speakNext();
+};
+
+speakNext();
+}
+
+// Main Play/Pause button
+function togglePlayPause() {
+    // If a dynamic play button is playing, reset everything first
+    if (dynamicButtonPlaying) {
+        resetAllPlayButtons();
+    }
+
+    if (!isPlaying) {
+        startPlaying();
+        isPlaying = true;
+        isPaused = false;
+        document.getElementById("playPauseButton").textContent = "▐▐"; // Pause icon
+    } else if (!isPaused) {
+        synth.pause();
+        isPaused = true;
+        document.getElementById("playPauseButton").textContent = "►"; // Play icon
+    } else {
+        synth.resume();
+        isPaused = false;
+        document.getElementById("playPauseButton").textContent = "▐▐"; // Pause icon
+    }
+}
+
+// Stop all speech
+function stopPlaying() {
+    resetAllPlayButtons();
+}
+
+function increaseSpeed() {
+    utterance.rate += 0.1;
+    updateSpeedIndicator();
+}
+
+function decreaseSpeed() {
+    utterance.rate -= 0.1;
+    updateSpeedIndicator();
+}
+
+function updateSpeedIndicator() {
+    const speedometer = document.getElementById('speedIndicator');
+    const speed = utterance.rate;
+
+    const widthPercentage = ((speed - 0.1) / (2.0 - 0.1)) * 100;
+    speedometer.style.width = `${widthPercentage}%`;
+}
+
+// Ensure voices are loaded and set the voice
+
+
+// File Management Section
+document.getElementById('uploadButton').addEventListener('click', () => { 
+    document.getElementById('fileInput').click();
+});
+
+document.getElementById('fileInput').addEventListener('change', handleFileChange);
+
+document.getElementById('saveButton').addEventListener('click', () => {
+    document.getElementById('fileNameContainer').style.display = 'block';
+    document.getElementById('fileNameInput').focus();
+});
+
+document.getElementById('confirmSaveButton').addEventListener('click', saveFile);
+
+document.getElementById('deleteButton').addEventListener('click', deleteFile);
+
+function handleFileChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => document.getElementById('inputText').value = e.target.result;
+        reader.readAsText(file);
+    }
+}
+
+function saveFile() {
+    const text = document.getElementById('inputText').value;
+    const fileName = document.getElementById('fileNameInput').value.trim();
+    if (fileName) {
+        const savedFiles = JSON.parse(localStorage.getItem('savedFiles')) || {};
+        savedFiles[fileName] = text;
+        localStorage.setItem('savedFiles', JSON.stringify(savedFiles));
+        loadSavedFiles();
+        document.getElementById('fileNameContainer').style.display = 'none';
+        document.getElementById('fileNameInput').value = '';
+    } else {
+        alert('Please enter a valid file name.');
+    }
+}
+
+function deleteFile() {
+    const savedFilesSelect = document.getElementById('savedFiles');
+    const selectedFile = savedFilesSelect.value;
+    if (selectedFile) {
+        const savedFiles = JSON.parse(localStorage.getItem('savedFiles')) || {};
+        if (savedFiles[selectedFile]) {
+            delete savedFiles[selectedFile];
+            localStorage.setItem('savedFiles', JSON.stringify(savedFiles));
+            loadSavedFiles();
+            document.getElementById('inputText').value = '';
+            alert(`File '${selectedFile}' has been deleted.`);
+        } else {
+            alert('Selected file does not exist.');
+        }
+    } else {
+        alert('Please select a file to delete.');
+    }
+}
+
+function loadSavedFiles() {
+    const savedFiles = JSON.parse(localStorage.getItem('savedFiles')) || {};
+    const savedFilesSelect = document.getElementById('savedFiles');
+    savedFilesSelect.innerHTML = '<option value="">Select a saved file...</option>';
+    Object.keys(savedFiles).forEach(fileName => {
+        const option = document.createElement('option');
+        option.value = fileName;
+        option.textContent = fileName;
+        savedFilesSelect.appendChild(option);
+    });
+}
+
+function loadFileFromStorage() {
+    const selectedFile = document.getElementById('savedFiles').value;
+    if (selectedFile) {
+        const savedFiles = JSON.parse(localStorage.getItem('savedFiles')) || {};
+        document.getElementById('inputText').value = savedFiles[selectedFile] || '';
+
+        // Show the delete button when a file is selected
+        document.getElementById('deleteButton').style.display = 'block';
+    } else {
+        // Optionally hide the delete button if no file is selected
+        document.getElementById('deleteButton').style.display = 'none';
+    }
+}
+
+
+// Voice Selection Section
+document.addEventListener('DOMContentLoaded', () => {
+    loadSavedFiles(); // Load saved files on page load
+    initializeVoices(); // Initialize voices properly
+});
+
+function loadVoices() {
+    let voices = synth.getVoices().filter(voice => voice.lang.startsWith("es"));
+    let select = document.getElementById("voiceSelect");
+
+    select.innerHTML = ""; // Clear previous options
+
+    if (voices.length === 0) {
+        setTimeout(loadVoices, 500); // Retry if voices are not loaded yet
+        return;
+    }
+
+    // Populate the dropdown with available voices
+    voices.forEach(voice => {
+        let option = document.createElement("option");
+        option.value = voice.name;
+        option.textContent = `${voice.name} (${voice.lang})`;
+        select.appendChild(option);
+    });
+
+    // Set default voice
+    select.selectedIndex = 0;
+    utterance.voice = voices[0];
+}
+
+// Event listener for voice selection
+document.getElementById('voiceSelect').addEventListener('change', function () {
+    let selectedVoiceName = this.value;
+    let voices = synth.getVoices();
+    let selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
+
+    if (selectedVoice) {
+        utterance.voice = selectedVoice;
+    }
+});
+
+// Ensure voices load correctly
+function initializeVoices() {
+    if (synth.getVoices().length > 0) {
+        loadVoices();
+    } else {
+        synth.onvoiceschanged = loadVoices;
+    }
+}
+
+// Initialize voices on page load
+document.addEventListener('DOMContentLoaded', initializeVoices);
+
+
+
+// Ensure voices are set when the page loads
+window.onload = () => {
+    loadSavedFiles();
+    initializeVoices();
+};
+
+
+</script></body>
+
+</html>

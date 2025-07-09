@@ -1,0 +1,394 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=.1.0" />
+ 
+       <style>
+
+     html,
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0%;
+        overflow: hidden;
+            background-color: black; /* Yellow background */
+
+      }
+
+  
+ 
+      .parent-buttons {
+        display: grid;          
+   width:99%;
+   margin-left:0.3vh;
+        grid-template-columns: repeat(6, 1fr);
+    background-color: black; 
+    justify-content: center;
+    align-items: center;
+    
+   margin-top:2.5vh;
+
+      }
+
+      .button {
+        background-color: black;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+font-size: calc(0.8vh + 1vw);`
+        font-weight:bold;
+          border: 0.1vh solid white;
+                height:8vh;
+                text-align: center;
+ justify-content: center; 
+    align-items: center; 
+         width: 100%;
+      }
+
+      .button.hidden {
+        display: none;
+      }
+
+     
+
+      .button.selected {
+        background-color: #28a745;
+      }
+   
+         .button[data-parent=".."] {
+  background-color: transparent;
+  border: none; /* Ensures no border is visible */
+  font-size: 2vh; /* Hides the text size */
+  pointer-events: none; /* Disables clicking on the button */
+  
+}
+     .button[data-parent="."] {
+  background-color: transparent;
+  border: none; /* Ensures no border is visible */
+  font-size: 2vh; /* Hides the text size */
+  pointer-events: none; /* Disables clicking on the button */
+  
+}
+
+      .child-buttons {
+        display: none; 
+ margin-top:2vh;
+
+      }
+
+      .child-buttons.visible {
+        display: block; /* Show child buttons when toggled */
+      }
+
+    
+      .child-buttons .button {
+        display: block; 
+          background-color: black;
+        height:7vh;
+  font-size: 2vh;
+                margin: 0vh;
+                       color:white;
+
+width:100%;
+  border: 0.1px solid darkgrey;
+            }
+   .child-buttons .button:hover {
+    background-color: #333; /* Change this to any color you want for the hover effect */
+    transform: scale(1.05); /* Optional zoom effect on hover */
+}
+   
+      #buttonContainer1 {
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+  background-color: black; 
+width:100%;
+            font-weight:bold;
+      font-size: 1.8vh;
+
+}
+
+/* Style for the buttons */
+.title-button0 {
+  background-color: lightgrey; /* Blue background */
+  color: black; /* White text */
+  border: none; /* Removes border */
+  border-radius: 5px; /* Rounded corners */
+              border: 0.5px solid black;
+        font-weight:bold;
+
+  font-size: 1.8vh;
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: all 0.3s ease; /* Smooth transition effect */
+  width:19.8%;
+
+}
+
+/* Hover effect for buttons */
+.title-button0:hover {
+  background-color: darkgrey; /* Darker blue on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+    </style>
+
+  </head>
+<body>
+    <div id="buttonContainer1" class="button-container1">
+  
+          </div>
+          <div id="buttonContainer" class="button-container">
+  <div class="parent-buttons" id="parentButtons">
+    <button class="button" data-parent="HABÍA SENTADO">ME HAB<span style="color: yellow;">ÍA</span><br> SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button" data-parent="SENTÉ">ME <span style="background-color: BLACK; color: WHITE;">SENT</span><span style="color:LIME;">É</span></button>
+    <button class="button" data-parent="."><span style="color: yellow;  text-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow, 0 0 40px yellow;font-weight:bold;">SIT</span></button>
+    <button class="button" data-parent=".."><span style="color: yellow;  text-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow, 0 0 40px red;font-weight:bold;">SENTAR</span></button>
+    <button class="button" data-parent="HABRÍA SENTADO">ME HAB<span style="color: cyan;">R</span><span style="color: yellow;">ÍA</span><br> SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button" data-parent="SI HUBIERA SENTADO">SI ME<br> HUB<span style="color: ORANGE;">IERA</span><br> SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button" data-parent="HE SENTADO">ME H<span style="color: LIME;">E</span><br> SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button" data-parent="SENTABA">ME SENT<span style="color: #FF5033;">ABA</span></button>
+
+    <button class="button" data-parent="TE SIENTAS">TE SIENT<span style="color: CYAN;">A</span>S</button>
+    <button class="button" data-parent="SENTARÉ">ME SENT<span style="color: LIGHTBLUE;background-color: DARKBLUE; font-size:2vh;">AR</span><span style="color: LIME;">É</span></button>
+    <button class="button" data-parent="SENTARÍA">ME SENT<span style="color: LIGHTBLUE;background-color: DARKBLUE; font-size:2vh;">AR</span><span style="color: yellow;">ÍA</span></button>
+
+    <button class="button" data-parent="SI ME SENTARA">SI ME<br> <span style="background-color: ORANGE; color: BLACK;">SENT</span><span style="color: ORANGE;">ARA</span> </button>
+  </div>
+</div>
+
+
+<div id="buttonContainer" class="button-container">
+  <div class="parent-buttons" id="parentButtons">
+    <button class="button" data-parent="HABÍA SENTIDO">ME HAB<span style="color: yellow;">ÍA</span><br> SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+
+    <button class="button" data-parent="SENTÍ" >ME <span style="background-colorBLACK; color: WHITE;">SENT</span><span style="color:YELLOW;font-weight:bold;">Í</span></button>
+    <button class="button" data-parent="."><span style="color: #FF5033;  text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red, 0 0 40px red;font-weight:bold;">FEEL</span></button>
+    <button class="button" data-parent=".."><span style="color: #FF5033;  text-shadow: 0 0 10px red, 0 0 20px red, 0 0 30px red, 0 0 40px red;font-weight:bold;">SENTIR</span></button>
+    <button class="button" data-parent="HABRÍA SENTIDO">ME HAB<span style="color: cyan;">R</span><span style="color: yellow;">ÍA</span><br>  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button" data-parent="SI HUBIERA SENTIDO">SI ME<br> HUB<span style="color: ORANGE;">IERA</span><br>  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button" data-parent="HE SENTIDO">ME H<span style="color: LIME;">E</span><br>  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button" data-parent="SENTÍA">ME SENT<span style="color: yellow;">ÍA</span></button>
+
+    <button class="button" data-parent="SIENTO">TE SIENT<span style="color: CYAN;"><span style="color: lime;">E</span></span>S</button>
+    <button class="button" data-parent="SENTIRÉ" >ME SENT<span style="color: LIGHTBLUE;background-color: DARKBLUE; font-size:2vh;">IR</span><span style="color: LIME;">É</span></button>
+    <button class="button" data-parent="SENTIRÍA" >ME SENT<span style="color: LIGHTBLUE;background-color: DARKBLUE; font-size:2vh;">IR</span><span style="color: yellow;">ÍA</span></button>
+
+    <button class="button" data-parent="SI SINTIERA" >SI ME<br> <span style="background-color: ORANGE; color: BLACK;">SINT</span><span style="color: ORANGE;">IERA</span> </button>
+  </div>
+</div>
+
+
+<div id="childButtonsContainer">
+  <div class="child-buttons" data-parent="HABÍA SENTIDO">
+    <button class="button">YO ME HABÍA SENT<span style="color: YELLOW;font-weight:bold;">I</span>DO</button>
+    <button class="button">TÚ TE HABÍAS  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">ÉL SE HABÍA  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">NOSOTROS NOS HABÍAMOS  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">VOSOTROS OS HABÍAIS  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">ELLOS SE HABÍAN  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+  </div>
+  <div class="child-buttons" data-parent="SENTÍ">
+    <button class="button">YO ME SENT<span style="color: YELLOW;font-weight:bold;">Í</span></button>
+    <button class="button">TÚ TE SENT<span style="color: YELLOW;font-weight:bold;">I</span>STE</button>
+    <button class="button">ÉL SE SINT<span style="color: YELLOW;font-weight:bold;">I</span><span style="color: CYAN;font-weight:bold;">Ó</span></button>
+    <button class="button">NOSOTROS NOS SENT<span style="color: YELLOW;font-weight:bold;">I</span>MOS</button>
+    <button class="button">VOSOTROS OS SENT<span style="color: YELLOW;font-weight:bold;">I</span>STEIS</button>
+    <button class="button">ELLOS SE SINT<span style="color: YELLOW;font-weight:bold;">I</span><span style="color: LIME;font-weight:bold;">E</span>RON</button>
+  </div>
+  <div class="child-buttons" data-parent="HABRÍA SENTIDO">
+    <button class="button">YO ME HABRÍA SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">TÚ TE HABRÍAS SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">ÉL SE HABRÍA SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">NOSOTROS NOS HABRÍAMOS SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">VOSOTROS OS HABRÍAIS SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">ELLOS SE HABRÍAN SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+  </div>
+  <div class="child-buttons" data-parent="SI HUBIERA SENTIDO">
+    <button class="button">SI YO ME HUBIERA SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">SI TÚ TE HUBIERAS SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">SI ÉL SE HUBIERA SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">SI NOSOTROS NOS HUBIÉRAMOS SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">SI VOSOTROS OS HUBIERAIS SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">SI ELLOS SE HUBIERAN SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+  </div>
+  <div class="child-buttons" data-parent="HE SENTIDO">
+    <button class="button">YO ME HE SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">TÚ TE HAS  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">ÉL SE HA  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">NOSOTROS NOS HEMOS  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">VOSOTROS OS HABÉIS  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+    <button class="button">ELLOS SE HAN  SENT<span style="color: YELLOW;fpnt-weight:bold;">I</span>DO</button>
+  </div>
+  <div class="child-buttons" data-parent="SENTÍA">
+    <button class="button">YO ME SENT<span style="color: yellow;font-weight:bold;">ÍA</span></button>
+    <button class="button">TÚ TE SENT<span style="color: yellow;font-weight:bold;">ÍA</span>S</button>
+    <button class="button">ÉL SE SENT<span style="color: yellow;font-weight:bold;">ÍA</span></button>
+    <button class="button">NOSOTROS NOS SENT<span style="color: yellow;font-weight:bold;">ÍA</span>MOS</button>
+    <button class="button">VOSOTROS OS SENT<span style="color: yellow;font-weight:bold;">ÍA</span>IS</button>
+    <button class="button">ELLOS SE SENT<span style="color: yellow;font-weight:bold;">ÍA</span>N</button>
+  </div>
+  <div class="child-buttons" data-parent="SIENTO">
+    <button class="button">YO ME SIENT<span style="color: cyan;">O</span></button>
+    <button class="button">TÚ TE SIENT<span style="color: LIME;">E</span>S</button>
+    <button class="button">ÉL SE SIENT<span style="color: LIME;">E</span></button>
+    <button class="button">NOSOTROS NOS SENT<span style="color: YELLOW;">I</span>MOS</button>
+    <button class="button">VOSOTROS OS SENT<span style="color: YELLOW;">Í</span>S</button>
+    <button class="button">ELLOS SE SIENT<span style="color: LIME;">E</span>N</button>
+  </div>
+  <div class="child-buttons" data-parent="SENTIRÉ">
+    <button class="button">YO ME SENT<span style="color: YELLOW;font-weight:bold">I</span>R<span style="color: lime;font-weight:bold">É</span></button>
+    <button class="button">TÚ TE SENT<span style="color: YELLOW;font-weight:bold">I</span>RÁS</button>
+    <button class="button">ÉL SE SENT<span style="color: YELLOW;font-weight:bold">I</span>RÁ</button>
+    <button class="button">NOSOTROS NOS SENT<span style="color: YELLOW;font-weight:bold">I</span>R<span style="color: lime;font-weight:bold">E</span>MOS</button>
+    <button class="button">VOSOTROS OS SENT<span style="color: YELLOW;font-weight:bold">I</span>R<span style="color: lime;font-weight:bold">É</span>IS</button>
+    <button class="button">ELLOS SE SENT<span style="color: YELLOW;font-weight:bold">I</span>RÁN</button>
+  </div>
+  <div class="child-buttons" data-parent="SENTIRÍA">
+    <button class="button">YO ME SENTIR<span style="color: yellow;font-weight:bold;">ÍA</span></button>
+    <button class="button">TÚ TE SENTIR<span style="color: yellow;font-weight:bold;">ÍA</span>S</button>
+    <button class="button">ÉL SE SENTIR<span style="color: yellow;font-weight:bold;">ÍA</span></button>
+    <button class="button">NOSOTROS NOS SENTIR<span style="color: yellow;font-weight:bold;">ÍA</span>MOS</button>
+    <button class="button">VOSOTROS OS SENTIR<span style="color: yellow;font-weight:bold;">ÍA</span>IS</button>
+    <button class="button">ELLOS SE SENTIR<span style="color: yellow;font-weight:bold;">ÍA</span>N</button>
+  </div>
+  <div class="child-buttons" data-parent="SI SINTIERA">
+    <button class="button">SI YO ME SINT<span style="color: YELLOW;">I</span><span style="color:ORANGE;">E</span><span style="color: #FF5033;">R</span><span style="color: RED;">A</span></button>
+    <button class="button">SI TÚ TE SINT<span style="color: YELLOW;">I</span><span style="color:ORANGE;">E</span><span style="color: #FF5033;">R</span><span style="color: RED;">A</span>S</button>
+    <button class="button">SI ÉL SE SINT<span style="color: YELLOW;">I</span><span style="color:ORANGE;">E</span><span style="color: #FF5033;">R</span><span style="color: RED;">A</span>A</button>
+    <button class="button">SI NOSOTROS NOS SINT<span style="color: YELLOW;">I</span><span style="color:ORANGE;">É</span><span style="color: #FF5033;">R</span><span style="color: RED;">A</span>AMOS</button>
+    <button class="button">SI VOSOTROS OS SINTIERAIS</button>
+    <button class="button">SI ELLOS SE SINT<span style="color: YELLOW;">I</span><span style="color:ORANGE;">E</span><span style="color: #FF5033;">R</span><span style="color: RED;">A</span>N</button>
+  </div>
+</div>
+<div id="childButtonsContainer">
+  <div class="child-buttons" data-parent="HABÍA SENTADO">
+    <button class="button">YO ME HABÍA SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">TÚ TE HABÍAS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">ÉL SE HABÍA SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">NOSOTROS NOS HABÍAMOS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">VOSOTROS OS HABÍAIS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">ELLOS SE HABÍAN SENT<span style="color: #FF5033;">A</span>DO</button>
+  </div>
+  <div class="child-buttons" data-parent="SENTÉ">
+    <button class="button">YO ME SENT<span style="color: LIME;">É</span></button>
+    <button class="button">TÚ TE SENT<span style="color: #FF5033;">A</span>STE</button>
+    <button class="button">ÉL SE SENT<span style="color: CYAN;">Ó</span></button>
+    <button class="button">NOSOTROS NOS SENT<span style="color: #FF5033;">A</span>MOS</button>
+    <button class="button">VOSOTROS OS SENT<span style="color: #FF5033;">A</span>STEIS</button>
+    <button class="button">ELLOS SE SENT<span style="color: #FF5033;">A</span>RON</button>
+  </div>
+  <div class="child-buttons" data-parent="HABRÍA SENTADO">
+    <button class="button">YO ME HABRÍA SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">TÚ TE HABRÍAS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">ÉL SE HABRÍA SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">NOSOTROS NOS HABRÍAMOS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">VOSOTROS OS HABRÍAIS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">ELLOS SE HABRÍAN SENT<span style="color: #FF5033;">A</span>DO</button>
+  </div>
+  <div class="child-buttons" data-parent="SI HUBIERA SENTADO">
+    <button class="button">SI YO ME HUBIERA SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">SI TÚ TE HUBIERAS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">SI ÉL SE HUBIERA SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">SI NOSOTROS NOS HUBIÉRAMOS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">SI VOSOTROS OS HUBIERAIS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">SI ELLOS SE HUBIERAN SENT<span style="color: #FF5033;">A</span>DO</button>
+  </div>
+  <div class="child-buttons" data-parent="HE SENTADO">
+    <button class="button">YO ME HE SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">TÚ TE HAS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">ÉL SE HA SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">NOSOTROS NOS HEMOS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">VOSOTROS OS HABÉIS SENT<span style="color: #FF5033;">A</span>DO</button>
+    <button class="button">ELLOS SE HAN SENT<span style="color: #FF5033;">A</span>DO</button>
+  </div>
+  <div class="child-buttons" data-parent="SENTABA">
+    <button class="button">YO ME SENT<span style="color: #FF5033;">ABA</span></button>
+    <button class="button">TÚ TE SENT<span style="color: #FF5033;">ABA</span>S</button>
+    <button class="button">ÉL SE SENT<span style="color: #FF5033;">ABA</span></button>
+    <button class="button">NOSOTROS NOS SENT<span style="color: #FF5033;">ÁBA</span>MOS</button>
+    <button class="button">VOSOTROS OS SENT<span style="color: #FF5033;">ABA</span>IS</button>
+    <button class="button">ELLOS SE SENT<span style="color: #FF5033;">ABA</span>N</button>
+  </div>
+  <div class="child-buttons" data-parent="TE SIENTAS">
+    <button class="button">YO ME SIENT<span style="color: cyan;">O</span></button>
+    <button class="button">TÚ TE SIENT<span style="color: #FF5033;">A</span>S</button>
+    <button class="button">ÉL SE SIENT<span style="color: #FF5033;">A</span></button>
+    <button class="button">NOSOTROS NOS SENT<span style="color: #FF5033;">A</span>MOS</button>
+    <button class="button">VOSOTROS OS SENT<span style="color: #FF5033;">A</span>IS</button>
+    <button class="button">ELLOS SE SIENT<span style="color: #FF5033;">A</span>N</button>
+  </div>
+  <div class="child-buttons" data-parent="SENTARÉ">
+    <button class="button">YO ME SENT<span style="color: #FF5033;">A</span>R<span style="color: LIME;">É</span></button>
+    <button class="button">TÚ TE SENT<span style="color: #FF5033;">A</span>RÁS</button>
+    <button class="button">ÉL SE SENT<span style="color: #FF5033;">A</span>RÁ</button>
+    <button class="button">NOSOTROS NOS SENT<span style="color: #FF5033;">A</span>R<span style="color: LIME;">E</span>MOS</button>
+    <button class="button">VOSOTROS OS SENT<span style="color: #FF5033;">A</span>R<span style="color: LIME;">É</span>IS</button>
+    <button class="button">ELLOS SE SENT<span style="color: #FF5033;">A</span>RÁN</button>
+  </div>
+  <div class="child-buttons" data-parent="SENTARÍA">
+    <button class="button">YO ME SENTAR<span style="color: yellow;font-weight:bold;">ÍA</span></button>
+    <button class="button">TÚ TE SENTAR<span style="color: yellow;font-weight:bold;">ÍA</span>S</button>
+    <button class="button">ÉL SE SENTAR<span style="color: yellow;font-weight:bold;">ÍA</span></button>
+    <button class="button">NOSOTROS NOS SENTAR<span style="color: yellow;font-weight:bold;">ÍA</span>MOS</button>
+    <button class="button">VOSOTROS OS SENTAR<span style="color: yellow;font-weight:bold;">ÍA</span>IS</button>
+    <button class="button">ELLOS SE SENTAR<span style="color: yellow;font-weight:bold;">ÍA</span>N</button>
+  </div>
+  <div class="child-buttons" data-parent="SI ME SENTARA">
+    <button class="button">SI YO ME SENT<span style="color: #FF5033;">A</span><span style="color: ORANGE;">R</span><span style="color: #FF5033;">A</span></button>
+    <button class="button">SI TÚ TE SENT<span style="color: #FF5033;">A</span><span style="color: ORANGE;">R</span><span style="color: #FF5033;">A</span>S</button>
+    <button class="button">SI ÉL SE SENT<span style="color: #FF5033;">A</span><span style="color: ORANGE;">R</span><span style="color: #FF5033;">A</span></button>
+    <button class="button">SI NOSOTROS NOS SENT<span style="color: #FF5033;">Á</span><span style="color: ORANGE;">R</span><span style="color: #FF5033;">A</span>MOS</button>
+    <button class="button">SI VOSOTROS OS SENT<span style="color: #FF5033;">A</span><span style="color: ORANGE;">R</span><span style="color: #FF5033;">A</span>IS</button>
+    <button class="button">SI ELLOS SE SENT<span style="color: #FF5033;">A</span><span style="color: ORANGE;">R</span><span style="color: #FF5033;">A</span>N</button>
+  </div>
+</div>
+
+
+   <script>
+document.querySelectorAll('.parent-buttons .button').forEach(button => {
+  button.addEventListener("click", () => {
+    toggleChildButtons(button.dataset.parent);
+  });
+});
+
+function toggleChildButtons(parent) {
+  // Hide all child groups first
+  document.querySelectorAll('.child-buttons.visible').forEach(group => {
+    group.classList.remove("visible");
+  });
+
+  // Show the clicked parent's child group
+  const childGroup = document.querySelector(`.child-buttons[data-parent="${parent}"]`);
+  if (childGroup) {
+    childGroup.classList.toggle("visible");
+  }
+}
+
+document.querySelectorAll('.child-buttons .button').forEach(childButton => {
+  childButton.addEventListener("click", () => selectButton(childButton));
+});
+
+function selectButton(button) {
+  const buttonText = button.innerText;
+  readTextAloud(buttonText);
+}
+
+function readTextAloud(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "es-ES";
+  speechSynthesis.speak(utterance);
+}
+
+function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+}
+
+   </script>
+ <button
+          class="title-button0"
+ onclick="loadInnerActivity('sitfeel.html')"
+          style=" background-color:black; color:white;  font-size: 2vh; black;    border: 2px solid cyan;position:absolute; top:85%;left:1%;font-weight:bold;   border-radius: 50%;border-radius: 50%;height:12vh;width:15vh;text-align:center;align-items: center;">PLAY<br>SHUFFLED<br>GAME</button>
+</body>
+</html>

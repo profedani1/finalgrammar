@@ -1,0 +1,458 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            color: white;
+        }
+        .containerpr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 0.1vh; /* Adjust margin as needed */
+        }
+    .pronoun-container {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.pronoun-button {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f1f1f1;
+    font-size: 1.5vh;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+.pronoun-button.selected {
+    background-color: #0c1c0c;
+    color: lime;
+    border: 0.25vh solid lime;
+}
+
+/* Button Styles for Question and Translation Columns */
+.columns-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Adjust space between columns */
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.questions-column button{
+    width: 99%;
+    height: 6.0vh;
+    margin-top: 0vh;
+    font-size: 2.4vh;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 0.2vh solid white;
+}
+.translations-column button {
+    width: 99%;
+    height: 6.0vh;
+    margin-top: 0vh;
+    font-size: 2.4vh;
+    cursor: pointer;
+    background-color: black;
+    color: transparent;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 0.2vh solid white;
+}
+
+/* Specific Button States for Questions and Translations */
+.questions-column button.selected{
+    background-color: #0c1c0c;
+    border: 0.25vh solid lime;    color: transparent;
+
+}
+
+.translations-column button.selected {
+    background-color: #0c1c0c;
+    color: transparent;
+    border: 0.25vh solid lime;
+}
+
+.questions-column button.matched,
+.translations-column button.matched {
+    border: 0.3vh solid lime;
+    color: lime;
+}
+
+.questions-column button.wrong,
+.translations-column button.wrong {
+    background-color: darkred;
+    color: white;
+}
+
+.questions-column button:hover {
+    background-color: lime;
+    color: black;
+}
+.translations-column button:hover {
+    background-color: lime;
+    color: transparent;
+}
+
+.questions-column button:active{
+    background-color: lime;
+    color: black;
+}
+
+
+.translations-column button:active {
+    background-color: #000C00;
+    color: transparent;
+        border: 0.3vh solid yellow;
+
+}
+
+/* Button Group for CATCH Button */
+.button {
+    background-color: darkblue;
+    border: 0.2vh solid gray;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+button[onclick="navigateTomainCATCH()"]:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #337ab7;
+}
+
+button[onclick="navigateTomainCATCH()"]:active {
+    background-color: #285e8e;
+    border: none;
+    color: white;
+}
+    </style>
+</head>
+<body>
+    <div class="containerpr">
+  <div class="pronoun-container">
+            <button class="pronoun-button selected" data-pronoun="yo">yo</button>
+            <button class="pronoun-button" data-pronoun="tú">tú</button>
+            <button class="pronoun-button" data-pronoun="él">él</button>
+            <button class="pronoun-button" data-pronoun="nosotros">nosotros</button>
+            <button class="pronoun-button" data-pronoun="vosotros">vosotros</button>
+            <button class="pronoun-button" data-pronoun="ellos">ellos</button>
+    </div>
+    
+    <div class="columns-container">
+        <div class="column questions-column" id="questionsColumn">
+            <!-- Questions will be added here dynamically -->
+        </div>
+        <div class="column translations-column" id="translationsColumn">
+            <!-- Translations will be added here dynamically -->
+        </div>
+    </div>
+</div>
+
+ <script>
+  const pronouns = [
+            'yo',
+            'tú',
+            'él',
+            'nosotros',
+            'vosotros',
+            'ellos'
+        ];
+
+
+const questions = new Map();
+
+questions.set('yo', [
+  { question: 'I felt', translation: 'YO ME SENTÍ' },
+  { question: 'I sat', translation: 'YO ME SENTÉ' },
+  { question: 'I used to feel', translation: 'YO ME SENTÍA' },
+  { question: 'I use to sit', translation: 'YO ME SENTABA' },
+   { question: 'I have felt', translation: 'YO ME HE SENTIDO' },
+  { question: 'I have sat', translation: 'YO ME HE SENTADO' },
+  { question: 'If I felt', translation: 'SI YO ME SINTIERA' },
+  { question: 'If I sat', translation: 'SI YO ME SENTARA ' },
+    { question: 'I am feeling', translation: 'YO ME ESTOY SINTIENDO' },
+  { question: 'I am sitting', translation: 'YO ME ESTOY SENTANDO' }
+ 
+]);
+
+questions.set('tú', [
+ { question: 'You felt', translation: 'TÚ TE SENTISTE' },
+{ question: 'You sat', translation: 'TÚ TE SENTASTE' },
+{ question: 'You used to feel', translation: 'TÚ TE SENTÍAS' },
+{ question: 'You used to sit', translation: 'TÚ TE SENTABAS' },
+{ question: 'You have felt', translation: 'TÚ TE HAS SENTIDO' },
+{ question: 'You have sat', translation: 'TÚ TE HAS SENTADO' },
+{ question: 'If you felt', translation: 'SI TÚ TE SINTIERAS' },
+{ question: 'If you sat', translation: 'SI TÚ TE SENTARAS' },
+{ question: 'You are feeling', translation: 'TÚ TE ESTÁS SINTIENDO' },
+{ question: 'You are sitting', translation: 'TÚ TE ESTÁS SENTANDO' }
+]);
+
+questions.set('él', [
+{ question: 'He felt', translation: 'ÉL SE SENTÓ' },
+{ question: 'He sat', translation: 'ÉL SE SENTÓ' },
+{ question: 'He used to feel', translation: 'ÉL SE SENTÍA' },
+{ question: 'He used to sit', translation: 'ÉL SE SENTABA' },
+{ question: 'He has felt', translation: 'ÉL SE HA SENTIDO' },
+{ question: 'He has sat', translation: 'ÉL SE HA SENTADO' },
+{ question: 'If he felt', translation: 'SI ÉL SE SINTIERA' },
+{ question: 'If he sat', translation: 'SI ÉL SE SENTARA' },
+{ question: 'He is feeling', translation: 'ÉL SE ESTÁ SINTIENDO' },
+{ question: 'He is sitting', translation: 'ÉL SE ESTÁ SENTANDO' }
+
+]);
+
+questions.set('nosotros', [
+ { question: 'We felt', translation: 'NOSOTROS NOS SENTIMOS' },
+{ question: 'We sat', translation: 'NOSOTROS NOS SENTAMOS' },
+{ question: 'We used to feel', translation: 'NOSOTROS NOS SENTÍAMOS' },
+{ question: 'We used to sit', translation: 'NOSOTROS NOS SENTÁBAMOS' },
+{ question: 'We have felt', translation: 'NOSOTROS NOS HEMOS SENTIDO' },
+{ question: 'We have sat', translation: 'NOSOTROS NOS HEMOS SENTADO' },
+{ question: 'If we felt', translation: 'SI NOSOTROS NOS SINTIÉRAMOS' },
+{ question: 'If we sat', translation: 'SI NOSOTROS NOS SENTÁRAMOS' },
+{ question: 'We are feeling', translation: 'NOSOTROS NOS ESTAMOS SINTIENDO' },
+{ question: 'We are sitting', translation: 'NOSOTROS NOS ESTAMOS SENTANDO' }
+]);
+
+questions.set('vosotros', [
+{ question: 'You guys felt', translation: 'VOSOTROS OS SENTISTEIS' },
+{ question: 'You guys sat', translation: 'VOSOTROS OS SENTASTEIS' },
+{ question: 'You guys used to feel', translation: 'VOSOTROS OS SENTÍAIS' },
+{ question: 'You guys used to sit', translation: 'VOSOTROS OS SENTABAIS' },
+{ question: 'You guys have felt', translation: 'VOSOTROS OS HABÉIS SENTIDO' },
+{ question: 'You guys have sat', translation: 'VOSOTROS OS HABÉIS SENTADO' },
+{ question: 'If you guys felt', translation: 'SI VOSOTROS OS SINTIERAIS' },
+{ question: 'If you guys sat', translation: 'SI VOSOTROS OS SENTARais' },
+{ question: 'You guys are feeling', translation: 'VOSOTROS OS ESTÁIS SINTIENDO' },
+{ question: 'You guys are sitting', translation: 'VOSOTROS OS ESTÁIS SENTANDO' }
+]);
+
+questions.set('ellos', [
+ { question: 'They felt', translation: 'ELLOS SE SENTIRON' },
+{ question: 'They sat', translation: 'ELLOS SE SENTARON' },
+{ question: 'They used to feel', translation: 'ELLOS SE SENTÍAN' },
+{ question: 'They used to sit', translation: 'ELLOS SE SENTABAN' },
+{ question: 'They have felt', translation: 'ELLOS SE HAN SENTIDO' },
+{ question: 'They have sat', translation: 'ELLOS SE HAN SENTADO' },
+{ question: 'If they felt', translation: 'SI ELLOS SE SINTIERAN' },
+{ question: 'If they sat', translation: 'SI ELLOS SE SENTARAN' },
+{ question: 'They are feeling', translation: 'ELLOS SE ESTÁN SINTIENDO' },
+{ question: 'They are sitting', translation: 'ELLOS SE ESTÁN SENTANDO' }
+]);
+
+const pronounButtons = document.querySelectorAll('.pronoun-button');
+const questionsColumn = document.getElementById('questionsColumn');
+const translationsColumn = document.getElementById('translationsColumn');
+
+let selectedPronoun = 'yo'; // Default selected pronoun
+let selectedQuestion = null;
+let selectedTranslation = null;
+let isGameStarted = false;
+
+function updateQuestions() {
+    clearElement(questionsColumn);
+    clearElement(translationsColumn);
+
+    const selectedQuestions = questions.get(selectedPronoun);
+
+    selectedQuestions.forEach((item, index) => {
+        const questionBtn = document.createElement('button');
+        questionBtn.innerText = item.question;
+        questionBtn.dataset.index = index;
+        questionBtn.addEventListener('click', () => selectButton(questionBtn, 'question'));
+        questionsColumn.appendChild(questionBtn);
+
+         const translationBtn = document.createElement('button');
+    translationBtn.innerText = item.translation;
+    translationBtn.dataset.index = index;
+    translationBtn.clickedOnce = false; // Initialize the click state
+    translationBtn.addEventListener('click', () => selectButton(translationBtn, 'translation'));
+    translationsColumn.appendChild(translationBtn);
+});
+    shuffleTranslations();
+    highlightSelectedPronoun();
+}
+
+function clearElement(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}
+
+function selectButton(button, type) {
+    if (button.classList.contains('matched')) return;
+
+    if (type === 'translation') {
+        if (button === selectedTranslation) {
+            // If the same button is clicked twice consecutively, select it
+            button.classList.add('selected');
+            selectedTranslation = button;
+        } else {
+            // Deselect the previously selected button (if any)
+            if (selectedTranslation) {
+                selectedTranslation.classList.remove('selected');
+                selectedTranslation.clickedOnce = false; // Reset the clicked state of the previous button
+            }
+
+            // Handle the new button
+            selectedTranslation = button;
+
+            if (!button.clickedOnce) {
+                // First click: Speak the translation
+                speakTranslation(button.innerText);
+                button.clickedOnce = true;
+            } else {
+                // Second click: Select the button
+                button.classList.add('selected');
+            }
+        }
+    } else if (type === 'question') {
+        if (selectedQuestion) selectedQuestion.classList.remove('selected');
+        selectedQuestion = button === selectedQuestion ? null : button;
+
+        button.classList.toggle('selected');
+
+        if (selectedQuestion && selectedTranslation) {
+            checkMatch();
+        }
+    }
+}
+function speakTranslation(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-ES';
+    speechSynthesis.speak(utterance);
+}
+
+function checkMatch() {
+    const questionIndex = selectedQuestion.dataset.index;
+    const translationIndex = selectedTranslation.dataset.index;
+
+    if (questionIndex === translationIndex) {
+        selectedQuestion.classList.add('matched');
+        selectedTranslation.classList.add('matched');
+        selectedQuestion.classList.remove('selected');
+        selectedTranslation.classList.remove('selected');
+
+        speakTranslation(selectedTranslation.innerText);
+
+        selectedQuestion = null;
+        selectedTranslation = null;
+        checkCompletion();
+    } else {
+        selectedQuestion.classList.add('wrong');
+        selectedTranslation.classList.add('wrong');
+        setTimeout(() => {
+            selectedQuestion.classList.remove('wrong');
+            selectedTranslation.classList.remove('wrong');
+            selectedQuestion.classList.remove('selected');
+            selectedTranslation.classList.remove('selected');
+            selectedQuestion = null;
+            selectedTranslation = null;
+
+            shuffleTranslations();
+        }, 1000);
+    }
+}
+
+function checkCompletion() {
+    const matchedButtons = document.querySelectorAll('.matched');
+    if (matchedButtons.length === questions.get(selectedPronoun).length * 2) {
+        setTimeout(() => {
+            alert("Congratulations! You've matched all pairs.");
+            startNextLevel();
+        }, 1000);
+    }
+}
+
+function startNextLevel() {
+    const pronounOrder = Array.from(pronounButtons).map(button => button.dataset.pronoun);
+    const currentIndex = pronounOrder.indexOf(selectedPronoun);
+    const nextIndex = (currentIndex + 1) % pronounOrder.length;
+    selectedPronoun = pronounOrder[nextIndex];
+
+    updateQuestions();
+}
+
+function shuffleTranslations() {
+    const translationsButtons = Array.from(translationsColumn.children);
+
+    for (let i = translationsButtons.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [translationsButtons[i], translationsButtons[j]] = [translationsButtons[j], translationsButtons[i]];
+    }
+
+    translationsButtons.forEach(button => translationsColumn.appendChild(button));
+}
+
+function highlightSelectedPronoun() {
+    pronounButtons.forEach(button => button.classList.remove('selected'));
+    const selectedButton = document.querySelector(`.pronoun-button[data-pronoun="${selectedPronoun}"]`);
+    if (selectedButton) selectedButton.classList.add('selected');
+}
+
+// Event listeners for pronoun buttons
+pronounButtons.forEach(button => {
+    button.addEventListener('click', function () {
+        if (isGameStarted) return; // Prevent changing pronouns after the game starts
+
+        pronounButtons.forEach(btn => btn.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedPronoun = this.dataset.pronoun;
+        updateQuestions();
+    });
+});
+
+// Start the game with the default pronoun
+updateQuestions();
+const initialPronounBtn = document.querySelector('.pronoun-button.selected');
+updateQuestions.call(initialPronounBtn);
+   
+        function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+
+ 
+    </script>
+
+
+
+</body>
+</html>

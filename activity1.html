@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+       body {
+    background: black;
+    width: 97%;
+    font-family: Arial, sans-serif;
+}
+#question {
+    color: white;
+    font-size: 2.2vh;
+    font-weight: bold;
+    text-align: center;
+    height: 7vh;
+    border: 0.1vh solid darkgrey;
+    padding: 1vh;
+    width: 97%;
+}
+#question:hover {
+    cursor: default;
+}
+#interim-text {
+    display: none; /* Initially hide */
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    width: 97.9%;
+    height: 9vh;
+    margin: 2.5vh 0;
+    border: 0.1vh solid darkgrey;
+    border-radius: 0.5vh;
+    resize: none;
+}
+#interim-text.show {
+    display: block; /* Show when there's content */
+}
+#interim-text:hover {
+    cursor: default;
+}
+#askButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    background-color: black;
+    padding: 1vh 3vh;
+    border: 1vh solid red;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: 3vh;
+    transition: box-shadow 0.3s ease, font-size 0.3s ease;
+}
+#askButton:hover {
+    box-shadow: 0 0 5vh red;
+    font-size: 10.5vh;
+}
+#askButton.recording {
+    background-color: darkred;
+    border-color: #640b0b;
+    text-shadow: 0vh 0vh 1vh black;
+}
+#nextButton {
+    display: inline-block;
+    background-color: black;
+    color: white;
+    border: 0.1vh solid darkgrey;
+    width: 100%;
+    cursor: pointer;
+    font-size: 3vh;
+    transition: background-color 0.3s ease, border 0.3s ease;
+    text-align: center;
+    padding: 4vh;
+    margin-bottom: 2vh;
+}
+#prevButton:hover, #nextButton:hover {
+    background-color: #191919;
+    border-color: white;
+}
+#answer {
+    color: #ff0000;
+    font-weight: bold;
+    text-align: center;
+    margin: 2vh 0;
+}
+.microphone-icon {
+    color: red;
+    font-size: 10vh;
+}
+.microphone-icon:hover {
+    color: red;
+    font-size: 10.2vh;
+}
+#expected-phrase {
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    border: 0.1vh solid darkgrey;
+    text-align: center;
+    width: 100%;
+    height: 4vh;
+}
+#audio-container {
+    margin: 2vh 0;
+    text-align: center;
+}
+#checkButton {
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    border: 0.1vh solid darkgrey;
+    margin-bottom: 2vh;
+    width: 100%;
+    height: 10vh;
+}
+#listenButton {
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    width: 100%;
+    height: 4vh;
+}
+audio {
+    width: 95%;
+    background-color: #191919;
+    padding: 1vh;
+}
+.code-container {
+    width: 95.5%;
+    margin-top: 1vh;
+}
+#toggleActivitiesBtn {
+    padding: 10px 20px;
+    background-color: green;
+    color: lime;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+#activitiesContainer {
+    display: none;
+}
+.activity-btn {
+    margin-right: 0.1vh;
+    background-color: black;
+    color: lime;
+    font-weight: bold;
+    padding: 0vw;
+}
+.activity-img {
+    width: 15vw;
+    height: 15vh;
+    border: 0.4vh solid lime;
+}
+.title-button {
+    background-color: black;
+    color: lime;
+    font-weight: bold;
+    padding: 0vw;
+}
+#automaticPlayButton {
+    display: inline-block;
+    background-color: black;
+    color: white;
+    border: 0.1vh solid darkgrey;
+    width: 100%;
+    cursor: pointer;
+    font-size: 3vh;
+    transition: background-color 0.3s ease, border 0.3s ease;
+    text-align: center;
+    padding: 4vh;
+    margin-bottom: 2vh;
+}
+#automaticPlayButton:hover {
+    background-color: #191919;
+    border-color: white;
+}
+  #speedControls {
+      width:100%;
+
+}
+#speedControls button {
+  
+  width:49%;
+    padding: 1.5vh; /* Adjust padding for buttons */
+    margin: 0.1vh; /* Margin around buttons */
+    border: none; /* Remove default border */
+    background-color: white; /* Button background color */
+    color: black; /* Button text color */
+    font-size: 3vh; /* Font size for button text */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 3px; /* Rounded corners for buttons */
+}
+
+#speedControls button:hover {
+    background-color: #0056b3; color:white;
+}
+
+#speedControls input[type="range"] {
+    width: 100%; /* Full width of the container */
+    margin: 10px 0; /* Vertical margin */
+}
+
+#speedControls .label {
+    display: block; /* Make labels block elements */
+    margin-bottom: 5px; /* Margin below labels */
+    font-size: 14px; /* Font size for labels */
+    color: #333; /* Text color for labels */
+}
+#speedIndicator {
+    margin-top: 10px;
+    height: 20px; /* Set the height of the speedometer */
+    background: linear-gradient(to right, #ff0000 0%, #00ff00 100%);
+    border-radius: 3px;
+    overflow: hidden;
+    transition: width 0.5s ease;
+}
+    </style>
+</head>
+<body>
+    <h1 id="question"></h1>
+    <button id="askButton"><i class="fas fa-microphone microphone-icon"></i></button>
+    <button id="nextButton">GENERATE PHRASE</button>
+    <button id="checkButton">CHECK</button>
+    <p id="expected-phrase" style="display: none; width: 98.5%; padding: 1vh; height: 8vh;"></p>
+  
+    <button id="automaticPlayButton">AUTOMATIC PLAY</button>
+    <p id="answer">Answer will appear here</p>
+    <p id="interim-text">Interim text will appear here</p>
+  <div id="speedControls">
+    <button onclick="increaseSpeed()">+</button>
+    <button onclick="decreaseSpeed()">-</button>
+</div>
+
+
+<div id="speedIndicator"></div>
+
+<script>
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.lang = 'es-ES'; // Set to Spanish for speech recognition
+
+// Variables
+let questions = [];
+let currentQuestionIndex = 0;
+let isPlaying = false;
+let utterance = new SpeechSynthesisUtterance();
+let portugueseVoice = null;
+let spanishVoice = null;
+
+// Load voices and select the first available Portuguese and Spanish voices
+function loadVoices() {
+  const synth = window.speechSynthesis;
+  synth.onvoiceschanged = () => {
+    const voices = synth.getVoices();
+    for (let i = 0; i < voices.length; i++) {
+      if (voices[i].lang === 'en-US' && !portugueseVoice) {
+        portugueseVoice = voices[i];
+      } else if (voices[i].lang === 'es-ES' && !spanishVoice) {
+        spanishVoice = voices[i];
+      }
+    }
+  };
+}
+loadVoices();
+
+// Load questions from localStorage
+document.addEventListener('DOMContentLoaded', () => {
+  const questionsJSON = localStorage.getItem('questions');
+  if (questionsJSON) {
+    try {
+      questions = JSON.parse(questionsJSON);
+      if (questions.length > 0) {
+        createQuestion(); // Initialize with the first question
+      } else {
+        console.warn('No questions available.');
+      }
+    } catch (error) {
+      console.error('Error loading questions:', error);
+    }
+  } else {
+    console.warn('No questions found in local storage.');
+  }
+});
+
+function normalizeString(str) {
+  const accentsMap = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'ñ': 'n'};
+  const numbersMap = {
+    'uno': '1', 'dos': '2', 'tres': '3', 'cuatro': '4', 'cinco': '5',
+    'seis': '6', 'siete': '7', 'ocho': '8', 'nueve': '9', 'diez': '10',
+    'once': '11', 'doce': '12', 'trece': '13', 'catorce': '14', 'quince': '15',
+    'dieciséis': '16', 'diecisiete': '17', 'dieciocho': '18', 'diecinueve': '19',
+    'veinte': '20'
+  };
+
+  return str.toLowerCase()
+    .replace(/[áéíóúñ]/g, match => accentsMap[match] || match)
+    .replace(/\b(uno|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce|trece|catorce|quince|dieciséis|diecisiete|dieciocho|diecinueve|veinte)\b/g, match => numbersMap[match] || match);
+}
+
+function createQuestion() {
+  document.getElementById('interim-text').textContent = "";
+  document.getElementById('askButton').innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
+  document.getElementById('answer').textContent = "";
+  document.getElementById('expected-phrase').textContent = "";
+
+  // Set the current question
+  const currentQuestion = questions[currentQuestionIndex];
+  const questionText = currentQuestion.question;
+  const expectedTranslation = currentQuestion.translation;
+
+  document.getElementById('question').textContent = questionText;
+  document.getElementById('expected-phrase').textContent = expectedTranslation;
+
+  playQuestionAudio(questionText);
+}
+
+function playQuestionAudio(phrase) {
+  if (!portugueseVoice) {
+    console.warn('Portuguese voice not available');
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(phrase);
+  utterance.voice = portugueseVoice;
+  utterance.lang = 'en-US';
+  speechSynthesis.speak(utterance);
+}
+
+function playExpectedPhraseAudio() {
+  const expectedPhrase = document.getElementById('expected-phrase').textContent.trim();
+
+  if (!spanishVoice) {
+    console.warn('Spanish voice not available');
+    return;
+  }
+
+  utterance.text = expectedPhrase;
+  utterance.voice = spanishVoice;
+  utterance.lang = 'es-ES';
+  speechSynthesis.speak(utterance);
+
+  utterance.onend = function() {
+    document.getElementById('expected-phrase').style.display = 'none';
+    document.getElementById('checkButton').style.display = 'inline-block';
+    document.getElementById('checkButton').textContent = 'CHECK';
+  };
+
+  updateSpeedIndicator();
+}
+
+function increaseSpeed() {
+  utterance.rate += 0.1;
+  if (utterance.rate > 2.0) utterance.rate = 2.0;
+  updateSpeedIndicator();
+}
+
+function decreaseSpeed() {
+  utterance.rate -= 0.1;
+  if (utterance.rate < 0.1) utterance.rate = 0.1;
+  updateSpeedIndicator();
+}
+
+function updateSpeedIndicator() {
+  const speedometer = document.getElementById('speedIndicator');
+  const speed = utterance.rate;
+  const widthPercentage = ((speed - 0.1) / (2.0 - 0.1)) * 100;
+  speedometer.style.width = `${widthPercentage}%`;
+}
+
+// Automatic Play Handler
+function handleAutomaticPlay() {
+  const automaticPlayButton = document.getElementById('automaticPlayButton');
+  const nextButton = document.getElementById('nextButton');
+  const checkButton = document.getElementById('checkButton');
+  const askButton = document.getElementById('askButton');
+
+  if (!isPlaying) {
+    isPlaying = true;
+    automaticPlayButton.textContent = "Stop";
+
+    nextButton.style.display = 'none';
+    checkButton.style.display = 'none';
+    askButton.style.display = 'none';
+
+    function playCycle() {
+      if (isPlaying) {
+        createQuestion(); // Display the current question
+        setTimeout(() => {
+          document.getElementById('checkButton').click(); // Simulate check
+          setTimeout(() => {
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length; // Move to next question
+            playCycle(); // Continue the cycle
+          }, 7000); // Delay between questions
+        }, 7000); // Delay before checking
+      }
+    }
+
+    playCycle();
+  } else {
+    isPlaying = false;
+    automaticPlayButton.textContent = "Automatic Play";
+    nextButton.style.display = 'inline-block';
+    checkButton.style.display = 'inline-block';
+    askButton.style.display = 'inline-block';
+  }
+}
+
+// Highlight Text Function
+function highlightText(interimText, expectedText) {
+  const normalizedInterim = normalizeString(interimText);
+  const normalizedExpected = normalizeString(expectedText);
+
+  if (normalizedInterim === normalizedExpected) {
+    document.getElementById('interim-text').style.color = 'lightgreen';
+    document.getElementById('answer').textContent = 'Correct!';
+  } else {
+    document.getElementById('interim-text').style.color = 'red';
+    document.getElementById('answer').textContent = 'Try again';
+  }
+
+  document.getElementById('interim-text').value = interimText;
+}
+
+// Event Listeners
+document.getElementById('askButton').addEventListener('click', function() {
+  recognition.start();
+  this.innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
+  this.classList.add('recording');
+});
+
+recognition.onresult = function(event) {
+  const transcript = event.results[0][0].transcript.trim();
+  const normalizedTranscript = normalizeString(transcript);
+  const normalizedExpected = normalizeString(questions[currentQuestionIndex].translation);
+
+  highlightText(transcript, questions[currentQuestionIndex].translation);
+
+  document.getElementById('askButton').innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
+  document.getElementById('askButton').classList.remove('recording');
+};
+
+recognition.onend = function() {
+  document.getElementById('askButton').innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
+  document.getElementById('askButton').classList.remove('recording');
+};
+
+document.getElementById('checkButton').addEventListener('click', function() {
+  const checkButton = document.getElementById('checkButton');
+  const expectedPhraseElement = document.getElementById('expected-phrase');
+
+  if (checkButton.textContent === 'CHECK') {
+    expectedPhraseElement.style.display = 'block';
+    checkButton.style.display = 'none';
+    playExpectedPhraseAudio();
+  }
+});
+
+document.getElementById('nextButton').addEventListener('click', function() {
+  currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+  createQuestion();
+});
+
+document.getElementById('automaticPlayButton').addEventListener('click', handleAutomaticPlay);
+</script>
+
+</body>
+</html>

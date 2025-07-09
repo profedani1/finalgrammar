@@ -1,0 +1,469 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            color: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 1vh; /* Adjust margin as needed */
+        }
+        .pronoun-container {
+            display: flex;
+            width: 90%;
+            justify-content: space-around;
+        }
+        .pronoun-button {
+            height: 5vh;
+            font-size: 2vh;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            border: 0.3vh solid white;
+        }
+      .pronoun-button:hover {
+            background-color: black;
+            color: cyan;
+                    border: 0.3vh solid cyan;
+
+        }
+        .pronoun-button.selected {
+            background-color: cyan;
+            color: black;
+                              border: 0.3vh solid cyan;
+
+        }
+      #menu {
+    display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    gap: 0.5vh;
+    justify-content: center;
+    margin-top:2vh;
+}
+
+/* Style for each button */
+#menu button {
+    background-color: lightgrey;
+    border: 0.3vh solid #ccc;
+    font-size: 2vh;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+    width: 120px;
+    transition: all 0.3s ease;
+        margin:0vh;
+
+}
+#menu button:hover {
+    background-color: black;
+    color: yellow;
+    border-color: yellow;
+    transform: scale(1.05);
+}
+#menu button.selected {
+    background-color: yellow;
+    color: black;
+    border-color: yellow;
+}
+
+  .columns-container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%; /* Adjust width as needed */
+            margin-top: 0vh; /* Adjust margin as needed */
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5vh; /* Adjust gap between buttons */
+            box-sizing: border-box;
+            width: 50%; /* Adjust width as needed */
+            padding: 1vh 0;
+        }
+        button {
+            width: 90%;
+            height: 6.1vh;
+            font-size: 2.2vh;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            border: 0.3vh solid white;
+        }
+        .selected {
+            background-color: blue;
+            color: white;
+                      border: 0.3vh solid blue;
+
+        }
+        .matched {
+            border: 0.7vh solid lime;
+        }
+        .wrong {
+            background-color: darkred;
+            color: white;
+        }
+        button.translation {
+            width: 100%;
+            height: 6.1vh;
+            cursor: pointer;
+            background-color: black;
+            font-weight: bold;
+            border: 0.3vh solid white;
+            color: white;
+            
+            overflow: hidden; 
+            cursor: pointer;
+        }
+        button.translation:hover {
+            border: 0.7vh solid blue;
+            animation: shake 0.5s ease; /* Apply shake animation on hover */
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            10% { transform: translateX(-0.3vw); }
+            20% { transform: translateX(0.3vw); }
+            30% { transform: translateX(-0.3vw); }
+            40% { transform: translateX(-0.3vw); }
+            50% { transform: translateX(0.3vw); }
+            60% { transform: translateX(-0.3vw); }
+            70% { transform: translateX(-0.3vw); }
+            80% { transform: translateX(0.3vw); }
+            90% { transform: translateX(-0.3vw); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes borderChange {
+            0% { border-color: red; }
+            25% { border-color: yellow; }
+            50% { border-color: lime; }
+            75% { border-color: cyan; }
+            100% { border-color: magenta; }
+        }
+
+        .shuffle-white-border {
+            border-color: white !important;
+        }
+
+        button.translation.selected {
+            background-color: blue;
+            color: white;
+        }
+
+        button.translation.matched {
+            border: 0.7vh solid lime;
+        }
+
+        button.translation.wrong {
+            background-color: darkred;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu">
+    <button data-verb="rest" onclick="selectVerb('rest')">REST<br>DESCANSAR</button>
+    <button data-verb="work" onclick="selectVerb('work')">WORK<br>TRABAJAR</button>
+    <button data-verb="walk" onclick="selectVerb('walk')">WALK<br>CAMINAR</button>
+    <button data-verb="study" onclick="selectVerb('study')">STUDY<br>ESTUDIAR</button>
+    <button data-verb="buy" onclick="selectVerb('buy')">BUY<br>COMPRAR</button>
+    <button data-verb="help" onclick="selectVerb('help')">HELP<br>AYUDAR</button>
+    <button data-verb="visit" onclick="selectVerb('visit')">VISIT<br>VISITAR</button>
+    <button data-verb="wait" onclick="selectVerb('wait')">WAIT<br>ESPERAR</button>
+    <button data-verb="talk" onclick="selectVerb('talk')">TALK<br>HABLAR</button>
+</div>
+    <div class="container">
+        <div class="pronoun-container">
+            <button class="pronoun-button selected" data-pronoun="I">I</button>
+            <button class="pronoun-button" data-pronoun="YOU">YOU</button>
+            <button class="pronoun-button" data-pronoun="HE">HE</button>
+            <button class="pronoun-button" data-pronoun="WE">WE</button>
+            <button class="pronoun-button" data-pronoun="YOU GUYS">YOU GUYS</button>
+            <button class="pronoun-button" data-pronoun="THEY">THEY</button>
+        </div>
+        
+      
+      
+        <div class="columns-container">
+            <div class="column" id="questionsColumn"></div>
+            <div class="column" id="translationsColumn"></div>
+        </div>
+    </div>
+
+    <script>
+        const verbs = {
+            rest: { rootEn: "REST", rootEs: "DESCANS" },
+            work: { rootEn: "WORK", rootEs: "TRABAJ" },
+            walk: { rootEn: "WALK", rootEs: "CAMIN" },
+            study: { rootEn: "STUDY", rootEs: "ESTUDI" },
+            talk: { rootEn: "TALK", rootEs: "HABL" },
+            buy: { rootEn: "BUY", rootEs: "COMPR" },
+            help: { rootEn: "HELP", rootEs: "AYUD" },
+            visit: { rootEn: "VISIT", rootEs: "VISIT" },
+            wait: { rootEn: "WAIT", rootEs: "ESPER" },
+        };
+
+        let selectedPronoun = 'I'; // Default pronoun
+        let selectedVerb = verbs.rest; // Default verb
+        const pronounButtons = document.querySelectorAll('.pronoun-button');
+        const questionsColumn = document.getElementById('questionsColumn');
+        const translationsColumn = document.getElementById('translationsColumn');
+        let selectedQuestion = null;
+        let selectedTranslation = null;
+
+      function selectVerb(verbKey) {
+    // Remove selected class from all buttons
+    const buttons = document.querySelectorAll('#menu button');
+    buttons.forEach(button => {
+        button.classList.remove('selected');
+    });
+
+    // Add selected class to the clicked button
+    const selectedButton = document.querySelector(`#menu button[data-verb="${verbKey}"]`);
+    selectedButton.classList.add('selected');
+
+    // Update the verb as per your logic
+    selectedVerb = verbs[verbKey];
+    updateQuestions();
+}
+        function generateQuestions(pronoun, verb) {
+    // Generate the past tense for English verbs
+    let rootEnPast = verb.rootEn.endsWith('E') ? verb.rootEn + 'D' : verb.rootEn + 'ED';
+
+    // Exception for "BUYED" to be replaced with "BOUGHT"
+    if (rootEnPast === "BUYED") {
+        rootEnPast = "BOUGHT";
+    }
+
+    const rootEs = verb.rootEs;
+
+            
+          if (pronoun === "I") {
+          return [
+            { question: `I HAD ${rootEnPast}`, translation: `HABÍA ${verb.rootEs}ADO` },
+            { question: `I ${rootEnPast}`, translation: `${rootEs}É` },
+            { question: `I USED TO ${verb.rootEn}`, translation: `${rootEs}ABA` },
+            { question: `I HAVE ${rootEnPast}`, translation: `HE ${verb.rootEs}ADO` },
+            { question: `I ${verb.rootEn}`, translation: `${rootEs}O` },
+            { question: `I WILL ${verb.rootEn}`, translation: `${rootEs}ARÉ` },
+            { question: `I WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍA` },
+            { question: `IF I ${rootEnPast}`, translation: `SI ${rootEs}ARA` },
+            { question: `I WOULD HAVE ${rootEnPast}`, translation: `HABRÍA ${verb.rootEs}ADO` },
+            { question: `IF I HAD ${rootEnPast}`, translation: `SI HUBIERA ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "YOU") {
+          return [
+            { question: `YOU HAD ${rootEnPast}`, translation: `HABÍAS ${verb.rootEs}ADO` },
+            { question: `YOU ${rootEnPast}`, translation: `${rootEs}ASTE` },
+            { question: `YOU USED TO ${verb.rootEn}`, translation: `${rootEs}ABAS` },
+            { question: `YOU HAVE ${rootEnPast}`, translation: `HAS ${verb.rootEs}ADO` },
+            { question: `YOU ${verb.rootEn}`, translation: `${rootEs}AS` },
+            { question: `YOU WILL ${verb.rootEn}`, translation: `${rootEs}ARÁS` },
+            { question: `YOU WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍAS` },
+            { question: `IF YOU ${rootEnPast}`, translation: `SI ${rootEs}ARAS` },
+            { question: `YOU WOULD HAVE ${rootEnPast}`, translation: `HABRÍAS ${verb.rootEs}ADO` },
+            { question: `IF YOU HAD ${rootEnPast}`, translation: `SI HUBIERAS ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "HE") {
+          return [
+            { question: `HE HAD ${rootEnPast}`, translation: `HABÍA ${verb.rootEs}ADO` },
+            { question: `HE ${rootEnPast}`, translation: `${rootEs}Ó` },
+            { question: `HE USED TO ${verb.rootEn}`, translation: `${rootEs}ABA` },
+            { question: `HE HAS ${rootEnPast}`, translation: `HA ${verb.rootEs}ADO` },
+            { question: `HE ${verb.rootEn}S`, translation: `${rootEs}A` },
+            { question: `HE WILL ${verb.rootEn}`, translation: `${rootEs}ARÁ` },
+            { question: `HE WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍA` },
+            { question: `IF HE ${rootEnPast}`, translation: `SI ${rootEs}ARA` },
+            { question: `HE WOULD HAVE ${rootEnPast}`, translation: `HABRÍA ${verb.rootEs}ADO` },
+            { question: `IF HE HAD ${rootEnPast}`, translation: `SI HUBIERA ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "WE") {
+          return [
+            { question: `WE HAD ${rootEnPast}`, translation: `HABÍAMOS ${verb.rootEs}ADO` },
+            { question: `WE ${rootEnPast}`, translation: `${rootEs}AMOS` },
+            { question: `WE USED TO ${verb.rootEn}`, translation: `${rootEs}ABAMOS` },
+            { question: `WE HAVE ${rootEnPast}`, translation: `HEMOS ${verb.rootEs}ADO` },
+            { question: `WE ${verb.rootEn}`, translation: `${rootEs}AMOS` },
+            { question: `WE WILL ${verb.rootEn}`, translation: `${rootEs}AREMOS` },
+            { question: `WE WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍAMOS` },
+            { question: `IF WE ${rootEnPast}`, translation: `SI ${rootEs}ARAMOS` },
+            { question: `WE WOULD HAVE ${rootEnPast}`, translation: `HABRÍAMOS ${verb.rootEs}ADO` },
+            { question: `IF WE HAD ${rootEnPast}`, translation: `SI HUBIERAMOS ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "YOU GUYS") {
+          return [
+            { question: `YOU GUYS HAD ${rootEnPast}`, translation: `HABÍAIS ${verb.rootEs}ADO` },
+            { question: `YOU GUYS ${rootEnPast}`, translation: `${rootEs}ASTEIS` },
+            { question: `YOU GUYS USED TO ${verb.rootEn}`, translation: `${rootEs}ABAIS` },
+            { question: `YOU GUYS HAVE ${rootEnPast}`, translation: `HABEIS ${verb.rootEs}ADO` },
+            { question: `YOU GUYS ${verb.rootEn}`, translation: `${rootEs}AIS` },
+            { question: `YOU GUYS WILL ${verb.rootEn}`, translation: `${rootEs}AREIS` },
+            { question: `YOU GUYS WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍAIS` },
+            { question: `IF YOU GUYS ${rootEnPast}`, translation: `SI ${rootEs}ARAIS` },
+            { question: `YOU GUYS WOULD HAVE ${rootEnPast}`, translation: `HABRÍAIS ${verb.rootEs}ADO` },
+            { question: `IF YOU GUYS HAD ${rootEnPast}`, translation: `SI HUBIERAIS ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "THEY") {
+          return [
+            { question: `THEY HAD ${rootEnPast}`, translation: `HABÍAN ${verb.rootEs}ADO` },
+            { question: `THEY ${rootEnPast}`, translation: `${rootEs}ARON` },
+            { question: `THEY USED TO ${verb.rootEn}`, translation: `${rootEs}ABAN` },
+            { question: `THEY HAVE ${rootEnPast}`, translation: `HAN ${verb.rootEs}ADO` },
+            { question: `THEY ${verb.rootEn}`, translation: `${rootEs}AN` },
+            { question: `THEY WILL ${verb.rootEn}`, translation: `${rootEs}ARÁN` },
+            { question: `THEY WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍAN` },
+            { question: `IF THEY ${rootEnPast}`, translation: `SI ${rootEs}ARAN` },
+            { question: `THEY WOULD HAVE ${rootEnPast}`, translation: `HABRÍAN ${verb.rootEs}ADO` },
+            { question: `IF THEY HAD ${rootEnPast}`, translation: `SI HUBIERAN ${verb.rootEs}ADO` }
+          ];
+        }
+        
+        return [];
+      }
+
+
+   // Function to shuffle an array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Update the questions and translations, shuffling translations
+function updateQuestions() {
+    clearElement(questionsColumn);
+    clearElement(translationsColumn);
+
+    const currentQuestions = generateQuestions(selectedPronoun, selectedVerb);
+
+    // Create and append the question buttons
+    currentQuestions.forEach((item, index) => {
+        const questionBtn = document.createElement('button');
+        questionBtn.textContent = item.question;
+        questionBtn.dataset.index = index;
+        questionBtn.classList.add('question');
+        questionBtn.addEventListener('click', () => selectButton(questionBtn, 'question'));
+        questionsColumn.appendChild(questionBtn);
+    });
+
+    // Shuffle the translations array before displaying them
+    const shuffledTranslations = [...currentQuestions].map(item => item.translation);
+    shuffleArray(shuffledTranslations);
+
+    // Create and append the shuffled translation buttons
+    shuffledTranslations.forEach((translation, index) => {
+        const translationBtn = document.createElement('button');
+        translationBtn.textContent = translation;
+        translationBtn.dataset.index = index; // Keep track of the original index
+        translationBtn.dataset.translation = translation;
+        translationBtn.classList.add('translation');
+        translationBtn.addEventListener('click', () => selectButton(translationBtn, 'translation'));
+        translationsColumn.appendChild(translationBtn);
+    });
+}
+
+function checkMatch() {
+    const questionIndex = selectedQuestion.dataset.index;
+    const translationIndex = selectedTranslation.dataset.index;
+
+    // Ensure the match corresponds to the correct verb's question and translation
+    const currentQuestions = generateQuestions(selectedPronoun, selectedVerb);
+    const correctTranslation = currentQuestions[questionIndex].translation;
+
+    if (correctTranslation === selectedTranslation.textContent) {
+        // Mark the items as matched
+        selectedQuestion.classList.add('matched');
+        selectedTranslation.classList.add('matched');
+        selectedQuestion.classList.remove('selected');
+        selectedTranslation.classList.remove('selected');
+        
+        // Play the correct translation using speech synthesis
+        const utterance = new SpeechSynthesisUtterance(correctTranslation);
+        utterance.lang = 'es-ES'; // Set language to Spanish (es-ES)
+        speechSynthesis.speak(utterance);
+
+        // Reset the selected question and translation
+        selectedQuestion = null;
+        selectedTranslation = null;
+
+        // Check if all questions are matched
+        checkCompletion();
+    } else {
+        // If the match is wrong, mark as wrong
+        selectedQuestion.classList.add('wrong');
+        selectedTranslation.classList.add('wrong');
+        setTimeout(() => {
+            selectedQuestion.classList.remove('wrong');
+            selectedTranslation.classList.remove('wrong');
+            selectedQuestion.classList.remove('selected');
+            selectedTranslation.classList.remove('selected');
+            selectedQuestion = null;
+            selectedTranslation = null;
+        }, 1000);
+    }
+}
+
+
+function clearElement(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}
+
+// Selection logic remains unchanged
+ function selectButton(button, type) {
+            if (button.classList.contains('matched')) return;
+
+            if (type === 'question') {
+                if (selectedQuestion) selectedQuestion.classList.remove('selected');
+                selectedQuestion = button === selectedQuestion ? null : button;
+            } else if (type === 'translation') {
+                if (selectedTranslation) selectedTranslation.classList.remove('selected');
+                selectedTranslation = button === selectedTranslation ? null : button;
+            }
+
+            button.classList.toggle('selected');
+
+            if (selectedQuestion && selectedTranslation) {
+                checkMatch();
+            }
+        }
+
+// Pronoun selection logic remains unchanged
+pronounButtons.forEach(button => {
+    button.addEventListener('click', function () {
+        pronounButtons.forEach(btn => btn.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedPronoun = this.dataset.pronoun;
+        updateQuestions();
+    });
+});
+
+// Initialize questions
+updateQuestions();
+
+    </script>
+</body>
+</html>

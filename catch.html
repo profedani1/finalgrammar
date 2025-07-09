@@ -1,0 +1,352 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Learning Game</title>
+  <style>
+    body {
+      background-color: #333;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      margin-top: -1vh;
+      padding: 0;
+      overflow: hidden; /* Prevent scrolling */
+    }
+    #screen {
+      position: relative;
+      background:black;
+      width: 100%;
+      height: 75vh;
+      border: 1px solid #ccc;
+      overflow: hidden;
+      margin-top:10vh;
+    }
+    .rectangle {
+      position: absolute;
+      padding: 9px;
+      width:18vh;
+      background-color: white;
+      color:black;
+      font-weight:bold;
+      border: 1px solid #000;
+      cursor: pointer;
+            text-align: center;
+            font-size: 2vh;
+
+    }
+    .rectangle.mismatched {
+      background-color: lightcoral;
+    }
+    #question-area {
+      position:absolute;
+      background-color:black;
+      text-align: center;
+      color:yellow;
+      font-weight:bold;
+      width:83%;
+      height:6.8vh;
+      left:15%;
+      top:0.5vh;
+                border:0.2vh solid yellow;
+
+font-size: calc(2.2vh + 2vw);`
+    }
+    #record-button {
+      margin-top: 10px;
+    }
+    #recognized-text {
+      visibility: hidden;
+      transition: opacity 0.5s;
+    }
+
+ .button.voice-recognition {   width: 33.3%;
+
+}
+
+.button.choose {   width: 33.3%;
+}
+
+.button.listen {    width: 33.3%;
+}
+
+ .act-container {
+  display: flex; /* Use flexbox to align buttons horizontally */
+   width: 100%;
+height:10vh;
+}
+        #playPauseButton {
+          background-color:white;
+                 font-size: 4.5vh;
+position:absolute;
+         top:0.75vh;
+         left:1.1vh;
+          border:0.2vh solid #735bc1;  animation: wave 2s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+  </style>
+</head>
+<body>
+  <div id="question-area"></div>
+  <div id="screen"></div>
+     <button id="playPauseButton">🎵</button>
+
+     <div class="act-container">
+<button class="button voice-recognition" onclick="navigateToVoiceRecognition()">SPEAK</button>
+
+<button class="button choose" onclick="navigateTochoose()">CHOOSE</button>
+
+
+<button class="button listen" onclick="navigateTolisten()">LISTEN</button>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const screen = document.getElementById("screen");
+    const questionArea = document.getElementById("question-area");
+
+    // Retrieve mistake data from localStorage
+    const mistakeData = JSON.parse(localStorage.getItem('mistakeData'));
+
+    // If no mistakeData exists or is empty, alert the user and stop further execution
+    if (!mistakeData || mistakeData.length === 0) {
+      alert("No mistake data available!");
+      return;
+    }
+  recoveredPhrases = mistakeData; // Now you have the data for other functions to use.
+
+    let currentQuestion = {};
+    let currentTranslations = [];
+
+    function generateRandomPhrase() {
+      // Select a random question and translation pair from the mistakeData
+      const randomIndex = Math.floor(Math.random() * mistakeData.length);
+      currentQuestion = mistakeData[randomIndex];
+      currentTranslations = getRandomTranslations(currentQuestion.translation);
+      questionArea.innerText = currentQuestion.question;
+      createTranslationButtons(currentTranslations);
+    }
+
+    function getRandomTranslations(correctTranslation) {
+      // Generate a list of translations with one correct one and random incorrect ones
+      const incorrectTranslations = mistakeData
+        .filter(item => item.translation !== correctTranslation)
+        .map(item => item.translation);
+
+      // Shuffle the translations and include the correct one
+      const allTranslations = [correctTranslation, ...getRandomItems(incorrectTranslations, 3)];
+      return shuffleArray(allTranslations);
+    }
+
+    function getRandomItems(array, count) {
+      const shuffled = shuffleArray(array);
+      return shuffled.slice(0, count);
+    }
+
+    function shuffleArray(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function createTranslationButtons(translations) {
+      screen.innerHTML = ""; // Clear existing rectangles
+      translations.forEach((translation) => createRectangle(translation));
+    }
+
+    function createRectangle(text) {
+      const rectangle = document.createElement("div");
+      rectangle.classList.add("rectangle");
+      rectangle.innerText = text;
+      screen.appendChild(rectangle);
+      positionRectangle(rectangle);
+      rectangle.addEventListener("click", () => handleRectangleClick(rectangle));
+      moveRectangle(rectangle);
+    }
+
+    function positionRectangle(rectangle) {
+      let overlap;
+      do {
+        const x = Math.random() * (screen.offsetWidth - rectangle.offsetWidth);
+        const y = Math.random() * (screen.offsetHeight - rectangle.offsetHeight);
+        rectangle.style.left = `${x}px`;
+        rectangle.style.top = `${y}px`;
+        overlap = checkOverlap(rectangle);
+      } while (overlap);
+    }
+
+    function checkOverlap(rectangle) {
+      const rect1 = rectangle.getBoundingClientRect();
+      return Array.from(screen.children).some((other) => {
+        if (other === rectangle) return false;
+        const rect2 = other.getBoundingClientRect();
+        return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+      });
+    }
+
+    function moveRectangle(rectangle) {
+      const baseSpeed = 0.1; // Base speed factor in vh/vw
+      const speedX = baseSpeed * window.innerWidth / 100; // Adjust speed to vw (viewport width)
+      const speedY = baseSpeed * window.innerHeight / 100; // Adjust speed to vh (viewport height)
+
+      let dx = speedX;
+      let dy = speedY;
+
+      function move() {
+        let x = parseFloat(rectangle.style.left) || 0;
+        let y = parseFloat(rectangle.style.top) || 0;
+
+        // Bounce off screen edges
+        if (x + rectangle.offsetWidth >= screen.offsetWidth || x <= 0) dx *= -1;
+        if (y + rectangle.offsetHeight >= screen.offsetHeight || y <= 0) dy *= -1;
+
+        rectangle.style.left = `${x + dx}px`;
+        rectangle.style.top = `${y + dy}px`;
+
+        // Check for collisions with other rectangles
+        const collision = checkOverlap(rectangle);
+        if (collision) {
+          dx *= -1;
+          dy *= -1;
+        }
+
+        requestAnimationFrame(move);
+      }
+
+      move();
+    }
+
+    function handleRectangleClick(rectangle) {
+      if (rectangle.innerText === currentQuestion.translation) {
+        const utterance = new SpeechSynthesisUtterance(rectangle.innerText);
+        utterance.lang = "es-ES";
+        window.speechSynthesis.speak(utterance);
+
+        rectangle.style.backgroundColor = "lightgreen";
+        setTimeout(() => generateRandomPhrase(), 500);
+      } else {
+        rectangle.classList.add("mismatched");
+        setTimeout(() => rectangle.classList.remove("mismatched"), 500);
+      }
+    }
+
+    // Initial call to start the activity
+    generateRandomPhrase();
+  });
+function navigateToVoiceRecognition() {
+  const questionsJSON = JSON.stringify(recoveredPhrases);
+  const url = `voicerecognition.html?questions=${encodeURIComponent(questionsJSON)}`;
+  window.location.href = url;
+}
+
+  function navigateTolisten() {
+    const questionsJSON = JSON.stringify(recoveredPhrases);
+    const url = `listen.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+  }
+      
+  function navigateTochoose() {
+    const questionsJSON = JSON.stringify(recoveredPhrases);
+    const url = `choose.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+  }
+
+  function navigateTomainCATCH() {
+    const questionsJSON = JSON.stringify(recoveredPhrases);
+    const url = `catch.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+  }
+function makeAllButtonsResponsiveToBeat(audioUrl) {
+  let audioContext, analyser, dataArray, isPlaying = false;
+
+  // Create audio element but do not play it initially
+  const audio = new Audio(audioUrl);
+  audio.crossOrigin = "anonymous"; // Ensure CORS is handled for external URLs
+  audio.loop = true;
+
+  // Set up the Web Audio API when the audio starts
+  function setupAudioContext() {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 256;
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      const source = audioContext.createMediaElementSource(audio);
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+
+      visualize();
+    }
+  }
+
+  // Function to update visualization for all buttons
+  function visualize() {
+    requestAnimationFrame(visualize);
+    analyser.getByteFrequencyData(dataArray);
+
+    // Calculate the average volume
+    const avg = dataArray.reduce((sum, val) => sum + val, 0) / dataArray.length;
+
+    // Scale based on volume
+     const scale = 0.7 + avg / 400; // Adjust the scale to make it smoother
+
+    // Apply the scale to all buttons except the Play/Pause button
+    document.querySelectorAll("button").forEach((button) => {
+      if (button.id !== "playPauseButton") {
+        button.style.transform = `scale(${scale})`;
+      }
+    });
+  }
+
+  // Add functionality to the Play/Pause button
+  const playPauseButton = document.getElementById("playPauseButton");
+  playPauseButton.addEventListener("click", () => {
+    if (isPlaying) {
+      audio.pause();
+      playPauseButton.textContent = "🎵";
+    } else {
+      setupAudioContext(); // Ensure audio context is set up
+      audio.play();
+      playPauseButton.textContent = "🔇";
+    }
+    isPlaying = !isPlaying;
+  });
+}
+
+// Call the function with the audio URL
+makeAllButtonsResponsiveToBeat("https://cdn.glitch.global/30d0db25-b202-45bb-b635-9b58601a408e/J.Rabbit%20-%20Tequila_%20Remix(MP3_160K)_1.mp3?v=1737651634075");
+
+// Add dynamic buttons functionality
+const addButton = document.getElementById("addButton");
+let buttonCount = 1;
+
+addButton.addEventListener("click", () => {
+  const newButton = document.createElement("button");
+  newButton.textContent = `Dynamic Button ${buttonCount++}`;
+  document.body.appendChild(newButton);
+});
+  </script>   
+
+</div>
+</body>
+</html>

@@ -1,0 +1,859 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=.1.0" />
+    <title>HTML preview</title>
+    <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+      html,
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #000C00;
+        width: 99%;
+        height: 100%;
+        margin: 0;
+        padding: 0%;
+        overflow: hidden;
+      }
+ .microphone-icon {
+    color: red;
+    font-size: 8vh;
+    border-radius: 100%;
+    background-color: transparent;
+    justify-content: space-between;
+    padding:10% 30%;
+   margin-left:-1vh;
+
+transition: all 1s ease;
+       text-align: center; /* Changed from display: center; */
+    justify-content: center;
+            align-items: center;   box-sizing: border-box;
+
+}
+
+.microphone-icon:hover {
+    background-color: transparent;
+    text-shadow: 0 0 0.5vh #F03200, 0 0 0.5vh #F00032, 0 0 0.7vh darkred;
+    box-shadow: 0 0 1vh #F03200, 0 0 3vh #F00032, 0 0 5vh red;
+}
+@keyframes flicker {
+    0% {
+        box-shadow: 0 0 4px white, 0 0 4px white, 0 0 4px white;
+    }
+    25% {
+        box-shadow: 0 0 4px lightgrey, 0 0 4px lightgrey, 0 0 4px lightgrey;
+    }
+    50% {
+        box-shadow: 0 0 4px grey, 0 0 4px grey, 0 0 4px grey;
+    }
+   75% {
+        box-shadow: 0 0 4px darkgrey, 0 0 4px darkgrey, 0 0 4px darkgrey;
+    }
+    100% {
+        box-shadow: 0 0 4px lightgrey, 0 0 4px lightgrey, 0 0 4px lightgrey;
+    }
+}
+
+.title-button {
+    width: 100%;margin-bottom:1vh;margin-top:1vh;
+    font-weight: bold;
+    text-align: center; /* Changed from display: center; */
+    padding: 0vh 0vh;
+    height: 5vh; /* Adjusted height using vh */
+ background: linear-gradient(150deg, black, brown);
+            border-radius:10vh;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+border:0.3vh solid yellow; color: yellow;font-size:1.5vh;animation: press 0.5s infinite ease-in-out
+}
+@keyframes press {
+            0%, 100% {
+                transform: translateY(0);
+                box-shadow: 0 1px #1a1a1a, 0 5px #000;
+            }
+            50% {
+                transform: translateY(0.5vh);
+                box-shadow: 0 3px #1a1a1a, 0 5px #000;
+            }
+        }
+.title-button:hover {
+    transform: scale(1.05); /* Slightly scale up when hovered */
+}
+      
+      
+      
+      #answers{
+        display: flex;
+
+        justify-content: space-between;
+      }
+
+      .column {
+        width: 100%;
+      }
+      .column:first-child {
+     }
+
+      .column:last-child {
+        /* Styles for the second column */
+      }
+      .answer-btn {
+  width: 100%;
+  padding: 0% 0%; /* Adjusted vertical padding */
+  box-sizing: border-box;
+  height: 3.7vh;
+font-size: calc(0.7vh + 0.7vw);`
+  font-weight: bold;
+  background-color: #020205;
+  color: #ffffff;
+  border: 0.1px solid white;
+  cursor: pointer;
+ transition: background-color 0.2s ease; /* Smooth transition for background color */
+}
+.answer-btn:hover {
+  background-color: green !important; /* Changes background color to green on hover, overriding any inline styles */
+}
+
+
+    
+      @media (max-width: 2.64in) and (max-height: 5in) {
+      }
+
+
+ #erBtn{
+    background-color: black;
+    color: cyan;
+padding: 0.8vh 3vh;    text-decoration: none;
+    font-weight: bold;
+    font-size: 2vh; /* Using vh for font size */
+    cursor: pointer;
+    border: 2px solid cyan;
+    margin-bottom:1vh;
+    margin-top:1vh;
+}
+ #beBtn{
+    background-color: black;
+    color: orange;
+padding: 0.8vh 3vh;    text-decoration: none;
+    font-weight: bold;
+    font-size: 2vh; /* Using vh for font size */
+    cursor: pointer;
+    border: 2px solid orange;
+    margin-bottom:1vh;
+    margin-top:1vh;
+}
+#arBtn{
+    background-color: black;
+    color: lime;
+padding: 0.8vh 3vh;    text-decoration: none;
+    font-weight: bold;
+    font-size: 2vh; /* Using vh for font size */
+    cursor: pointer;
+    border: 2px solid lime;
+    margin-bottom:1vh;
+    margin-top:1vh;
+}
+   .title-button0{
+        font-weight: bold;
+
+  background-color: black;
+  color:lime;
+}
+.title-button0:hover {
+      font-weight: bold;
+    transform: scale(1.20); 
+  background-color: lime;
+  color:black;
+}
+      
+
+#games {
+    position: fixed;
+    top: 70%;
+    left: 50%;
+ display: grid;
+transform: translate(-50%, -50%);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+#playButton {
+  position: absolute;  text-align: center;
+    bottom: 20vh;
+RIGHT: 50%;    height: 5vh;
+    transform: translate(50%, 50%);
+
+    width:20vh;      font-weight:bold;
+       border:0.4vh solid white;
+    font-size: 1.8vh;
+  background-color: BLACK;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+#playButton:hover {
+    background-color: blue;
+    color: white;
+}
+
+     #gameMenu {
+    position: fixed;
+    top: -49%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+} 
+  #gameMenu2 {
+    position: fixed;
+    top: -49%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+/* When active, the menu drops down */
+#gameMenu.active {
+    top: 50%;
+}
+          /* When active, the menu drops down */
+#gameMenu2.active {
+    top: 50%;
+}
+       .iframe-container {
+    position: absolute;
+    bottom: 0%;
+    left: 0;
+    width: 100%;
+    height: 95%;
+    border: none;
+}      
+      
+
+     button.title-buttonX[onclick="toggleGameMenu(false)"] {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+width:40%;height:4vh;       font-weight:bold;
+       border:0.4vh solid white;
+    font-size: 2vh;
+padding:0vh 0vh ;   background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+button.title-buttonX[onclick="toggleGameMenu(false)"]:hover {
+    background-color: transparent; /* Darker blue on hover */
+}
+
+
+button.title-buttonX2[onclick="toggleGameMenu2(false)"] {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+width:40%;height:4vh;       font-weight:bold;
+       border:0.4vh solid white;
+    font-size: 2vh;
+padding:0vh 0vh ;   background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+button.title-buttonX2[onclick="toggleGameMenu2(false)"]:hover {
+    background-color: transparent; /* Darker blue on hover */
+}
+ #maingames2 {
+    position: fixed;
+    BOTTOM: 17%;
+    left: 50%;
+  width:14vh; 
+    height:14vh; 
+gap:0vh;
+ display: grid;
+transform: translate(-50%, -50%);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  justify-content: center;
+    align-items: center;
+  justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+      text-align: center;
+    align-items: center;    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+   #overall-score {
+    position: absolute;
+        right:4%;
+        top:2.5%;
+    height: 8%;
+        color:yellow;
+    background-color: transparent;
+    display: flex;
+            font-size: 3vh;
+
+    
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+
+
+    </style>
+  </head>
+  <body>   
+    <button id="erBtn" onclick="loadActivityAR()">AR</button>
+    <button id="beBtn" onclick="loadActivityESTAR()">ESTAR</button>
+
+ 
+        <div style="margin-top: 0px"></div>
+
+<div id="answers">
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityHADDRINKED.html')"
+          style="background-color: brown;color:yellow"
+        >
+          HAD DRUNK
+       <br><span id="score-value-haddrunk" style="color: yellow; font-size: 1.5vh;"></span></button>
+
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+  HAB<span style="color: yellow">ÍA</span> 
+</button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">S</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK"></span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span> 
+        </button>
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWOULDHAVEDRINKED.html')"
+          style="background-color: YELLOW; font-size: 1.4vh;height:6vh;"
+        >
+          WOULD HAVE DRUNK
+    <br><span id="score-value-wouldhavedrunk" style="color: yellow; font-size: 1.5vh;"></span></button>
+        <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">S</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span> 
+        </button>
+      </div>
+         <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityIFHADDRINKED.html')"
+          style="background-color: lightblue"
+        >
+          IF...HAD DRUNK
+        <br><span id="score-value-ifhaddrunk" style="color: yellow; font-size: 1.5vh;"></span></button>
+
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+          <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+          <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">S</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+         <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+<span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+       <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IER</span
+          ><span style="color: PINK">AN</span> 
+        </button>
+           <button class="answer-btn" onclick="playAudio(this)" style="background-color: white;color:black">
+      BEB<span style="color:red"
+            >IDO</span
+          >
+        </button>
+      </div>
+    </div>
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityDRINKED.html')"
+          style="background-color: red; color: yellow"
+        >
+          DRANK<br><span id="score-value-drank" style="color: yellow; font-size: 1.5vh;"></span></button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: YELLOW">Í</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: GOLD">ISTE</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: YELLOW">I</span><span style="color: LIGHTBLUE">Ó</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: BLACK;">
+        BEB<span style="color: yellow">Í</span
+          ><span style="color: PINK">MOS</span>
+        </button>      
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: GOLD">ISTEIS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span
+            style="color: lightblue"
+            >IER</span
+          ><span style="color: #ee6f57">ON</span>
+        </button></div>
+           <div id="maingames2">
+
+                <button
+          class="title-button"
+          onclick="loadInnerActivity('activitychooseer.html')"
+          style="  font-size: 2vh; black;border: 2px solid YELLOW; border-radius: 50%;height:10vh;width:12vh;text-align: center;             align-items: center;
+
+"
+        >
+PLAY  ALL<br><span id="score-value-aller" style="color: yellow; font-size: 1.5vh;"></span><br><span id="score-value-onebyoneall" style="color: yellow; font-size: 1.5vh;"></span></button>
+       
+         <button
+          class="recognizerer"
+          onclick="loadInnerActivity('recognizerer.html')"
+          style="background-color:transparent;
+             border: 0.8vh solid #ff0000;
+
+     font-size: 2vh;
+    border-radius: 100%;
+
+         width:12vh;
+         height:11vh;
+"
+        ><i class="fas fa-microphone microphone-icon"></i></button><br><br>
+          <button class="redirect-button" onclick="redirectToURL()"
+          style="background-color:BLACK;
+             border: 0.8vh solid white;color:white;
+
+     font-size: 2vh;
+    border-radius: 100%;
+
+         width:12vh;
+         height:11vh;
+"
+        >PHRASE BUILDER</button>
+  <button id="playButton" onclick="toggleGameMenu(true)">ACTIVITIES BY VERB</button>
+      </div>    
+<div id="gameMenu">
+  <!-- "Back to Map" button -->
+  <button class="title-buttonX" onclick="toggleGameMenu(false)">BACK TO MAP</button>
+ <button onclick="resetIframe()" style="font-size:2vh;padding:0% 0%;width:40%;height:4vh;background-color:black;color:white;font-weight:bold;position:absolute;top:0.4%;left:1%;padding:0% 0%; border: 0.4vh solid white;"
+>RESET GAMES</button>
+
+        <iframe id="myIframe" class="iframe-container" src="https://fresh-rhinestone-canidae.glitch.me/"></iframe>
+    </div>
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityUSEDTODRINK.html')"
+          style="background-color: ORANGE;font-size:1.3vh;height:5vh;margin-bottom:1vh;"
+        >
+          USED TO DRINK
+        <br><span id="score-value-usedtodrink" style="color: yellow; font-size: 1.5vh;"></span></button>
+
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+BEB<span style="color: yellow">ÍA</span
+          ></button>     
+
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+          BEB<span style="color: yellow">ÍA</span
+          ><span style="color: pink">S</span>
+        </button>
+
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+       BEB<span style="color: yellow">ÍA</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        BEB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+         BEB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        BEB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span>
+        </button>
+      </div>
+      <div id="answers2">
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityHAVEDRINKED.html')"
+          style=" font-size: 1.4vh;"
+        >
+HAVE DRUNK <br><span id="score-value-havedrunk" style="color: yellow; font-size: 1.5vh;"></span></button>
+
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+    H<span style="color: lime;">E</span>
+</button>
+          
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        H<span style="color: PINK">AS</span>
+          
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         H<span style="color: PINK">A</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+       H<span style="color: lime">E</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        HAB<span style="color: lime">É</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         H<span style="color: PINK">AN</span> 
+        </button>
+         <button class="answer-btn" onclick="playAudio(this)" style="background-color: white;color:black">
+      BEB<span style="color:red"
+            >IDO</span
+          >
+        </button>
+      </div>      </div>
+
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityDRINK.html')"
+          style="background-color: WHITE"
+        >
+          DRINK<br><span id="score-value-drink" style="color: yellow; font-size: 1.5vh;"></span></button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: lightblue">O</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: PINK">ES</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: PINK">E</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: PINK">EMOS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: PINK">ÉIS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          BEB<span style="color: PINK">EN</span>
+        </button>
+      </div>
+    <div style="margin-top: 1px"></div>
+
+   
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWILLDRINK.html')"
+          style="background-color: lime"
+        >
+          WILL DRINK
+        <br><span id="score-value-willdrink" style="color: yellow; font-size: 1.5vh;"></span></button>
+
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         <span style="color: white">BEBER</span
+          ><span style="color: lime">É</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+          <span style="color: white">BEBER</span
+          ><span style="color: PINK">ÁS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         <span style="color: white">BEBER</span
+          ><span style="color: PINK">Á</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        <span style="color: white">BEBER</span
+          ><span style="color: lime">E</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        <span style="color: white">BEBER</span
+          ><span style="color: lime">É</span><span style="color: PINK">IS</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         <span style="color: white">BEBER</span
+          ><span style="color: PINK">ÁN</span>
+        </button>
+    <div style="margin-top: 1px"></div>
+
+    
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWOULDDRINK.html')"
+          style="background-color: YELLOW"
+        >
+          WOULD DRINK
+      <br><span id="score-value-woulddrink" style="color: yellow; font-size: 1.5vh;"></span></button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        <span style="color: white">BEBER</span
+          ><span style="color: yellow">ÍA</span>
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+         <span style="color: white">BEBER</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">S</span>
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        <span style="color: white">BEBER</span
+          ><span style="color: yellow">ÍA</span>
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        <span style="color: white">BEBER</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+         <span style="color: white">BEBER</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span>
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        <span style="color: white">BEBER</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span>
+        </button>
+      </div>
+   
+    <div style="margin-top: 1px"></div>
+
+
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityIFDRINKED.html')"
+          style="background-color: lightblue"
+        >
+          IF... DRANK   <br><span id="score-value-ifdrank" style="color: yellow; font-size: 1.5vh;"></span></button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> BEB<span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> BEB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">S</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> BEB<span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> BEB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> BEB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">IS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+       <span style="color: #ccff15">si</span> BEB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">N</span>
+        </button>
+    <span style="font-size:1.4vh;color:YELLOW;font-weight:bold;position:absolute;  
+right:4%;top:1%;">TOTAL SCORE</span>
+<div id="overall-score">N/A</div>   </div>
+
+<script>
+    function toggleGameMenu(show) {
+    const gameMenu = document.getElementById("gameMenu");
+    const playButton = document.getElementById("playButton");
+
+    if (show) {
+        gameMenu.classList.add("active");
+        playButton.style.display = "none"; // Hide "PLAY" button
+    } else {
+        gameMenu.classList.remove("active");
+        setTimeout(() => {
+            playButton.style.display = "block"; // Show "PLAY" button after animation
+        }, 500); // Match transition duration
+    }
+}
+  function toggleGameMenu2(show) {
+    const gameMenu = document.getElementById("gameMenu2");
+    const playButton2 = document.getElementById("playButton2");
+
+    if (show) {
+        gameMenu2.classList.add("active");
+        playButton2.style.display = "none"; // Hide "PLAY" button
+    } else {
+        gameMenu2.classList.remove("active");
+        setTimeout(() => {
+            playButton2.style.display = "block"; // Show "PLAY" button after animation
+        }, 500); // Match transition duration
+    }
+}
+ function updateScoreDisplay(activityKey, elementId) { 
+    const savedScore = localStorage.getItem(activityKey);
+    if (savedScore !== null) {
+        document.getElementById(elementId).textContent = savedScore + "%"; // Append %
+    }
+}
+  updateScoreDisplay("score-aller", "score-value-aller");
+  updateScoreDisplay("score-drink", "score-value-drink");
+    updateScoreDisplay("score-usedtodrink", "score-value-usedtodrink");
+      updateScoreDisplay("score-haddrunk", "score-value-haddrunk");
+ updateScoreDisplay("score-willdrink", "score-value-willdrink");
+ updateScoreDisplay("score-woulddrink", "score-value-woulddrink");
+ updateScoreDisplay("score-ifdrank", "score-value-ifdrank");
+ updateScoreDisplay("score-ifhaddrunk", "score-value-ifhaddrunk");
+ updateScoreDisplay("score-wouldhavedrunk", "score-value-wouldhavedrunk");
+ updateScoreDisplay("score-havedrunk", "score-value-havedrunk");
+
+    updateScoreDisplay("score-drank", "score-value-drank");
+     updateScoreDisplay("score-onebyoneall", "score-value-onebyoneall");
+
+function calculateOverallScore() {
+    let totalScore = 0;
+    let count = 0;
+
+    const scoreElements = document.querySelectorAll("[id^='score-value-']"); // Select all score elements
+    scoreElements.forEach(element => {
+        if (element.textContent.trim() !== "") { // Check if the element has a displayed value
+            const score = parseFloat(element.textContent.replace("%", "")); // Remove % and convert to number
+            if (!isNaN(score)) {
+                totalScore += score;
+                count++;
+            }
+        }
+    });
+
+    if (count > 0) {
+        const overallScore = (totalScore / count).toFixed(2); // Calculate average
+        document.getElementById("overall-score").textContent = overallScore + "%"; // Display result
+    } else {
+        document.getElementById("overall-score").textContent = "N/A"; // No scores available
+    }
+}
+
+// Call the function after updating individual scores
+calculateOverallScore();
+  
+  
+  var speechSynthesis = window.speechSynthesis;
+
+ function playAudio(button) {
+    const textContent = button.innerText; // Get the text content of the button
+    const utterance = new SpeechSynthesisUtterance(textContent);
+    utterance.lang = 'es-ES'; // Set the language to Spanish
+    speechSynthesis.speak(utterance); // Speak the text
+  }
+      function loadActivityAR() {
+        // Load activity3.html when the "ER" button is clicked
+        window.location.href = "index.html";
+      }
+      function loadActivityESTAR() {
+        // Load activity3.html when the "ER" button is clicked
+        window.location.href = "activityESTAR.html";
+      }
+      
+     function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+    function redirectToURL() {
+            const url = "https://knowledgeable-versed-lotus.glitch.me/";  // URL to navigate to
+            window.location.href = url;  // Redirects to the URL
+        }
+      function resetIframe() {
+            const iframe = document.getElementById("myIframe");
+            iframe.src = iframe.src; // Reloads the iframe
+        }
+    </script>
+  </body>
+</html>

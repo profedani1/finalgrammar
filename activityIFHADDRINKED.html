@@ -1,0 +1,921 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Game</title>
+    <style>
+      @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+
+body {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+.question-container {
+    width: 96%;
+    display: flex;
+    justify-content: left; 
+      margin-top: 3vh;
+
+    margin-bottom: 0vh;
+    padding: 0.5vh 1vh;
+    background-color: black;
+    color: lightblue;
+    font-weight: bold;
+  font-size: clamp(6px, 4vw, 4rem);
+    border: 0.5vh solid lightblue;
+}
+
+.button-container {
+    display: flex; /* Show columns in a row */
+      width: 99.8%; /* Adjust width as needed, e.g., 20% of viewport width */
+margin-top:1vh;
+margin-left:0.1vh;
+    height: 60vh;
+    background-color: black;
+    align-items: center; 
+    box-sizing: border-box;
+}
+
+.column {
+    display: flex; /* Use flexbox to align buttons */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%; /* Adjust width as needed, e.g., 20% of viewport width */
+    min-width: 15vw; /* Ensure columns don’t get too narrow */
+    margin: 0.1vh 0.1vh; /* Margin between columns */
+    height: 100%; /* Ensure column takes full height */
+
+    box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+.column:active{
+    opacity: 1; /* Highlight active column */
+    transform: scale(1); 
+        border: 0.2vh solid yellow;
+
+}
+
+.translation-button {
+  font-size: clamp(3px, 3vw, 3rem);
+    color: #FFFFFF;
+  padding:0;
+    font-weight: bold;
+    background-color: black;
+    cursor: pointer;
+    width: 100%; /* Make buttons fill the column width */
+    border: 0.1vh solid white;
+    text-transform: uppercase;
+    flex: 1; /* Make buttons flexible */
+  
+}
+
+.translation-button:hover {
+    background-color: black;
+    color: yellow;
+border:0.5vh solid yellow;
+
+}
+.column:not(.active) {
+    pointer-events: none;
+    opacity: 0.5; /* Optional: visually indicate inactive columns */
+}
+.column:not(.active) {
+    pointer-events: none;
+    opacity: 0.5; /* Optional: visually indicate inactive columns */
+}
+
+.translation-button.correct {
+    background-color: black; /* Green background */
+    color: lime;
+    border: 0.5vh solid lime;
+}
+
+.translation-button.incorrect {
+    background-color: black; /* Red background */
+    color: red; /* White text */
+    border: 0.5vh solid red;
+}
+.translation-button:selected {
+    background-color: black;
+    color: cyan;
+    font-size: 2vh;
+      padding: 0;
+
+}
+   .title-button1 {
+background-color: black; /* Red background */
+color: white; /* White text */
+border: 0.5vh solid white;
+  width:12vh;
+  height:12vh;
+   border-radius: 50%;}
+.title-button1:hover {
+background-color: darkgrey; /* Red background */
+color: red; /* White text */
+border: 0.5vh solid red;
+  width:12vh;
+  height:12vh;
+   border-radius: 50%;} 
+      
+       button[onclick="navigateTomainRECOGNIZER()"] {
+   background-color:transparent;
+         color:pink;
+         font-weight:bold;
+     font-size: 2vh;
+ border:none;
+position:absolute;
+         bottom:5vh;
+         left:1%;
+         width:20%;
+         width:60%;
+         height:10%;
+}
+      .microphone-icon {
+    color: red;
+    font-size: 8vh;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 0.7vh solid #ff0000;
+    justify-content: space-between;
+    padding: 5% 25%;
+    transition: all 1s ease;
+       
+}
+
+.microphone-icon:hover {
+    background-color: transparent;
+    text-shadow: 0 0 0.5vh #F03200, 0 0 0.5vh #F00032, 0 0 0.7vh darkred;
+    box-shadow: 0 0 1vh #F03200, 0 0 3vh #F00032, 0 0 5vh red;
+}
+
+#voiceSelect{position:absolute;
+        top:95%;
+        right:40%;
+        font-size:2.5vh;
+        width:50%;  width:30%;
+
+}   
+
+@keyframes focusOutline {
+  0% {
+    outline-offset: 0;
+    outline-color: transparent;
+  }
+  25% {
+    outline-offset: 1vh;
+    outline-color: #4CAF50;
+  }
+  50% {
+    outline-offset: 2vh;
+    outline-color: #4CAF50;
+  }
+  75% {
+    outline-offset: 1vh;
+    outline-color: #4CAF50;
+  }
+  100% {
+    outline-offset: 0vh;
+    outline-color: #4CAF50;
+  }
+}
+ #end-game-content {
+   width:80%;
+   height:100%;
+margin-top:4vh;
+   transition: all 1s ease;
+
+      }
+     #try-again-button{
+   width:100%;
+   height:10vh;
+   background-color:#00080F;
+   color:cyan;
+   border:0.3vh solid cyan;     font-size: 3vh;
+   transition: all 1s ease;
+
+      }
+    #try-again-button:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+  color:lightblue;
+}
+  #score-display   {
+        justify-content: center;
+      margin-top:4vh;
+
+    display: flex;
+    justify-content: space-around;
+   align-items: center; 
+    box-sizing: border-box;
+  background-color: #0C0600;
+   width:100%;
+color: YELLOW;
+    border:0.3vh solid yellow;
+   width:100%;
+    padding:0% 0%;
+    height:10vh;
+    font-size: 3vh;
+  font-weight: bold;
+  border-radius: 1vh;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+} 
+
+
+
+.end-game-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+   transition: all 1s ease;
+
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Make sure it's on top of other content */
+}
+
+
+   
+  .save-score {
+  background-color:#0b150b;
+transition: all 2s ease;
+color: lime;
+ width:100%;
+    height:10vh;
+    font-size: 3vh;
+            border: 0.5vh solid lime;
+margin-top:4vh;
+
+  font-weight: bold;
+  border-radius: 1vh;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.save-score:hover {
+  background-color: #0b150b;
+   text-shadow: 0 0 0.5vh lime, 0 0 0.5vh green, 0 0 0.7vh darkgreen;
+    box-shadow: 0 0 1vh lightgreen, 0 0 3vh green, 0 0 5vh darkgreen;
+  box-sizing: border-box;
+  color:white;
+}
+
+.save-score:active {
+  background-color: yellow;
+  color:black;
+  transform: scale(0.98);
+}
+
+
+
+
+.save-score:focus {
+  outline: 0.5vh solid #4CAF50;
+
+  outline-offset: 2vh;
+  animation: focusOutline 2s ease-in-out forwards;
+}
+      #countdown-bar {
+    width: 100%;
+    height: 2vh; /* Fixed height */
+top:1%; 
+        position:absolute;
+}
+
+@keyframes countdownAnimation {
+    from {
+        width: 100%;
+        background-color: green;
+    }
+    50% {
+        background-color: yellow;
+    }
+    to {
+        width: 0%;
+        background-color: red;
+    }
+}
+
+
+
+.animate {
+    animation: countdownAnimation 60s linear forwards;
+}
+       #voiceSelect{position:absolute;
+   background-color:0C000CMardi  ;
+   color:magenta;
+        top:93%;
+        right:25%;
+        font-size:2.5vh;
+        width:50%;
+   border:0.3vh solid magenta;
+}  
+  </style>
+  </head>
+  <body>
+    <div id="question-container" class="question-container"></div>    <div id="countdown-container">
+        <progress id="countdown-bar" value="600" max="600"></progress>
+        <span id="countdown-time">60</span> 
+    <div class="button-container" id="button-container"></div>
+       <button class="button" onclick="navigateTomainRECOGNIZER()"><span style="position:absolute;top:0%;left:5%;"><i class="fas fa-microphone microphone-icon"></i></span></button>
+
+       <select id="voiceSelect">
+    <option value="">Select a Spanish voice</option>
+</select>
+    
+
+seconds
+    </div>
+
+   <div id="end-game-screen" class="end-game-overlay" style="display:none;">
+    <div class="end-game-content">
+<button id="try-again-button" >TRY AGAIN</button>
+ 
+      <div id="score-display" style=""></div>
+<button class="save-score" onclick="saveScore('score-ifhaddrunk')">SAVE SCORE</button>
+    <script>
+const data = [
+    {
+        phrases: ["IF I HAD LIVED",
+"IF YOU HAD LIVED",
+"IF HE HAD LIVED",
+"IF SHE HAD LIVED",
+"IF WE HAD LIVED",
+"IF YOU ALL HAD LIVED",
+"IF THEY HAD LIVED",
+"IF I HAD RUN",
+"IF YOU HAD RUN",
+"IF HE HAD RUN",
+"IF SHE HAD RUN",
+"IF WE HAD RUN",
+"IF YOU ALL HAD RUN",
+"IF THEY HAD RUN",
+"IF I HAD EATEN",
+"IF YOU HAD EATEN",
+"IF HE HAD EATEN",
+"IF SHE HAD EATEN",
+"IF WE HAD EATEN",
+"IF YOU ALL HAD EATEN",
+"IF THEY HAD EATEN",
+"IF I HAD DRUNK",
+"IF YOU HAD DRUNK",
+"IF HE HAD DRUNK",
+"IF SHE HAD DRUNK",
+"IF WE HAD DRUNK",
+"IF YOU ALL HAD DRUNK",
+"IF THEY HAD DRUNK",
+"IF I HAD WRITTEN",
+"IF YOU HAD WRITTEN",
+"IF HE HAD WRITTEN",
+"IF SHE HAD WRITTEN",
+"IF WE HAD WRITTEN",
+"IF YOU ALL HAD WRITTEN",
+"IF THEY HAD WRITTEN",
+"IF I HAD READ",
+"IF YOU HAD READ",
+"IF HE HAD READ",
+"IF SHE HAD READ",
+"IF WE HAD READ",
+"IF YOU ALL HAD READ",
+"IF THEY HAD READ"
+        ],
+        translations: ["SI YO HUBIERA VIVIDO",
+"SI TÚ HUBIERAS VIVIDO",
+"SI ÉL HUBIERA VIVIDO",
+"SI ELLA HUBIERA VIVIDO",
+"SI NOSOTROS HUBIÉRAMOS VIVIDO",
+"SI VOSOTROS HUBIERAIS VIVIDO",
+"SI ELLOS HUBIERAN VIVIDO",
+"SI YO HUBIERA CORRIDO",
+"SI TÚ HUBIERAS CORRIDO",
+"SI ÉL HUBIERA CORRIDO",
+"SI ELLA HUBIERA CORRIDO",
+"SI NOSOTROS HUBIÉRAMOS CORRIDO",
+"SI VOSOTROS HUBIERAIS CORRIDO",
+"SI ELLOS HUBIERAN CORRIDO",
+"SI YO HUBIERA COMIDO",
+"SI TÚ HUBIERAS COMIDO",
+"SI ÉL HUBIERA COMIDO",
+"SI ELLA HUBIERA COMIDO",
+"SI NOSOTROS HUBIÉRAMOS COMIDO",
+"SI VOSOTROS HUBIERAIS COMIDO",
+"SI ELLOS HUBIERAN COMIDO",
+"SI YO HUBIERA BEBIDO",
+"SI TÚ HUBIERAS BEBIDO",
+"SI ÉL HUBIERA BEBIDO",
+"SI ELLA HUBIERA BEBIDO",
+"SI NOSOTROS HUBIÉRAMOS BEBIDO",
+"SI VOSOTROS HUBIERAIS BEBIDO",
+"SI ELLOS HUBIERAN BEBIDO",
+"SI YO HUBIERA ESCRITO",
+"SI TÚ HUBIERAS ESCRITO",
+"SI ÉL HUBIERA ESCRITO",
+"SI ELLA HUBIERA ESCRITO",
+"SI NOSOTROS HUBIÉRAMOS ESCRITO",
+"SI VOSOTROS HUBIERAIS ESCRITO",
+"SI ELLOS HUBIERAN ESCRITO",
+"SI YO HUBIERA LEÍDO",
+"SI TÚ HUBIERAS LEÍDO",
+"SI ÉL HUBIERA LEÍDO",
+"SI ELLA HUBIERA LEÍDO",
+"SI NOSOTROS HUBIÉRAMOS LEÍDO",
+"SI VOSOTROS HUBIERAIS LEÍDO",
+"SI ELLOS HUBIERAN LEÍDO"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+
+const exceptions = [
+    "SI YO",    "SI TÚ",    "SI ÉL",    "SI ELLA",    "SI NOSOTROS",
+    "SI VOSOTROS",    "SI ELLOS",  
+
+
+
+
+
+
+"un poco",
+"ya que",
+"si tú",
+"si él",
+"si ella",
+"si nosotros",
+"si vosotros",
+"si yo",
+"si ellos",
+"en el futuro",
+"en la casa",
+"en la oficina",
+"en la avenida",
+"en el mercado",
+"en la biblioteca",
+"en la farmacia",
+"en el hospital",
+"en el museo",
+"en el restaurante",
+"en el banco",
+"en el parque",
+"en la calle",
+"en la tienda",
+"en la escuela"];
+
+const dataSets = [data]; 
+let usedSets = [];
+
+function shuffleSetPhrasesAndTranslations(set) {
+    const length = set.phrases.length;
+
+    // Pair up phrases and translations, shuffle them, and then split them back
+    const paired = set.phrases.map((phrase, index) => ({
+        phrase,
+        translation: set.translations[index]
+    }));
+
+    shuffleArray(paired);
+
+    // Reassign shuffled phrases and translations
+    set.phrases = paired.map(pair => pair.phrase);
+    set.translations = paired.map(pair => pair.translation);
+}
+
+function generateCombinations(sections, index = 0, currentPhrase = "", currentTranslation = "", combinations = []) {
+    if (index === sections.length) {
+        combinations.push({
+            phrase: currentPhrase.trim(),
+            translation: currentTranslation.trim()
+        });
+        return;
+    }
+
+    sections[index].phrases.forEach((phrase, i) => {
+        generateCombinations(
+            sections,
+            index + 1,
+            currentPhrase + " " + phrase,
+            currentTranslation + " " + sections[index].translations[i],
+            combinations
+        );
+    });
+
+    return combinations;
+}
+
+function createColumnsByWordPosition(translations) {
+    const wordPositions = [];
+
+    translations.forEach(translation => {
+        let words = splitTranslation(translation);
+        words.forEach((word, index) => {
+            if (!wordPositions[index]) {
+                wordPositions[index] = new Set();
+            }
+            wordPositions[index].add(word);
+        });
+    });
+
+    return wordPositions.map(positionSet => Array.from(positionSet));
+}
+
+function splitTranslation(translation) {
+    let words = [];
+    let remainingText = translation;
+
+    while (remainingText) {
+        let matchedException = exceptions.find(exception => remainingText.startsWith(exception));
+        if (matchedException) {
+            words.push(matchedException);
+            remainingText = remainingText.slice(matchedException.length).trim();
+        } else {
+            let firstSpaceIndex = remainingText.indexOf(' ');
+            if (firstSpaceIndex === -1) {
+                words.push(remainingText);
+                remainingText = "";
+            } else {
+                words.push(remainingText.slice(0, firstSpaceIndex));
+                remainingText = remainingText.slice(firstSpaceIndex + 1).trim();
+            }
+        }
+    }
+
+    return words;
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function getRandomDataSet() {
+    if (usedSets.length === dataSets.length) {
+        usedSets = [];
+        shuffleArray(dataSets);
+    }
+
+    let randomIndex;
+    do {
+        randomIndex = Math.floor(Math.random() * dataSets.length);
+    } while (usedSets.includes(randomIndex));
+
+    usedSets.push(randomIndex);
+    return dataSets[randomIndex];
+}
+let currentColumnIndex = 0;
+let totalPlayed = 0;
+let correctAnswerCount = 0;
+let incorrectAnswerCount = 0;
+
+function loadQuestion(index) {
+    const selectedData = getRandomDataSet();
+    selectedData.forEach(shuffleSetPhrasesAndTranslations);
+
+    const combinations = generateCombinations(selectedData);
+    const { phrase, translation } = combinations[index];
+    const currentTranslationWords = splitTranslation(translation);
+
+    document.getElementById('question-container').innerText = `${phrase}`;
+    const buttonContainer = document.getElementById('button-container');
+    buttonContainer.innerHTML = '';
+
+    const columnsData = createColumnsByWordPosition(combinations.map(({ translation }) => translation));
+
+    answeredCorrectly = new Array(columnsData.length).fill(false);
+    currentColumnIndex = 0;
+
+    columnsData.forEach((words, colIndex) => {
+        const columnContainer = document.createElement('div');
+        columnContainer.classList.add('column');
+        columnContainer.classList.toggle('active', colIndex === currentColumnIndex);
+
+        shuffleArray(words);
+
+        let displayedWords = words.includes(currentTranslationWords[colIndex])
+            ? [currentTranslationWords[colIndex], ...words.filter(word => word !== currentTranslationWords[colIndex])]
+            : [currentTranslationWords[colIndex], ...words];
+
+        displayedWords = displayedWords.slice(0, 7);
+        shuffleArray(displayedWords);
+
+        displayedWords.forEach(word => {
+            const button = document.createElement('button');
+            button.innerText = word;
+            button.classList.add('translation-button');
+
+            button.onclick = function() {
+                if (answeredCorrectly[colIndex]) return;
+
+                totalPlayed++;
+
+                if (currentTranslationWords[colIndex] === word) {
+                    correctAnswerCount++;
+                    button.classList.add('correct');
+                    speakText(word);
+                    answeredCorrectly[colIndex] = true;
+
+                    if (answeredCorrectly.every(status => status)) {
+                        speakText(translation);
+                        setTimeout(() => {
+                            loadQuestion(getRandomQuestionIndex());
+                        }, 2500);
+                    } else {
+                        currentColumnIndex++;
+                        showColumns();
+                    }
+                } else {
+                    incorrectAnswerCount++;
+                    button.classList.add('incorrect');
+                    setTimeout(() => {
+                        button.classList.remove('incorrect');
+                    }, 1000);
+                }
+            };
+
+            columnContainer.appendChild(button);
+        });
+
+        buttonContainer.appendChild(columnContainer);
+    });
+
+    showColumns();
+    startCountdown(); // Starts the countdown timer
+}
+
+function showColumns() {
+    const columns = document.querySelectorAll('.column');
+    columns.forEach((col, index) => {
+        col.classList.toggle('active', index === currentColumnIndex);
+    });
+}
+
+function getRandomQuestionIndex() {
+    return Math.floor(Math.random() * 4);
+}
+
+let countdownTime = 60; // Countdown time in seconds
+let countdownInterval;
+let countdownRunning = false; // Track if the countdown is already running
+
+function startCountdown() {
+    if (countdownRunning) return; // Prevent restarting countdown
+    countdownRunning = true; // Set countdown as running
+
+    const countdownBar = document.getElementById('countdown-bar');
+    const countdownTimeDisplay = document.getElementById('countdown-time');
+    countdownTimeDisplay.innerText = countdownTime; // Display initial time
+
+    countdownBar.classList.remove('animate'); // Reset animation
+    void countdownBar.offsetWidth; // Force reflow to restart animation
+    countdownBar.classList.add('animate'); // Start animation
+
+    countdownInterval = setInterval(() => {
+        countdownTime--;
+        countdownTimeDisplay.innerText = countdownTime; // Update display
+
+        if (countdownTime <= 0) {
+            clearInterval(countdownInterval);
+            endGame(); // End the game when countdown reaches 0
+        }
+    }, 1000);
+}
+
+// Call startCountdown() only once at the beginning of the game
+document.addEventListener("DOMContentLoaded", function () {
+    startCountdown(); // Start countdown once when the game loads
+});
+
+
+
+let totalAnswers = 0; // Track the total number of answers (questions)
+let correctAnswers = 0; // Track the number of correct answers
+function updateScoreDisplay() {
+    let percentageScore = correctAnswerCount * 6 - incorrectAnswerCount * 3;
+    percentageScore = Math.max(0, Math.min(100, percentageScore)); // Keep score between 0 and 100
+
+    // Display the updated score
+    document.getElementById('score-display').innerText = `SCORE: ${percentageScore.toFixed(2)}%`;
+}
+
+function endGame() {
+    // Calculate the final score with new rules
+    let finalScore = correctAnswerCount * 6 - incorrectAnswerCount * 3;
+    finalScore = Math.max(0, Math.min(100, finalScore)); // Ensure score is between 0 and 100
+
+    // Show the final result in the end game screen
+    document.getElementById('end-game-screen').style.display = 'flex';
+    document.getElementById('score-display').innerText = `${Math.round(finalScore)}%`;
+    document.getElementById('correct-answers').innerText = `Correct Answers: ${correctAnswerCount}`;
+    document.getElementById("save-score-button").style.display = "block";
+}
+
+// Try again button logic
+document.getElementById('try-again-button').onclick = function() {
+    location.reload(); // Restart the game
+};
+
+
+function saveScore(activityKey) {
+    const scoreElement = document.getElementById("score-display");
+    const scoreText = scoreElement.innerText.trim();  // Get the score text
+
+    // Extract numeric percentage (e.g., "75%") → "75"
+    const score = scoreText.replace(" ", "").replace("%", "").trim();
+
+    // Save the score to localStorage
+    localStorage.setItem(activityKey, score);
+    
+
+}
+
+let selectedVoice = null;
+
+// Function to speak the text
+function speakText(text) {
+    if (!text || !selectedVoice) return; // Prevent empty speech
+
+    // Cancel any ongoing speech to avoid overlap
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = selectedVoice;
+    window.speechSynthesis.speak(utterance);
+}
+
+// Populate the voice dropdown list
+function populateVoiceList() {
+    const voiceSelect = document.getElementById("voiceSelect");
+    const voices = speechSynthesis.getVoices();
+
+    voiceSelect.innerHTML = '';  // Clear existing options
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = '';
+    defaultOption.innerText = 'Select a Spanish voice';
+    voiceSelect.appendChild(defaultOption);
+
+    const spanishVoices = voices.filter(voice => voice.lang.startsWith('es'));
+
+    if (spanishVoices.length === 0) {
+        const noVoicesOption = document.createElement("option");
+        noVoicesOption.value = '';
+        noVoicesOption.innerText = 'No Spanish voices available';
+        voiceSelect.appendChild(noVoicesOption);
+    }
+
+    spanishVoices.forEach(voice => {
+        const option = document.createElement("option");
+        option.value = voice.name;
+        // Remove the word "Microsoft" from the display name
+option.innerText = `${voice.name.replace(/Microsoft|Spanish|Google/gi, '').trim()} (${voice.lang})`;
+
+      
+        voiceSelect.appendChild(option);
+    });
+
+
+    // Set the default voice to es-ES
+    const esVoice = spanishVoices.find(voice => voice.lang === 'es-ES');
+    selectedVoice = esVoice || spanishVoices[0] || voices[0];
+    voiceSelect.value = selectedVoice.name;
+}
+
+// Check if voices are loaded and populate the dropdown
+function checkVoices() {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length !== 0) {
+        populateVoiceList();
+    } else {
+        speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+}
+
+// Change the selected voice when a new one is chosen from the dropdown
+document.getElementById("voiceSelect").addEventListener("change", function() {
+    const voices = speechSynthesis.getVoices();
+    selectedVoice = voices.find(voice => voice.name === this.value);
+});
+
+// Initialize
+checkVoices();
+loadQuestion(getRandomQuestionIndex());
+
+          function navigateTomainRECOGNIZER() {
+    // Convert the data array to JSON
+    const dataJSON = JSON.stringify(data);
+    
+    // Create the URL for navigation
+    const url = `mainRECOGNIZER.html?data=${encodeURIComponent(dataJSON)}`;
+    
+    // Navigate to the activity page
+    window.location.href = url;
+}
+  function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+     function navigateTomainONEBYONE() {
+      // Convert the data array to JSON
+      const dataJSON = JSON.stringify(data);
+      
+      // Create the URL for navigation
+      const url = `onebyone.html?data=${encodeURIComponent(dataJSON)}`;
+      
+      // Navigate to the activity page
+      window.location.href = url;
+    }
+function createButton() {
+      // Create button element
+      const button = document.createElement('button');
+      button.classList.add('button');
+      button.setAttribute('onclick', 'navigateTomainONEBYONE()');
+      button.innerHTML = 'QUICK<br>MODE';
+
+      // Create a style element to hold the button styles
+      const style = document.createElement('style');
+      style.innerHTML = `
+        button[onclick="navigateTomainONEBYONE()"] {
+          position: fixed;
+          right: 1vh;
+          bottom:5vh;
+          color: cyan;
+          border: 0.5vh solid cyan;
+          font-size: 2vh; /* Using vh for font size */
+          width: 10vh;
+          font-weight: bold;
+          text-align: center;
+          padding: 0vh 0vh;
+          height: 10vh; /* Adjusted height using vh */
+          background: darkblue;
+          border-radius: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+           text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+        }
+       
+      `;
+
+      // Append the style to the head
+      document.head.appendChild(style);
+
+      // Append the button to the body
+      document.body.appendChild(button);
+    }
+
+    // Call the function to create the button
+    window.onload = createButton;
+</script>
+</body>
+</html>

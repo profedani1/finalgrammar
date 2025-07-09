@@ -1,0 +1,2017 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Game</title>
+    <style>
+body {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+.column:not(.active) {
+    pointer-events: none;
+    opacity: 0.2; /* Optional: visually indicate inactive columns */
+}
+     
+.question-container {
+    width: 100%;
+    display: flex;
+    justify-content: left; /* Center the question */
+    margin-bottom: 0vh;
+    padding: 0.5vh 1vh;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+  font-size: clamp(6px, 4vw, 4rem);
+    border: 0.5vh solid white;
+}
+
+.button-container {
+display: flex;
+width: 100%;
+margin-top: 2vh;
+margin-left: 1.7vh;
+height: 60vh;
+background-color: black;
+align-items: center;
+box-sizing: border-box;
+    white-space: nowrap;
+
+
+overflow-x: auto;
+scroll-behavior: smooth;
+gap: 1px;
+}
+
+.column {
+flex-shrink: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 200px;
+justify-content: space-around;
+width: 95%;
+min-width: 15vw;
+margin: 0.1vh 0.1vh;
+height: 99%;
+opacity: 1;
+transition: opacity 0.3s, transform 0.3s;
+box-sizing: border-box;
+}
+
+.column.active {
+    opacity: 1; /* Fully visible */
+    background-color: #f9f9f9; /* Light background */
+    pointer-events: auto; /* Allow interaction */
+}
+.column.inactive, .column.completed {
+    opacity: 0.5; /* Dim inactive/completed columns */
+    background-color: #ddd; /* Gray out inactive/completed columns */
+    pointer-events: none; /* Prevent interaction */
+}
+
+
+.translation-button {
+  font-size: clamp(3px, 8vw, 8rem);
+    color: #FFFFFF;
+  padding:0;
+    font-weight: bold;
+    background-color: black;
+    cursor: pointer;
+    width: 100%; /* Make buttons fill the column width */
+    border: 0.1vh solid white;
+    text-transform: uppercase;
+    flex: 1; /* Make buttons flexible */
+  
+}
+
+.translation-button:hover {
+color: yellow;
+    border: 0.1vh solid yellow;
+}
+
+.translation-button.correct {
+    background-color: black; /* Green background */
+    color: lime;
+    border: 0.5vh solid lime;
+}
+
+.translation-button.incorrect {
+    background-color: black; /* Red background */
+    color: red; /* White text */
+    border: 0.5vh solid red;
+}
+.translation-button:selected {
+    background-color: black;
+    color: cyan;
+    font-size: 2vh;
+      padding: 0;
+
+}
+   .title-button1 {
+       position:absolute;
+       top:0%;left:0%;
+background-color: black; /* Red background */
+color: white; /* White text */
+border: 0.5vh solid white;
+  width:12vh;
+  height:12vh;
+   border-radius: 50%;}
+.title-button1:hover {
+background-color: darkgrey; /* Red background */
+color: red; /* White text */
+border: 0.5vh solid red;
+  width:12vh;
+  height:12vh;
+   border-radius: 50%;} 
+         .save-score {
+  background-color:#0b150b;
+position:absolute; bottom:1%; right:1%;
+color: lime;
+  padding: 1vh 1vh;
+  font-size: 16px;
+            border: 0.5vh solid lime;
+
+  font-weight: bold;
+  border-radius: 1vh;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+  #score-display   {
+  background-color: transparent;
+position:absolute;         bottom:2rem;
+ left:0rem;
+color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+} 
+.save-score:hover {
+  background-color: #45A049;
+  transform: scale(1.05);
+}
+
+.save-score:active {
+  background-color: yellow;
+  color:black;
+  transform: scale(0.98);
+}
+
+@keyframes focusOutline {
+  0% {
+    outline-offset: 0;
+    outline-color: transparent;
+  }
+  25% {
+    outline-offset: 1vh;
+    outline-color: #4CAF50;
+  }
+  50% {
+    outline-offset: 2vh;
+    outline-color: #4CAF50;
+  }
+  75% {
+    outline-offset: 1vh;
+    outline-color: #4CAF50;
+  }
+  100% {
+    outline-offset: 0vh;
+    outline-color: #4CAF50;
+  }
+}
+
+.save-score:focus {
+  outline: 0.5vh solid #4CAF50;
+  outline-offset: 2vh;
+  animation: focusOutline 2s ease-in-out forwards;
+}
+ #voiceSelect{position:absolute;
+   background-color:black;
+   color:cyan;
+        bottom:0%;
+        left:0%;
+        font-size:2.5vh;
+        width:50%;
+   border:0.3vh solid cyan;
+}    </style>
+  </head>
+  <body>
+    <div id="question-container" class="question-container"></div>
+    <div class="button-container" id="button-container"></div>
+
+       <select id="voiceSelect">
+    <option value="">Select a Spanish voice</option>
+</select>
+          <div id="score-display" style="font-size: 20px; color:white; font-weight: bold; margin-top: 10px;">0%</div>
+<button class="save-score" onclick="saveScore('score-onebyoneall')">SAVE SCORE</button>
+    <script>
+const data1 = [
+    {
+        phrases: [
+           
+         "I USED TO WORK",
+"I USED TO REST",
+"I USED TO WALK",
+"I USED TO STUDY",
+"I USED TO SPEAK",
+"I USED TO WAIT",
+"I USED TO BUY",
+"YOU USED TO WORK",
+"YOU USED TO REST",
+"YOU USED TO WALK",
+"YOU USED TO STUDY",
+"YOU USED TO SPEAK",
+"YOU USED TO WAIT",
+"YOU USED TO BUY",
+"HE USED TO WORK",
+"HE USED TO REST",
+"HE USED TO WALK",
+"HE USED TO STUDY",
+"HE USED TO SPEAK",
+"HE USED TO WAIT",
+"HE USED TO BUY",
+"SHE USED TO WORK",
+"SHE USED TO REST",
+"SHE USED TO WALK",
+"SHE USED TO STUDY",
+"SHE USED TO SPEAK",
+"SHE USED TO WAIT",
+"SHE USED TO BUY",
+"WE USED TO WORK",
+"WE USED TO REST",
+"WE USED TO WALK",
+"WE USED TO STUDY",
+"WE USED TO SPEAK",
+"WE USED TO WAIT",
+"WE USED TO BUY",
+"YOU ALL USED TO WORK",
+"YOU ALL USED TO REST",
+"YOU ALL USED TO WALK",
+"YOU ALL USED TO STUDY",
+"YOU ALL USED TO SPEAK",
+"YOU ALL USED TO WAIT",
+"YOU ALL USED TO BUY",
+"THEY USED TO WORK",
+"THEY USED TO REST",
+"THEY USED TO WALK",
+"THEY USED TO STUDY",
+"THEY USED TO SPEAK",
+"THEY USED TO WAIT",
+"THEY USED TO BUY"
+        ],
+        translations: [
+            "YO TRABAJABA",
+"YO DESCANSABA",
+"YO CAMINABA",
+"YO ESTUDIABA",
+"YO HABLABA",
+"YO ESPERABA",
+"YO COMPRABA",
+"TÚ TRABAJABAS",
+"TÚ DESCANSABAS",
+"TÚ CAMINABAS",
+"TÚ ESTUDIABAS",
+"TÚ HABLABAS",
+"TÚ ESPERABAS",
+"TÚ COMPRABAS",
+"ÉL TRABAJABA",
+"ÉL DESCANSABA",
+"ÉL CAMINABA",
+"ÉL ESTUDIABA",
+"ÉL HABLABA",
+"ÉL ESPERABA",
+"ÉL COMPRABA",
+"ELLA TRABAJABA",
+"ELLA DESCANSABA",
+"ELLA CAMINABA",
+"ELLA ESTUDIABA",
+"ELLA HABLABA",
+"ELLA ESPERABA",
+"ELLA COMPRABA",
+"NOSOTROS TRABAJABAMOS",
+"NOSOTROS DESCANSABAMOS",
+"NOSOTROS CAMINABAMOS",
+"NOSOTROS ESTUDIABAMOS",
+"NOSOTROS HABLABAMOS",
+"NOSOTROS ESPERABAMOS",
+"NOSOTROS COMPRABAMOS",
+"VOSOTROS TRABAJABAIS",
+"VOSOTROS DESCANSABAIS",
+"VOSOTROS CAMINABAIS",
+"VOSOTROS ESTUDIABAIS",
+"VOSOTROS HABLABAIS",
+"VOSOTROS ESPERABAIS",
+"VOSOTROS COMPRABAIS",
+"ELLOS TRABAJABAN",
+"ELLOS DESCANSABAN",
+"ELLOS CAMINABAN",
+"ELLOS ESTUDIABAN",
+"ELLOS HABLABAN",
+"ELLOS ESPERABAN",
+"ELLOS COMPRABAN"
+        ]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data2 = [
+    {
+        phrases: [
+            "I HAVE WALKED",
+            "YOU HAVE WALKED",
+            "HE HAS WALKED",
+            "WE HAVE WALKED",
+            "YOU GUYS HAVE WALKED",
+            "THEY HAVE WALKED",
+            "I HAVE WORKED",
+            "YOU HAVE WORKED",
+            "HE HAS WORKED",
+            "WE HAVE WORKED",
+            "YOU GUYS HAVE WORKED",
+            "THEY HAVE WORKED",
+            "I HAVE WAITED",
+            "YOU HAVE WAITED",
+            "HE HAS WAITED",
+            "WE HAVE WAITED",
+            "YOU GUYS HAVE WAITED",
+            "THEY HAVE WAITED",
+            "I HAVE RESTED",
+            "YOU HAVE RESTED",
+            "HE HAS RESTED",
+            "WE HAVE RESTED",
+            "YOU GUYS HAVE RESTED",
+            "THEY HAVE RESTED",
+            "I HAVE STUDIED",
+            "YOU HAVE STUDIED",
+            "HE HAS STUDIED",
+            "WE HAVE STUDIED",
+            "YOU GUYS HAVE STUDIED",
+            "THEY HAVE STUDIED",
+            "I HAVE BOUGHT",
+            "YOU HAVE BOUGHT",
+            "HE HAS BOUGHT",
+            "WE HAVE BOUGHT",
+            "YOU GUYS BOUGHT",
+            "THEY HAVE BOUGHT",
+            "I HAVE SPOKEN",
+            "YOU HAVE SPOKEN",
+            "HE HAS SPOKEN",
+            "WE HAVE SPOKEN",
+            "YOU GUYS HAVE SPOKEN",
+            "THEY HAVE SPOKEN"
+        ],
+        translations: [
+        "yo he caminado",  
+"tú has caminado",  
+"él ha caminado",  
+"nosotros hemos caminado",  
+"vosotros habéis caminado",  
+"ellos han caminado",  
+"yo he trabajado",  
+"tú has trabajado",  
+"él ha trabajado",  
+"nosotros hemos trabajado",  
+"vosotros habéis trabajado",  
+"ellos han trabajado",  
+"yo he esperado",  
+"tú has esperado",  
+"él ha esperado",  
+"nosotros hemos esperado",  
+"vosotros habéis esperado",  
+"ellos han esperado",  
+"yo he descansado",  
+"tú has descansado",  
+"él ha descansado",  
+"nosotros hemos descansado",  
+"vosotros habéis descansado",  
+"ellos han descansado",  
+"yo he estudiado",  
+"tú has estudiado",  
+"él ha estudiado",  
+"nosotros hemos estudiado",  
+"vosotros habéis estudiado",  
+"ellos han estudiado",  
+"yo he comprado",  
+"tú has comprado",  
+"él ha comprado",  
+"nosotros hemos comprado",  
+"vosotros habéis comprado",  
+"ellos han comprado",  
+"yo he hablado",  
+"tú has hablado",  
+"él ha hablado",  
+"nosotros hemos hablado",  
+"vosotros habéis hablado",  
+"ellos han hablado"  
+        ]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+
+const data3 = [    {
+        phrases: ["I WORK",
+"I REST",
+"I WALK",
+"I STUDY",
+"I SPEAK",
+"I WAIT",
+"I BUY",
+"YOU WORK",
+"YOU REST",
+"YOU WALK",
+"YOU STUDY",
+"YOU SPEAK",
+"YOU WAIT",
+"YOU BUY",
+"HE WORKS",
+"HE RESTS",
+"HE WALKS",
+"HE STUDIES",
+"HE SPEAKS",
+"HE WAITS",
+"HE BUYS",
+"SHE WORKS",
+"SHE RESTS",
+"SHE WALKS",
+"SHE STUDIES",
+"SHE SPEAKS",
+"SHE WAITS",
+"SHE BUYS",
+"WE WORK",
+"WE REST",
+"WE WALK",
+"WE STUDY",
+"WE SPEAK",
+"WE WAIT",
+"WE BUY",
+"YOU GUYS WORK",
+"YOU GUYS REST",
+"YOU GUYS WALK",
+"YOU GUYS STUDY",
+"YOU GUYS SPEAK",
+"YOU GUYS WAIT",
+"YOU GUYS BUY",
+"THEY WORK",
+"THEY REST",
+"THEY WALK",
+"THEY STUDY",
+"THEY SPEAK",
+"THEY WAIT",
+"THEY BUY"
+        ],
+        translations: ["YO TRABAJO",
+"YO DESCANSO",
+"YO CAMINO",
+"YO ESTUDIO",
+"YO HABLO",
+"YO ESPERO",
+"YO COMPRO",
+"TÚ TRABAJAS",
+"TÚ DESCANSAS",
+"TÚ CAMINAS",
+"TÚ ESTUDIAS",
+"TÚ HABLAS",
+"TÚ ESPERAS",
+"TÚ COMPRAS",
+"ÉL TRABAJA",
+"ÉL DESCANSA",
+"ÉL CAMINA",
+"ÉL ESTUDIA",
+"ÉL HABLA",
+"ÉL  ESPERA",
+"ÉL COMPRA",
+"ELLA TRABAJA",
+"ELLA DESCANSA",
+"ELLA CAMINA",
+"ELLA ESTUDIA",
+"ELLA HABLA",
+"ELLA ESPERA",
+"ELLA COMPRA",
+"NOSOTROS TRABAJAMOS",
+"NOSOTROS DESCANSAMOS",
+"NOSOTROS CAMINAMOS",
+"NOSOTROS ESTUDIAMOS",
+"NOSOTROS HABLAMOS",
+"NOSOTROS ESPERAMOS",
+"NOSOTROS COMPRAMOS",
+"VOSOTROS TRABAJAIS",
+"VOSOTROS DESCANSAIS",
+"VOSOTROS CAMINAIS",
+"VOSOTROS ESTUDIAIS",
+"VOSOTROS HABLAIS",
+"VOSOTROS ESPERAIS",
+"VOSOTROS COMPRAIS",
+"ELLOS TRABAJAN",
+"ELLOS DESCANSAN",
+"ELLOS CAMINAN",
+"ELLOS ESTUDIAN",
+"ELLOS HABLAN",
+"ELLOS ESPERAN",
+"ELLOS COMPRAN"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data4 = [
+    {
+        phrases: ["I WILL WORK",
+"I WILL REST",
+"I WILL WALK",
+"I WILL STUDY",
+"I WILL SPEAK",
+"I WILL WAIT",
+"I WILL BUY",
+"YOU WILL WORK",
+"YOU WILL REST",
+"YOU WILL WALK",
+"YOU WILL STUDY",
+"YOU WILL SPEAK",
+"YOU WILL WAIT",
+"YOU WILL BUY",
+"HE WILL WORK",
+"HE WILL REST",
+"HE WILL WALK",
+"HE WILL STUDY",
+"HE WILL SPEAK",
+"HE WILL WAIT",
+"HE WILL BUY",
+"SHE WILL WORK",
+"SHE WILL REST",
+"SHE WILL WALK",
+"SHE WILL STUDY",
+"SHE WILL SPEAK",
+"SHE WILL WAIT",
+"SHE WILL BUY",
+"WE WILL WORK",
+"WE WILL REST",
+"WE WILL WALK",
+"WE WILL STUDY",
+"WE WILL SPEAK",
+"WE WILL WAIT",
+"WE WILL BUY",
+"YOU GUYS WILL WORK",
+"YOU GUYS WILL REST",
+"YOU GUYS WILL WALK",
+"YOU GUYS WILL STUDY",
+"YOU GUYS WILL SPEAK",
+"YOU GUYS WILL WAIT",
+"YOU GUYS WILL BUY",
+"THEY WILL WORK",
+"THEY WILL REST",
+"THEY WILL WALK",
+"THEY WILL STUDY",
+"THEY WILL SPEAK",
+"THEY WILL WAIT",
+"THEY WILL BUY"
+        ],
+        translations: ["YO TRABAJARÉ",  
+"YO DESCANSARÉ",  
+"YO CAMINARÉ",  
+"YO ESTUDIARÉ",  
+"YO HABLARÉ",  
+"YO ESPERARÉ",  
+"YO COMPRARÉ",  
+"TÚ TRABAJARÁS",  
+"TÚ DESCANSARÁS",  
+"TÚ CAMINARÁS",  
+"TÚ ESTUDIARÁS",  
+"TÚ HABLARÁS",  
+"TÚ ESPERARÁS",  
+"TÚ COMPRARÁS",  
+"ÉL TRABAJARÁ",  
+"ÉL DESCANSARÁ",  
+"ÉL CAMINARÁ",  
+"ÉL ESTUDIARÁ",  
+"ÉL HABLARÁ",  
+"ÉL ESPERARÁ",  
+"ÉL COMPRARÁ",  
+"ELLA TRABAJARÁ",  
+"ELLA DESCANSARÁ",  
+"ELLA CAMINARÁ",  
+"ELLA ESTUDIARÁ",  
+"ELLA HABLARÁ",  
+"ELLA ESPERARÁ",  
+"ELLA COMPRARÁ",  
+"NOSOTROS TRABAJAREMOS",  
+"NOSOTROS DESCANSAREMOS",  
+"NOSOTROS CAMINAREMOS",  
+"NOSOTROS ESTUDIAREMOS",  
+"NOSOTROS HABLAREMOS",  
+"NOSOTROS ESPERAREMOS",  
+"NOSOTROS COMPRAREMOS",  
+"VOSOTROS TRABAJARÉIS",  
+"VOSOTROS DESCANSARÉIS",  
+"VOSOTROS CAMINARÉIS",  
+"VOSOTROS ESTUDIARÉIS",  
+"VOSOTROS HABLARÉIS",  
+"VOSOTROS ESPERARÉIS",  
+"VOSOTROS COMPRARÉIS",  
+"ELLOS TRABAJARÁN",  
+"ELLOS DESCANSARÁN",  
+"ELLOS CAMINARÁN",  
+"ELLOS ESTUDIARÁN",  
+"ELLOS HABLARÁN",  
+"ELLOS ESPERARÁN",  
+"ELLOS COMPRARÁN"  
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data5 = [
+    {
+        phrases: ["I WOULD SPEAK",
+"YOU WOULD SPEAK",
+"HE WOULD SPEAK",
+"SHE WOULD SPEAK",
+"WE WOULD SPEAK",
+"YOU ALL WOULD SPEAK",
+"THEY WOULD SPEAK",
+"I WOULD STUDY",
+"YOU WOULD STUDY",
+"HE WOULD STUDY",
+"SHE WOULD STUDY",
+"WE WOULD STUDY",
+"YOU ALL WOULD STUDY",
+"THEY WOULD STUDY",
+"I WOULD WALK",
+"YOU WOULD WALK",
+"HE WOULD WALK",
+"SHE WOULD WALK",
+"WE WOULD WALK",
+"YOU ALL WOULD WALK",
+"THEY WOULD WALK",
+"I WOULD WAIT",
+"YOU WOULD WAIT",
+"HE WOULD WAIT",
+"SHE WOULD WAIT",
+"WE WOULD WAIT",
+"YOU ALL WOULD WAIT",
+"THEY WOULD WAIT",
+"I WOULD BUY",
+"YOU WOULD BUY",
+"HE WOULD BUY",
+"SHE WOULD BUY",
+"WE WOULD BUY",
+"YOU ALL WOULD BUY",
+"THEY WOULD BUY",
+"I WOULD REST",
+"YOU WOULD REST",
+"HE WOULD REST",
+"SHE WOULD REST",
+"WE WOULD REST",
+"YOU ALL WOULD REST",
+"THEY WOULD REST",
+"I WOULD WORK",
+"YOU WOULD WORK",
+"HE WOULD WORK",
+"SHE WOULD WORK",
+"WE WOULD WORK",
+"YOU ALL WOULD WORK",
+"THEY WOULD WORK"
+        ],
+        translations: ["YO HABLARÍA",
+"TÚ HABLARÍAS",
+"ÉL HABLARÍA",
+"ELLA HABLARÍA",
+"NOSOTROS HABLARÍAMOS",
+"VOSOTROS HABLARÍAIS",
+"ELLOS HABLARÍAN",
+"YO ESTUDIARÍA",
+"TÚ ESTUDIARÍAS",
+"ÉL ESTUDIARÍA",
+"ELLA ESTUDIARÍA",
+"NOSOTROS ESTUDIARÍAMOS",
+"VOSOTROS ESTUDIARÍAIS",
+"ELLOS ESTUDIARÍAN",
+"YO CAMINARÍA",
+"TÚ CAMINARÍAS",
+"ÉL CAMINARÍA",
+"ELLA CAMINARÍA",
+"NOSOTROS CAMINARÍAMOS",
+"VOSOTROS CAMINARÍAIS",
+"ELLOS CAMINARÍAN",
+"YO ESPERARÍA",
+"TÚ ESPERARÍAS",
+"ÉL ESPERARÍA",
+"ELLA ESPERARÍA",
+"NOSOTROS ESPERARÍAMOS",
+"VOSOTROS ESPERARÍAIS",
+"ELLOS ESPERARÍAN",
+"YO COMPRARÍA",
+"TÚ COMPRARÍAS",
+"ÉL COMPRARÍA",
+"ELLA COMPRARÍA",
+"NOSOTROS COMPRARÍAMOS",
+"VOSOTROS COMPRARÍAIS",
+"ELLOS COMPRARÍAN",
+"YO DESCANSARÍA",
+"TÚ DESCANSARÍAS",
+"ÉL DESCANSARÍA",
+"ELLA DESCANSARÍA",
+"NOSOTROS DESCANSARÍAMOS",
+"VOSOTROS DESCANSARÍAIS",
+"ELLOS DESCANSARÍAN",
+"YO TRABAJARÍA",
+"TÚ TRABAJARÍAS",
+"ÉL TRABAJARÍA",
+"ELLA TRABAJARÍA",
+"NOSOTROS TRABAJARÍAMOS",
+"VOSOTROS TRABAJARÍAIS",
+"ELLOS TRABAJARÍAN"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data7 = [
+    {
+        phrases: ["IF I WORKED",
+          "IF YOU WORKED",
+          "IF HE WORKED",
+          "IF SHE WORKED",
+          "IF WE WORKED",
+          "IF YOU ALL WORKED",
+          "IF THEY WORKED",
+          "IF I RESTED",
+          "IF YOU RESTED",
+          "IF HE RESTED",
+          "IF SHE RESTED",
+          "IF WE RESTED",
+          "IF YOU ALL RESTED",
+          "IF THEY RESTED",
+          "IF I WALKED",
+          "IF YOU WALKED",
+          "IF HE WALKED",
+          "IF SHE WALKED",
+          "IF WE WALKED",
+          "IF YOU ALL WALKED",
+          "IF THEY WALKED",
+          "IF I STUDIED",
+          "IF YOU STUDIED",
+          "IF HE STUDIED",
+          "IF SHE STUDIED",
+          "IF WE STUDIED",
+          "IF YOU ALL STUDIED",
+          "IF THEY STUDIED",
+          "IF I SPOKE",
+          "IF YOU SPOKE",
+          "IF HE SPOKE",
+          "IF SHE SPOKE",
+          "IF WE SPOKE",
+          "IF YOU ALL SPOKE",
+          "IF THEY SPOKE",
+          "IF I WAITED",
+          "IF YOU WAITED",
+          "IF HE WAITED",
+          "IF SHE WAITED",
+          "IF WE WAITED",
+          "IF YOU ALL WAITED",
+          "IF THEY WAITED",
+          "IF I BOUGHT",
+          "IF YOU BOUGHT",
+          "IF HE BOUGHT",
+          "IF SHE BOUGHT",
+          "IF WE BOUGHT",
+          "IF YOU ALL BOUGHT",
+          "IF THEY BOUGHT"
+        ],
+        translations: ["SI YO TRABAJARA",
+          "SI TÚ TRABAJARAS",
+          "SI ÉL TRABAJARA",
+          "SI ELLA TRABAJARA",
+          "SI NOSOTROS TRABAJÁRAMOS",
+          "SI VOSOTROS TRABAJARAIS",
+          "SI ELLOS TRABAJARAN",
+          "SI YO DESCANSARA",
+          "SI TÚ DESCANSARAS",
+          "SI ÉL DESCANSARA",
+          "SI ELLA DESCANSARA",
+          "SI NOSOTROS DESCANSÁRAMOS",
+          "SI VOSOTROS DESCANSARAIS",
+          "SI ELLOS DESCANSARAN",
+          "SI YO CAMINARA",
+          "SI TÚ CAMINARAS",
+          "SI ÉL CAMINARA",
+          "SI ELLA CAMINARA",
+          "SI NOSOTROS CAMINÁRAMOS",
+          "SI VOSOTROS CAMINARAIS",
+          "SI ELLOS CAMINARAN",
+          "SI YO ESTUDIARA",
+          "SI TÚ ESTUDIARAS",
+          "SI ÉL ESTUDIARA",
+          "SI ELLA ESTUDIARA",
+          "SI NOSOTROS ESTUDIÁRAMOS",
+          "SI VOSOTROS ESTUDIARAIS",
+          "SI ELLOS ESTUDIARAN",
+          "SI YO HABLARA",
+          "SI TÚ HABLARAS",
+          "SI ÉL HABLARA",
+          "SI ELLA HABLARA",
+          "SI NOSOTROS HABLÁRAMOS",
+          "SI VOSOTROS HABLARAIS",
+          "SI ELLOS HABLARAN",
+          "SI YO ESPERARA",
+          "SI TÚ ESPERARAS",
+          "SI ÉL ESPERARA",
+          "SI ELLA ESPERARA",
+          "SI NOSOTROS ESPERÁRAMOS",
+          "SI VOSOTROS ESPERARAIS",
+          "SI ELLOS ESPERARAN",
+          "SI YO COMPRARA",
+          "SI TÚ COMPRARAS",
+          "SI ÉL COMPRARA",
+          "SI ELLA COMPRARA",
+          "SI NOSOTROS COMPRÁRAMOS",
+          "SI VOSOTROS COMPRARAIS",
+          "SI ELLOS COMPRARAN"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data6 = [
+    {
+        phrases: [ "IF I HAD SPOKEN",
+          "IF YOU HAD SPOKEN",
+          "IF HE HAD SPOKEN",
+          "IF SHE HAD SPOKEN",
+          "IF WE HAD SPOKEN",
+          "IF YOU ALL HAD SPOKEN",
+          "IF THEY HAD SPOKEN",
+          "IF I HAD STUDIED",
+          "IF YOU HAD STUDIED",
+          "IF HE HAD STUDIED",
+          "IF SHE HAD STUDIED",
+          "IF WE HAD STUDIED",
+          "IF YOU ALL HAD STUDIED",
+          "IF THEY HAD STUDIED",
+          "IF I HAD WALKED",
+          "IF YOU HAD WALKED",
+          "IF HE HAD WALKED",
+          "IF SHE HAD WALKED",
+          "IF WE HAD WALKED",
+          "IF YOU ALL HAD WALKED",
+          "IF THEY HAD WALKED",
+          "IF I HAD WAITED",
+          "IF YOU HAD WAITED",
+          "IF HE HAD WAITED",
+          "IF SHE HAD WAITED",
+          "IF WE HAD WAITED",
+          "IF YOU ALL HAD WAITED",
+          "IF THEY HAD WAITED",
+          "IF I HAD BOUGHT",
+          "IF YOU HAD BOUGHT",
+          "IF HE HAD BOUGHT",
+          "IF SHE HAD BOUGHT",
+          "IF WE HAD BOUGHT",
+          "IF YOU ALL HAD BOUGHT",
+          "IF THEY HAD BOUGHT",
+          "IF I HAD RESTED",
+          "IF YOU HAD RESTED",
+          "IF HE HAD RESTED",
+          "IF SHE HAD RESTED",
+          "IF WE HAD RESTED",
+          "IF YOU ALL HAD RESTED",
+          "IF THEY HAD RESTED",
+          "IF I HAD WORKED",
+          "IF YOU HAD WORKED",
+          "IF HE HAD WORKED",
+          "IF SHE HAD WORKED",
+          "IF WE HAD WORKED",
+          "IF YOU ALL HAD WORKED",
+          "IF THEY HAD WORKED"
+        ],
+        translations: ["SI YO HUBIERA HABLADO",
+          "SI TÚ HUBIERAS HABLADO",
+          "SI ÉL HUBIERA HABLADO",
+          "SI ELLA HUBIERA HABLADO",
+          "SI NOSOTROS HUBIÉRAMOS HABLADO",
+          "SI VOSOTROS HUBIERAIS HABLADO",
+          "SI ELLOS HUBIERAN HABLADO",
+          "SI YO HUBIERA ESTUDIADO",
+          "SI TÚ HUBIERAS ESTUDIADO",
+          "SI ÉL HUBIERA ESTUDIADO",
+          "SI ELLA HUBIERA ESTUDIADO",
+          "SI NOSOTROS HUBIÉRAMOS ESTUDIADO",
+          "SI VOSOTROS HUBIERAIS ESTUDIADO",
+          "SI ELLOS HUBIERAN ESTUDIADO",
+          "SI YO HUBIERA CAMINADO",
+          "SI TÚ HUBIERAS CAMINADO",
+          "SI ÉL HUBIERA CAMINADO",
+          "SI ELLA HUBIERA CAMINADO",
+          "SI NOSOTROS HUBIÉRAMOS CAMINADO",
+          "SI VOSOTROS HUBIERAIS CAMINADO",
+          "SI ELLOS HUBIERAN CAMINADO",
+          "SI YO HUBIERA ESPERADO",
+          "SI TÚ HUBIERAS ESPERADO",
+          "SI ÉL HUBIERA ESPERADO",
+          "SI ELLA HUBIERA ESPERADO",
+          "SI NOSOTROS HUBIÉRAMOS ESPERADO",
+          "SI VOSOTROS HUBIERAIS ESPERADO",
+          "SI ELLOS HUBIERAN ESPERADO",
+          "SI YO HUBIERA COMPRADO",
+          "SI TÚ HUBIERAS COMPRADO",
+          "SI ÉL HUBIERA COMPRADO",
+          "SI ELLA HUBIERA COMPRADO",
+          "SI NOSOTROS HUBIÉRAMOS COMPRADO",
+          "SI VOSOTROS HUBIERAIS COMPRADO",
+          "SI ELLOS HUBIERAN COMPRADO",
+          "SI YO HUBIERA DESCANSADO",
+          "SI TÚ HUBIERAS DESCANSADO",
+          "SI ÉL HUBIERA DESCANSADO",
+          "SI ELLA HUBIERA DESCANSADO",
+          "SI NOSOTROS HUBIÉRAMOS DESCANSADO",
+          "SI VOSOTROS HUBIERAIS DESCANSADO",
+          "SI ELLOS HUBIERAN DESCANSADO",
+          "SI YO HUBIERA TRABAJADO",
+          "SI TÚ HUBIERAS TRABAJADO",
+          "SI ÉL HUBIERA TRABAJADO",
+          "SI ELLA HUBIERA TRABAJADO",
+          "SI NOSOTROS HUBIÉRAMOS TRABAJADO",
+          "SI VOSOTROS HUBIERAIS TRABAJADO",
+          "SI ELLOS HUBIERAN TRABAJADO"
+
+
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data8 = [
+    {
+        phrases: [  "I WORKED",
+          "I RESTED",
+          "I WALKED",
+          "I WAITED",
+          "I BOUGHT",
+          "I VISITED",
+          "I HELPED",
+          "I SPOKE",
+          "YOU WORKED",
+          "YOU RESTED",
+          "YOU WALKED",
+          "YOU WAITED",
+          "YOU BOUGHT",
+          "YOU VISITED",
+          "YOU HELPED",
+          "YOU SPOKE",
+          "HE WORKED",
+          "HE RESTED",
+          "HE WALKED",
+          "HE WAITED",
+          "HE BOUGHT",
+          "HE VISITED",
+          "HE HELPED",
+          "HE SPOKE",
+          "SHE WORKED",
+          "SHE RESTED",
+          "SHE WALKED",
+          "SHE WAITED",
+          "SHE BOUGHT",
+          "SHE VISITED",
+          "SHE HELPED",
+          "SHE SPOKE",
+          "WE WORKED",
+          "WE RESTED",
+          "WE WALKED",
+          "WE WAITED",
+          "WE BOUGHT",
+          "WE VISITED",
+          "WE HELPED",
+          "WE SPOKE",
+          "YOU ALL WORKED",
+          "YOU ALL RESTED",
+          "YOU ALL WALKED",
+          "YOU ALL WAITED",
+          "YOU ALL BOUGHT",
+          "YOU ALL VISITED",
+          "YOU ALL HELPED",
+          "YOU ALL SPOKE",
+          "THEY WORKED",
+          "THEY RESTED",
+          "THEY WALKED",
+          "THEY WAITED",
+          "THEY BOUGHT",
+          "THEY VISITED",
+          "THEY HELPED",
+          "THEY SPOKE"
+        ],
+        translations: ["YO TRABAJÉ",
+"YO DESCANSÉ",
+"YO CAMINÉ",
+"YO ESPERÉ",
+"YO COMPRÉ",
+"YO VISITÉ",
+"YO AYUDÉ",
+"YO HABLÉ",
+"TÚ TRABAJASTE",
+"TÚ DESCANSASTE",
+"TÚ CAMINASTE",
+"TÚ ESPERASTE",
+"TÚ COMPRASTE",
+"TÚ VISITASTE",
+"TÚ AYUDASTE",
+"TÚ HABLASTE",
+"ÉL TRABAJÓ",
+"ÉL DESCANSÓ",
+"ÉL CAMINÓ",
+"ÉL ESPERÓ",
+"ÉL COMPRÓ",
+"ÉL VISITÓ",
+"ÉL AYUDÓ",
+"ÉL HABLÓ",
+"ELLA TRABAJÓ",
+"ELLA DESCANSÓ",
+"ELLA CAMINÓ",
+"ELLA ESPERÓ",
+"ELLA COMPRÓ",
+"ELLA VISITÓ",
+"ELLA AYUDÓ",
+"ELLA HABLÓ",
+"NOSOTROS TRABAJAMOS",
+"NOSOTROS DESCANSAMOS",
+"NOSOTROS CAMINAMOS",
+"NOSOTROS ESPERAMOS",
+"NOSOTROS COMPRAMOS",
+"NOSOTROS VISITAMOS",
+"NOSOTROS AYUDAMOS",
+"NOSOTROS HABLAMOS",
+"VOSOTROS TRABAJASTEIS",
+"VOSOTROS DESCANSASTEIS",
+"VOSOTROS CAMINASTEIS",
+"VOSOTROS ESPERASTEIS",
+"VOSOTROS COMPRASTEIS",
+"VOSOTROS VISITASTEIS",
+"VOSOTROS AYUDASTEIS",
+"VOSOTROS HABLASTEIS",
+"ELLOS TRABAJARON",
+"ELLOS DESCANSARON",
+"ELLOS CAMINARON",
+"ELLOS ESPERARON",
+"ELLOS COMPRARON",
+"ELLOS VISITARON",
+"ELLOS AYUDARON",
+"ELLOS HABLARON"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data9 = [
+    {
+        phrases: [   "I WOULD HAVE SPOKEN",
+          "YOU WOULD HAVE SPOKEN",
+          "HE WOULD HAVE SPOKEN",
+          "SHE WOULD HAVE SPOKEN",
+          "WE WOULD HAVE SPOKEN",
+          "YOU ALL WOULD HAVE SPOKEN",
+          "THEY WOULD HAVE SPOKEN",
+          "I WOULD HAVE STUDIED",
+          "YOU WOULD HAVE STUDIED",
+          "HE WOULD HAVE STUDIED",
+          "SHE WOULD HAVE STUDIED",
+          "WE WOULD HAVE STUDIED",
+          "YOU ALL WOULD HAVE STUDIED",
+          "THEY WOULD HAVE STUDIED",
+          "I WOULD HAVE WALKED",
+          "YOU WOULD HAVE WALKED",
+          "HE WOULD HAVE WALKED",
+          "SHE WOULD HAVE WALKED",
+          "WE WOULD HAVE WALKED",
+          "YOU ALL WOULD HAVE WALKED",
+          "THEY WOULD HAVE WALKED",
+          "I WOULD HAVE WAITED",
+          "YOU WOULD HAVE WAITED",
+          "HE WOULD HAVE WAITED",
+          "SHE WOULD HAVE WAITED",
+          "WE WOULD HAVE WAITED",
+          "YOU ALL WOULD HAVE WAITED",
+          "THEY WOULD HAVE WAITED",
+          "I WOULD HAVE BOUGHT",
+          "YOU WOULD HAVE BOUGHT",
+          "HE WOULD HAVE BOUGHT",
+          "SHE WOULD HAVE BOUGHT",
+          "WE WOULD HAVE BOUGHT",
+          "YOU ALL WOULD HAVE BOUGHT",
+          "THEY WOULD HAVE BOUGHT",
+          "I WOULD HAVE RESTED",
+          "YOU WOULD HAVE RESTED",
+          "HE WOULD HAVE RESTED",
+          "SHE WOULD HAVE RESTED",
+          "WE WOULD HAVE RESTED",
+          "YOU ALL WOULD HAVE RESTED",
+          "THEY WOULD HAVE RESTED",
+          "I WOULD HAVE WORKED",
+          "YOU WOULD HAVE WORKED",
+          "HE WOULD HAVE WORKED",
+          "SHE WOULD HAVE WORKED",
+          "WE WOULD HAVE WORKED",
+          "YOU ALL WOULD HAVE WORKED",
+          "THEY WOULD HAVE WORKED"
+        ],
+        translations: ["YO HABRÍA HABLADO",
+"TÚ HABRÍAS HABLADO",
+"ÉL HABRÍA HABLADO",
+"ELLA HABRÍA HABLADO",
+"NOSOTROS HABRÍAMOS HABLADO",
+"VOSOTROS HABRÍAIS HABLADO",
+"ELLOS HABRÍAN HABLADO",
+"YO HABRÍA ESTUDIADO",
+"TÚ HABRÍAS ESTUDIADO",
+"ÉL HABRÍA ESTUDIADO",
+"ELLA HABRÍA ESTUDIADO",
+"NOSOTROS HABRÍAMOS ESTUDIADO",
+"VOSOTROS HABRÍAIS ESTUDIADO",
+"ELLOS HABRÍAN ESTUDIADO",
+"YO HABRÍA CAMINADO",
+"TÚ HABRÍAS CAMINADO",
+"ÉL HABRÍA CAMINADO",
+"ELLA HABRÍA CAMINADO",
+"NOSOTROS HABRÍAMOS CAMINADO",
+"VOSOTROS HABRÍAIS CAMINADO",
+"ELLOS HABRÍAN CAMINADO",
+"YO HABRÍA ESPERADO",
+"TÚ HABRÍAS ESPERADO",
+"ÉL HABRÍA ESPERADO",
+"ELLA HABRÍA ESPERADO",
+"NOSOTROS HABRÍAMOS ESPERADO",
+"VOSOTROS HABRÍAIS ESPERADO",
+"ELLOS HABRÍAN ESPERADO",
+"YO HABRÍA COMPRADO",
+"TÚ HABRÍAS COMPRADO",
+"ÉL HABRÍA COMPRADO",
+"ELLA HABRÍA COMPRADO",
+"NOSOTROS HABRÍAMOS COMPRADO",
+"VOSOTROS HABRÍAIS COMPRADO",
+"ELLOS HABRÍAN COMPRADO",
+"YO HABRÍA DESCANSADO",
+"TÚ HABRÍAS DESCANSADO",
+"ÉL HABRÍA DESCANSADO",
+"ELLA HABRÍA DESCANSADO",
+"NOSOTROS HABRÍAMOS DESCANSADO",
+"VOSOTROS HABRÍAIS DESCANSADO",
+"ELLOS HABRÍAN DESCANSADO",
+"YO HABRÍA TRABAJADO",
+"TÚ HABRÍAS TRABAJADO",
+"ÉL HABRÍA TRABAJADO",
+"ELLA HABRÍA TRABAJADO",
+"NOSOTROS HABRÍAMOS TRABAJADO",
+"VOSOTROS HABRÍAIS TRABAJADO",
+"ELLOS HABRÍAN TRABAJADO"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data10 = [
+    {
+        phrases: ["I HAD SPOKEN",
+          "YOU HAD SPOKEN",
+          "HE HAD SPOKEN",
+          "SHE HAD SPOKEN",
+          "WE HAD SPOKEN",
+          "YOU ALL HAD SPOKEN",
+          "THEY HAD SPOKEN",
+          "I HAD STUDIED",
+          "YOU HAD STUDIED",
+          "HE HAD STUDIED",
+          "SHE HAD STUDIED",
+          "WE HAD STUDIED",
+          "YOU ALL HAD STUDIED",
+          "THEY HAD STUDIED",
+          "I HAD WALKED",
+          "YOU HAD WALKED",
+          "HE HAD WALKED",
+          "SHE HAD WALKED",
+          "WE HAD WALKED",
+          "YOU ALL HAD WALKED",
+          "THEY HAD WALKED",
+          "I HAD WAITED",
+          "YOU HAD WAITED",
+          "HE HAD WAITED",
+          "SHE HAD WAITED",
+          "WE HAD WAITED",
+          "YOU ALL HAD WAITED",
+          "THEY HAD WAITED",
+          "I HAD BOUGHT",
+          "YOU HAD BOUGHT",
+          "HE HAD BOUGHT",
+          "SHE HAD BOUGHT",
+          "WE HAD BOUGHT",
+          "YOU ALL HAD BOUGHT",
+          "THEY HAD BOUGHT",
+          "I HAD RESTED",
+          "YOU HAD RESTED",
+          "HE HAD RESTED",
+          "SHE HAD RESTED",
+          "WE HAD RESTED",
+          "YOU ALL HAD RESTED",
+          "THEY HAD RESTED",
+          "I HAD WORKED",
+          "YOU HAD WORKED",
+          "HE HAD WORKED",
+          "SHE HAD WORKED",
+          "WE HAD WORKED",
+          "YOU ALL HAD WORKED",
+          "THEY HAD WORKED"
+        ],
+        translations: ["YO HABÍA HABLADO",
+"TÚ HABÍAS HABLADO",
+"ÉL HABÍA HABLADO",
+"ELLA HABÍA HABLADO",
+"NOSOTROS HABÍAMOS HABLADO",
+"VOSOTROS HABÍAIS HABLADO",
+"ELLOS HABÍAN HABLADO",
+"YO HABÍA ESTUDIADO",
+"TÚ HABÍAS ESTUDIADO",
+"ÉL HABÍA ESTUDIADO",
+"ELLA HABÍA ESTUDIADO",
+"NOSOTROS HABÍAMOS ESTUDIADO",
+"VOSOTROS HABÍAIS ESTUDIADO",
+"ELLOS HABÍAN ESTUDIADO",
+"YO HABÍA CAMINADO",
+"TÚ HABÍAS CAMINADO",
+"ÉL HABÍA CAMINADO",
+"ELLA HABÍA CAMINADO",
+"NOSOTROS HABÍAMOS CAMINADO",
+"VOSOTROS HABÍAIS CAMINADO",
+"ELLOS HABÍAN CAMINADO",
+"YO HABÍA ESPERADO",
+"TÚ HABÍAS ESPERADO",
+"ÉL HABÍA ESPERADO",
+"ELLA HABÍA ESPERADO",
+"NOSOTROS HABÍAMOS ESPERADO",
+"VOSOTROS HABÍAIS ESPERADO",
+"ELLOS HABÍAN ESPERADO",
+"YO HABÍA COMPRADO",
+"TÚ HABÍAS COMPRADO",
+"ÉL HABÍA COMPRADO",
+"ELLA HABÍA COMPRADO",
+"NOSOTROS HABÍAMOS COMPRADO",
+"VOSOTROS HABÍAIS COMPRADO",
+"ELLOS HABÍAN COMPRADO",
+"YO HABÍA DESCANSADO",
+"TÚ HABÍAS DESCANSADO",
+"ÉL HABÍA DESCANSADO",
+"ELLA HABÍA DESCANSADO",
+"NOSOTROS HABÍAMOS DESCANSADO",
+"VOSOTROS HABÍAIS DESCANSADO",
+"ELLOS HABÍAN DESCANSADO",
+"YO HABÍA TRABAJADO",
+"TÚ HABÍAS TRABAJADO",
+"ÉL HABÍA TRABAJADO",
+"ELLA HABÍA TRABAJADO",
+"NOSOTROS HABÍAMOS TRABAJADO",
+"VOSOTROS HABÍAIS TRABAJADO",
+"ELLOS HABÍAN TRABAJADO"
+
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const exceptions = [
+"en la casa",
+"SI TÚ",
+"SI ÉL",
+"SI ELLA",
+"SI NOSOTROS",
+"SI VOSOTROS",
+"SI YO",
+"SI ELLOS",
+"en la oficina",
+"en la avenida",
+"en el mercado",
+"en la biblioteca",
+"en la farmacia",
+"en el hospital",
+"en el museo",
+"en el restaurante",
+"en el banco",
+"en el parque",
+"en la calle",
+"en la tienda",
+"en la escuela"];
+const dataSets = [data1, data2, data3, data4, data5, data7, data8, data10, data9, data6]; 
+let usedSets = [];
+
+// Shuffle phrases and translations within a single set
+function shuffleSetPhrasesAndTranslations(set) {
+    const length = set.phrases.length;
+
+    // Pair up phrases and translations, shuffle them, and then split them back
+    const paired = set.phrases.map((phrase, index) => ({
+        phrase,
+        translation: set.translations[index]
+    }));
+
+    shuffleArray(paired);
+
+    // Reassign shuffled phrases and translations
+    set.phrases = paired.map(pair => pair.phrase);
+    set.translations = paired.map(pair => pair.translation);
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function getRandomDataSet() {
+    if (usedSets.length === dataSets.length) {
+        usedSets = [];
+        shuffleArray(dataSets);
+    }
+
+    let randomIndex;
+    do {
+        randomIndex = Math.floor(Math.random() * dataSets.length);
+    } while (usedSets.includes(randomIndex));
+
+    usedSets.push(randomIndex);
+    return dataSets[randomIndex];
+}
+
+function generateCombinations(sections, index = 0, currentPhrase = "", currentTranslation = "", combinations = []) {
+    if (index === sections.length) {
+        combinations.push({
+            phrase: currentPhrase.trim(),
+            translation: currentTranslation.trim()
+        });
+        return;
+    }
+
+    sections[index].phrases.forEach((phrase, i) => {
+        generateCombinations(
+            sections,
+            index + 1,
+            currentPhrase + " " + phrase,
+            currentTranslation + " " + sections[index].translations[i],
+            combinations
+        );
+    });
+
+    return combinations;
+}
+
+function splitTranslation(translation) {
+    let words = [];
+    let remainingText = translation;
+
+    while (remainingText) {
+        let matchedException = exceptions.find(exception => remainingText.startsWith(exception));
+        if (matchedException) {
+            words.push(matchedException);
+            remainingText = remainingText.slice(matchedException.length).trim();
+        } else {
+            let firstSpaceIndex = remainingText.indexOf(' ');
+            if (firstSpaceIndex === -1) {
+                words.push(remainingText);
+                remainingText = "";
+            } else {
+                words.push(remainingText.slice(0, firstSpaceIndex));
+                remainingText = remainingText.slice(firstSpaceIndex + 1).trim();
+            }
+        }
+    }
+
+    return words;
+}
+
+function createColumnsByWordPosition(translations) {
+    const wordPositions = [];
+
+    translations.forEach(translation => {
+        let words = splitTranslation(translation);
+        words.forEach((word, index) => {
+            if (!wordPositions[index]) {
+                wordPositions[index] = new Set();
+            }
+            wordPositions[index].add(word);
+        });
+    });
+
+    return wordPositions.map(positionSet => Array.from(positionSet));
+}
+
+// Countdown and progress bar logic
+const progressBar = document.createElement('div');
+progressBar.id = 'progress-bar';
+progressBar.style.position = 'absolute';
+progressBar.style.top = '80';
+progressBar.style.left = '0';
+progressBar.style.height = '10px';
+progressBar.style.width = '0%';
+progressBar.style.backgroundColor = 'red';
+progressBar.style.transition = 'none';
+document.body.appendChild(progressBar);
+let countdownTimer;
+let countdownEnded = false;
+
+function startCountdown() {
+    stopCountdown();
+    countdownEnded = false;
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '100%';
+    progressBar.style.visibility = 'visible';
+
+    setTimeout(() => {
+        progressBar.style.transition = 'width 10s linear';
+        progressBar.style.width = '0%';
+    }, 50);
+
+    countdownTimer = setTimeout(() => {
+        endCountdown();
+    }, 10000); // 10 seconds countdown
+}
+
+function stopCountdown() {
+    clearTimeout(countdownTimer);
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '0%';
+    progressBar.style.visibility = 'hidden';
+}
+
+function endCountdown() {
+    progressBar.style.visibility = 'hidden';
+    countdownEnded = true;
+    handleDelay();
+}
+
+function handleDelay() {
+    if (countdownEnded) {
+        incorrectAnswerCount++;
+        totalPlayed++;
+        updateScoreDisplay();
+        setTimeout(() => {
+            loadQuestion(getRandomQuestionIndex());
+        }, 1000); // Short delay before loading the next question
+    }
+}
+
+// Score and display logic
+let currentColumnIndex = 0;
+let answeredCorrectly = [];
+let totalPlayed = 0;
+let correctAnswerCount = 0;
+let incorrectAnswerCount = 0;
+
+function updateScoreDisplay() {
+    let accuracy = totalPlayed > 0 ? (correctAnswerCount / totalPlayed) * 100 : 0;
+    document.getElementById("score-display").innerText = `${Math.round(accuracy)}%`;
+}
+
+function loadQuestion(index) {
+    stopCountdown();  // ✅ Stop any existing countdown
+    startCountdown(); // ✅ Start a new 10s countdown
+
+    const selectedData = getRandomDataSet();
+    selectedData.forEach(shuffleSetPhrasesAndTranslations);
+
+    const combinations = generateCombinations(selectedData);
+    const { phrase, translation } = combinations[index];
+    const currentTranslationWords = splitTranslation(translation);
+
+    document.getElementById('question-container').innerText = phrase;
+    const buttonContainer = document.getElementById('button-container');
+    buttonContainer.innerHTML = '';
+
+    const columnsData = createColumnsByWordPosition(combinations.map(({ translation }) => translation));
+
+    answeredCorrectly = new Array(columnsData.length).fill(false);
+    currentColumnIndex = 0;
+
+    let completedColumns = new Set();
+
+    columnsData.forEach((words, colIndex) => {
+        const columnContainer = document.createElement('div');
+        columnContainer.classList.add('column');
+        columnContainer.classList.toggle('active', colIndex === currentColumnIndex);
+
+        shuffleArray(words);
+
+        let displayedWords = words.includes(currentTranslationWords[colIndex])
+            ? [currentTranslationWords[colIndex], ...words.filter(word => word !== currentTranslationWords[colIndex])]
+            : [currentTranslationWords[colIndex], ...words];
+
+        displayedWords = displayedWords.slice(0, 3);
+        shuffleArray(displayedWords);
+
+        displayedWords.forEach(word => {
+            const button = document.createElement('button');
+            button.innerText = word;
+            button.classList.add('translation-button');
+
+            button.onclick = function () {
+                if (answeredCorrectly[colIndex]) return;
+
+                totalPlayed++;
+
+                if (currentTranslationWords[colIndex] === word) {
+                    correctAnswerCount++;
+                    button.classList.add('correct');
+                    speakWord(word);  // ✅ Trigger speech when the correct word is selected
+
+                    answeredCorrectly[colIndex] = true;
+
+                    if (answeredCorrectly.every(status => status)) {
+                        stopCountdown();  // ✅ Stop countdown if all answers are correct
+                        speakPhrase(translation);  // ✅ Trigger speech for the phrase
+
+                        setTimeout(() => {
+                            loadQuestion(getRandomQuestionIndex());
+                        }, 3000);
+                    } else {
+                        currentColumnIndex++;
+                        showColumns();
+                    }
+                } else {
+                    incorrectAnswerCount++;
+                    button.classList.add('incorrect');
+                    setTimeout(() => {
+                        button.classList.remove('incorrect');
+                    }, 1000);
+                }
+
+                updateScoreDisplay();
+            };
+
+            columnContainer.appendChild(button);
+        });
+
+        buttonContainer.appendChild(columnContainer);
+    });
+
+    showColumns();
+    startCountdown(); // Start countdown when the question loads
+}
+
+
+function speakWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'es-ES';  // Use Spanish language for the utterance
+    speechSynthesis.speak(utterance);
+}
+
+function speakPhrase(phrase) {
+    const utterance = new SpeechSynthesisUtterance(phrase);
+    utterance.lang = 'es-ES';  // Use Spanish language for the utterance
+    speechSynthesis.speak(utterance);
+}
+
+
+function showColumns() {
+    const columns = document.querySelectorAll('.column');
+    columns.forEach((col, index) => {
+        col.classList.toggle('active', index === currentColumnIndex);
+    });
+
+    moveToNextColumn(currentColumnIndex); // Scroll to the next column
+}
+function moveToNextColumn(columnIndex) {
+    const columnElements = document.getElementsByClassName('column');
+    if (columnIndex < columnElements.length) {
+        const nextColumn = columnElements[columnIndex];
+        const columnOffset = nextColumn.offsetLeft;
+        document.getElementById('button-container').scrollLeft = columnOffset;  
+    }
+}
+function getRandomQuestionIndex() {
+    return Math.floor(Math.random() * 3); // Adjust for 3 questions in the set
+}
+
+// Start first question and countdown on page load
+window.onload = function () {
+    loadQuestion(getRandomQuestionIndex());
+};
+
+
+function updateScoreDisplay() {
+    let accuracy = totalPlayed > 0 ? (correctAnswerCount / totalPlayed) * 100 : 0;
+    document.getElementById("score-display").innerText = ` ${Math.round(accuracy)}%`;
+}
+ function saveScore(activityKey) {
+    const scoreElement = document.getElementById("score-display");
+    const scoreText = scoreElement.textContent.trim();
+
+    // Extract numeric percentage (e.g., "75%") → "75"
+    const score = scoreText.replace("%", "").trim();
+
+    localStorage.setItem(activityKey, score);
+  }
+
+let selectedVoice = null;
+
+// Function to speak the text with the selected voice
+function speakText(text) {
+    if (!text || !selectedVoice) return; // Prevent empty speech or undefined voice
+
+    // Cancel any ongoing speech to avoid overlap
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = selectedVoice;
+    window.speechSynthesis.speak(utterance);
+}
+
+
+function populateVoiceList() {
+    const voiceSelect = document.getElementById("voiceSelect");
+    const voices = speechSynthesis.getVoices();
+
+    voiceSelect.innerHTML = '';  // Clear existing options
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = '';
+    defaultOption.innerText = 'Select a Spanish voice';
+    voiceSelect.appendChild(defaultOption);
+
+    const spanishVoices = voices.filter(voice => voice.lang.startsWith('es'));
+
+    if (spanishVoices.length === 0) {
+        const noVoicesOption = document.createElement("option");
+        noVoicesOption.value = '';
+        noVoicesOption.innerText = 'No Spanish voices available';
+        voiceSelect.appendChild(noVoicesOption);
+    }
+
+    spanishVoices.forEach(voice => {
+        const option = document.createElement("option");
+        option.value = voice.name;
+        option.innerText = `${voice.name.replace(/Microsoft|Spanish|Google/gi, '').trim()} (${voice.lang})`;
+        voiceSelect.appendChild(option);
+    });
+
+    // Set the default voice to es-ES or first available Spanish voice
+    selectedVoice = spanishVoices.find(voice => voice.lang === 'es-ES') || spanishVoices[0] || voices[0];
+    voiceSelect.value = selectedVoice.name;
+}
+
+// Check if voices are loaded and populate the dropdown
+function checkVoices() {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length !== 0) {
+        populateVoiceList();
+    } else {
+        speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+}
+
+// Change the selected voice when a new one is chosen from the dropdown
+document.getElementById("voiceSelect").addEventListener("change", function() {
+    const voices = speechSynthesis.getVoices();
+    selectedVoice = voices.find(voice => voice.name === this.value);
+});
+
+// Initialize
+checkVoices();
+
+loadQuestion(getRandomQuestionIndex());
+
+      
+  function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+</script>
+</body>
+</html>

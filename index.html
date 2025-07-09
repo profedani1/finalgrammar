@@ -1,0 +1,1251 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=.1.0" />
+    <title>HTML preview</title>
+    <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+      html,
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #000018;
+        width: 99.8%;
+        height: 100%;
+        margin: 0;
+        padding: 0%;
+        overflow: hidden;
+      }
+
+ .microphone-icon {
+    color: red;
+    font-size: 7vh;
+    border-radius: 100%;
+    background-color: transparent;
+    justify-content: space-between;
+    padding:5% 30%;
+   margin-left:-1vh;
+
+transition: all 1s ease;
+       text-align: center; /* Changed from display: center; */
+    justify-content: center;
+            align-items: center;   box-sizing: border-box;
+
+}
+
+.microphone-icon:hover {
+    background-color: transparent;
+    text-shadow: 0 0 0.5vh #F03200, 0 0 0.5vh #F00032, 0 0 0.7vh darkred;
+    box-shadow: 0 0 1vh #F03200, 0 0 3vh #F00032, 0 0 5vh red;
+}
+
+.title-button {
+    width: 100%;
+    font-weight: bold;
+    text-align: center; /* Changed from display: center; */
+    padding: 0vh 0vh;
+    height: 5vh; /* Adjusted height using vh */
+ background: linear-gradient(150deg, black, brown);margin-bottom:1vh;margin-top:1vh;
+            border-radius:10vh;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+border:0.3vh solid yellow; color: yellow;font-size:1.4vh;animation: press 0.5s infinite ease-in-out
+}
+@keyframes press {
+            0%, 100% {
+                transform: translateY(0);
+                box-shadow: 0 1px #1a1a1a, 0 5px #000;
+            }
+            50% {
+                transform: translateY(0.2vh);
+                box-shadow: 0 3px #1a1a1a, 0 5px #000;
+            }
+        }
+.title-button:hover {
+    animation: wave 4s ease-in-out infinite;
+  transform-origin: bottom center;
+  animation: press s infinite ease-in-out;
+}
+@keyframes wave {
+  0% {
+    transform: rotate(-3deg);
+  }
+  25% {
+    transform: rotate(3deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(-3deg);
+  }
+}
+      
+      
+      #answers{
+        display: flex;
+
+        justify-content: space-between;
+      }
+
+      .column {
+        width: 20%;
+      }
+      .column:first-child {
+     }
+
+      .column:last-child {
+        /* Styles for the second column */
+      }
+      
+      
+      #answers{
+        display: flex;
+
+        justify-content: space-between;
+      }
+
+      .column {
+        width: 16.5%;
+      }
+      .column:first-child {
+     }
+
+      .column:last-child {
+        /* Styles for the second column */
+      }
+      .answer-btn {
+  width: 100%;
+  padding: 0% 0%; /* Adjusted vertical padding */
+  box-sizing: border-box;
+  height: 3.4vh;
+font-size: calc(0.7vh + 0.8vw);`
+  font-weight: bold;
+  background-color: #020205;
+  color: #ffffff;
+  border: 0.1px solid white;
+  cursor: pointer;
+ transition: background-color 0.2s ease; /* Smooth transition for background color */
+}
+.answer-btn:hover {
+  background-color: green !important; /* Changes background color to green on hover, overriding any inline styles */
+}
+
+
+    
+      @media (max-width: 2.64in) and (max-height: 5in) {
+      }
+ #top{
+   width:100%;
+   
+  height: 6.5%;
+
+      }
+
+
+ .arBtn{
+    background-color: black;
+    color: cyan;
+padding: 0.8vh 3vh;    text-decoration: none;
+    font-weight: bold;
+     font-size: 3vh;
+    cursor: pointer;
+    border: 2px solid cyan;
+    margin-top:1vh;
+}
+ .beBtn{
+     position:absolute;
+  top:1%;
+  left:2%;
+     font-size: 3vh;
+    background-color: black;
+    color: orange;
+padding: 0% 0%;    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    border: 0.3vh solid orange;
+    margin-top:1vh;
+}
+.erBtn{
+   position:absolute;
+  top:1%;
+  left:14vh;
+  width:6vh;
+     font-size: 3vh;
+    background-color: black;
+    color: lime;
+padding: 0% 0%;    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    border: 0.3vh solid lime;
+    margin-top:1vh;
+}
+     .allar{
+    background-color: black;
+    color: cyan;
+padding: 0.8vh 3vh;    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5vh; /* Using vh for font size */
+    cursor: pointer;
+    border: 2px solid cyan;
+    margin-top:1vh;
+} 
+ #maingames2 {
+    position: fixed;
+    BOTTOM: 15%;
+    left: 50%;
+  width:14vh; 
+    height:14vh; 
+gap:0vh;
+ display: grid;
+transform: translate(-50%, -50%);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  justify-content: center;
+    align-items: center;
+  justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+      text-align: center;
+    align-items: center;    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+#maingames {
+    position: fixed;
+    BOTTOM: 5%;
+    left: 50%;
+  width:14vh; 
+    height:14vh; 
+gap:0vh;
+ display: grid;
+transform: translate(-50%, -50%);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  justify-content: center;
+    align-items: center;
+  justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+      text-align: center;
+    align-items: center;    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+.redirect-button {
+  font-weight:bold;
+height:10vh;  
+  width:10vh; font-size:1.4vh;
+  color: yellow;
+    border: 0.4vh solid yellow;
+  background-color:black; 
+  border-radius: 50%;
+    padding: 0;
+
+  justify-content: center;
+    align-items: center;
+    z-index: 1000;
+      text-align: center;
+    align-items: center;
+}
+.redirect-button:hover {
+     font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh black, 0 0 0.5vh orange, 0 0 0.7vh red;
+    box-shadow: 0 0 1vh yellow, 0 0 3vh orange, 0 0 5vh red;
+  box-sizing: border-box;
+  color:lightblue;
+}
+      
+     
+/* When active, the menu drops down */
+#gameMenu.active {
+    top: 0;
+}
+
+/* Style for buttons */
+.title-button0 {
+   
+    border: 2px solid cyan;
+     border-radius: 100%;
+height:7em;    transition: all 1s ease;
+  width:7em; font-size: 2vh;
+    text-align: center;
+    align-items: center;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+
+}
+
+
+.title-button0:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+  color:lightblue;
+}
+
+#games {
+    position: fixed;
+    top: 60%;
+    left: 50%;
+ display: grid;
+transform: translate(-50%, -50%);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+     #gameMenu {
+    position: fixed;
+    top: -49%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+} 
+  #gameMenu2 {
+    position: fixed;
+    top: -49%;
+    left: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+/* When active, the menu drops down */
+#gameMenu.active {
+    top: 50%;
+}
+          /* When active, the menu drops down */
+#gameMenu2.active {
+    top: 50%;
+}
+           
+     .verbsbar {
+    background-color:black;
+    color: lightgrey;
+  position: absolute;
+    top: 0.5%;
+    right: 1%;
+      width:8em;
+    font-size: 2vh;
+border:0vh solid transparent;
+    border-radius: 10px;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#verbSelect {
+  
+    appearance: none;
+    background-color:blue ;
+    color: WHITE;
+       text-transform: uppercase;
+border:none;
+      width:100%;
+  height:3vh;
+    border-radius: 2vh;
+    text-align: center; /* Center text horizontally */
+    font-weight:bold;
+
+    font-size: 2vh;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#verbSelect:hover {
+    background-color: #357EC7;
+    color:white;
+  width:100%;
+}
+
+#verbSelect:focus {
+    transform: scale(1.1);
+}
+
+#verbSelect option {
+    color: white;
+    background-color: black;
+    padding: 1vh;
+    font-size: 2vh;
+}
+
+/* Add a stylish arrow */
+#verbSelect::-ms-expand {
+    display: none;
+}
+
+#verbSelect::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+
+    right: 55px;
+    transform: translateY(-50%);
+    pointer-events: none;
+} 
+      
+      
+     
+     /* Style for the "PLAY" button */
+#playButton {
+  position: absolute;  text-align: center;
+    top: 42%;
+RIGHT: 25%;    height: 10%;
+
+    width:20%;      font-weight:bold;
+       border:0.4vh solid white;
+    font-size: 1.6vh;
+  background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+#playButton:hover {
+    background-color: blue;
+    color: white;
+}
+
+#playButton2 {
+  position: absolute;
+    top: 42%;height: 10%;
+left: 25%;
+    width:20%;      font-weight:bold;
+       border:0.4vh solid white;
+    font-size: 1.8vh;
+ background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+#playButton2:hover {
+    background-color: blue;
+    color: white;
+}
+
+
+     button.title-buttonX[onclick="toggleGameMenu(false)"] {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+width:40%;height:4vh;       font-weight:bold;
+       border:0.4vh solid white;
+    font-size: 2vh;
+padding:0vh 0vh ;   background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+button.title-buttonX[onclick="toggleGameMenu(false)"]:hover {
+    background-color: transparent; /* Darker blue on hover */
+}
+
+
+button.title-buttonX2[onclick="toggleGameMenu2(false)"] {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+width:40%;height:4vh;       font-weight:bold;
+       border:0.4vh solid white;
+    font-size: 2vh;
+padding:0vh 0vh ;   background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+button.title-buttonX2[onclick="toggleGameMenu2(false)"]:hover {
+    background-color: transparent; /* Darker blue on hover */
+}
+
+
+
+
+ .title-button0a {
+    font-size: 2vh;
+    border: 2px solid cyan;
+    text-align: center;
+    align-items: center;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: all 1s ease;
+}
+
+.title-button0a:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+  color:lightblue;
+}
+
+      
+        #overall-score {
+    position: absolute;
+        right:40%;
+        top:2.5%;
+    height: 8%;
+        color:yellow;
+    background-color: transparent;
+    display: flex;
+            font-size: 3vh;
+
+    
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+       #tools{
+      position: absolute;
+    bottom: 7%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+ display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  justify-content: center;
+    align-items: center;
+  justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+      text-align: center;
+    align-items: center;    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+         width:29vh;
+         height:10vh;
+         font-size:1.7vh;
+
+}
+         .title-buttona {
+     
+    border: 0.2vh solid white;
+    text-align: center;
+    align-items: center;
+        height:100%;
+  width:100%; 
+font-size:100%;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: all 1s ease;
+}
+      .title-buttonb {
+     font-size:100%;
+
+    border: 0.2vh solid white;
+    text-align: center;
+    align-items: center;
+         height:100%;
+  width:100%; 
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: all 1s ease;
+}
+      
+      .iframe-container {
+    position: absolute;
+    bottom: 0%;
+    left: 0;
+    width: 100%;
+    height: 95%;
+    border: none;
+}
+    </style>
+  </head>
+  <body>   
+      <div id="tools">
+
+      <button class="title-buttona" onclick="loadInnerActivity('READER.html')">TEXT READER            <br>
+<span style="font-size:200%;font-weight:bold;">🗣📖</span></button>
+   <button class="title-buttonb" onclick="loadInnerActivity('vocabsaver.html')">VOCAB SAVER            <br>
+<span style="font-size:200%;font-weight:bold;">🧠</span></button>            </div>    
+
+      <span style="font-size:1.4vh;color:YELLOW;font-weight:bold;position:absolute;  
+right:40%;top:1%;">TOTAL SCORE</span>
+<div id="overall-score">N/A</div>
+  <div id="maingames">
+
+    <button
+          class="redirect-button"
+ onclick="loadInnerActivity('activitysitfeel.html')"
+           
+        >SIT<br>AND<br>FEEL</button>
+      
+    <button class="redirect-button" onclick="redirectToURL()"
+         
+   >IMPORTANT VERBS</button>
+        <button
+          class="redirect-button"
+ onclick="loadInnerActivity('reflexivelo.html')"
+           
+        >YO<br>SE<br>LO</button>
+  
+            </div>    
+
+   <div id="maingames2">
+ <button class="redirect-button" onclick="redirectToURL2()"
+          style="background-color:BLACK;
+             border: 0.4vh solid white;color:white;position:absolute;
+bottom:11vh;left:5%;
+     font-size: 2vh;
+    border-radius: 100%;
+
+         width:12vh;
+         height:11vh;
+"
+        >PHRASE BUILDER</button>
+    <button class="title-button" onclick="loadInnerActivity('selectall.html')" style="font-size:1.5vh;padding:0% 0%;width:10vh;height:9vh;padding:0% 0%; border: 0.4vh solid ;">
+    PLAY ALL<br><span id="score-value-selectall" style="color: yellow; font-size: 1.5vh;"></span></button>
+          
+     <button
+          class="recognizerar" onclick="loadInnerActivity('recognizerar.html')" style="background-color:transparent;
+             border: 0.7vh solid #ff0000;
+margin-left:2vh;
+     font-size: 1.5vh;
+    border-radius: 100%;
+
+         width:10vh;
+         height:9vh;
+"><i class="fas fa-microphone microphone-icon"></i></button>
+  
+            </div>    
+<button id="playButton2" onclick="toggleGameMenu2(true)"> ALL VERBS RANDOM </button>
+<!-- Game Menu -->
+<div id="gameMenu2">
+  <!-- "Back to Map" button -->
+  <button class="title-buttonX2" onclick="toggleGameMenu2(false)">BACK TO MAP</button>
+   <button class="title-button0" onclick="loadInnerActivity('matching.html')">MATCHING GAME<br><span id="score-value-matching" style="font-size:3vh;color: cyan;"></span></button>
+
+ 
+  
+  
+<button class="title-button0" onclick="loadInnerActivity('mainlistening.html')">LISTENING<br> <span id="score-value-listeningame" style="font-size:3vh;color: cyan;"></span></button> 
+  
+  
+  
+<button class="title-button0" onclick="loadInnerActivity('maincatch.html')">CATCHING GAME<br><span id="score-value-catchgame" style="font-size:3vh;color: cyan;"> </span></button>
+<button class="title-button0" onclick="loadInnerActivity('mainchoosegame.html')">CHOOSE GAME<br><span id="score-value-choosegame" style="font-size:3vh;color: cyan;"> </span></button>
+
+    
+
+  
+  
+          </div>    
+
+<button id="playButton" onclick="toggleGameMenu(true)">ACTIVITIES BY VERB</button>
+<!-- Game Menu -->
+<div id="gameMenu">
+  <!-- "Back to Map" button -->
+  <button class="title-buttonX" onclick="toggleGameMenu(false)">BACK TO MAP</button>
+ <button onclick="resetIframe()" style="font-size:2vh;padding:0% 0%;width:40%;height:4vh;background-color:black;color:white;font-weight:bold;position:absolute;top:0.4%;left:1%;padding:0% 0%; border: 0.4vh solid white;"
+>RESET GAMES</button>
+
+        <iframe id="myIframe" class="iframe-container" src="https://awake-agate-kip.glitch.me/"></iframe>
+    </div>
+
+        <div id="top">
+
+      <div class="verbsbar">SELECT A VERB:    
+
+      <!-- Dropdown to select verb -->
+<select id="verbSelect" onchange="updateVerb()">
+  <option value="TRABAJ" data-english="WORK">TRABAJAR</option>
+<option value="CAMIN" data-english="WALK">CAMINAR</option>
+<option value="ESPER" data-english="WAIT">ESPERAR</option>
+<option value="DESCANS" data-english="REST">DESCANSAR</option>
+<option value="VISIT" data-english="VISIT">VISITAR</option>
+<option value="ACEPT" data-english="ACCEPT">ACEPTAR</option>
+<option value="ENTR" data-english="ENTER">ENTRAR</option>
+<option value="ESCUCH" data-english="LISTEN">ESCUCHAR</option>
+<option value="NECESIT" data-english="NEED">NECESITAR</option>
+<option value="PREGUNT" data-english="ASK">PREGUNTAR</option>
+<option value="LLAM" data-english="CALL">LLAMAR</option>
+<option value="REVIS" data-english="CHECK">REVISAR</option>
+<option value="LIMP" data-english="CLEAN">LIMPIAR</option>
+<option value="ESCAL" data-english="CLIMB">ESCALAR</option>
+<option value="COCIN" data-english="COOK">COCINAR</option>
+<option value="DESARROLL" data-english="DEVELOP">DESARROLLAR</option>
+<option value="TERMIN" data-english="FINISH">TERMINAR</option>
+<option value="AYUD" data-english="HELP">AYUDAR</option>
+<option value="JUMP" data-english="JUMP">SALTAR</option>
+<option value="MAT" data-english="KILL">MATAR</option>
+<option value="BES" data-english="KISS">BESAR</option>
+<option value="MIR" data-english="LOOK">MIRAR</option>
+<option value="EXTRAÑ" data-english="MISS">EXTRAÑAR</option>
+<option value="PAS" data-english="PASS">PASAR</option>
+<option value="PLANE" data-english="PLAN">PLANEAR</option>
+<option value="SEÑAL" data-english="POINT">SEÑALAR</option>
+<option value="TIR" data-english="PULL">TIRAR</option>
+<option value="EMPUJ" data-english="PUSH">EMPUJAR</option>
+<option value="LAV" data-english="WASH">LAVAR</option>
+</select>
+      </div>
+    
+    
+    
+    
+    
+
+  
+    <button class="erBtn" onclick="loadInnerActivity('activityER.html')">ER</button>
+    <button class="beBtn" onclick="loadInnerActivity('activityESTAR.html')">ESTAR</button>
+    </div>
+  
+    
+ 
+
+            <div style="margin-top: 0.1em"></div>
+
+<div id="answers">
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityHADWORKED.html')"
+          style="background-color: brown;color:yellow"
+        >
+          HAD<br> <span class="englishRoot">WORK</span>ED<br>
+          <span id="score-value-hadworked" style=" "></span></button>
+          
+      
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+  HAB<span style="color: yellow">ÍA</span> 
+</button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">S</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK"></span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span> 
+        </button>
+        
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWOULDHAVEWORKED.html')"
+          style="font-size:1.4vh;"
+        >
+          WOULD HAVE<br> <span class="englishRoot">WORK</span>ED
+     <br><span id="score-value-wouldhaveworked"></span><br>
+</button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">S</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span> 
+        </button>
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityIFHADWORKED.html')"
+          style="background-color: lightblue"
+        >
+          IF HAD<br> <span class="englishRoot">WORK</span>ED
+        <br><span id="score-value-ifhadworked"></span><br>
+</button>
+
+         <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+
+          <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+        <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+
+          <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">S</span> 
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+          <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IER</span
+          ><span style="color: PINK">AN</span> 
+        </button>
+           <button class="answer-btn" onclick="playAudio(this)" style="background-color: white;color:black">
+      <span class="verbRoot">TRABAJ</span><span style="color:red"
+            >ADO</span
+          >
+        </button>
+      </div>
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWORKED.html')"
+          style="background-color: red; color: yellow"
+        >
+         <span class="englishRoot">WORK</span>ED
+     <br><span id="score-value-worked"></span><br>
+</button>
+
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: lightgreen">É</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: GOLD">ASTE</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: LIGHTBLUE">Ó</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span style="color: LIME"><span class="verbRoot">TRABAJ</span>AMOS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: GOLD">ASTEIS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: #ee6f57">ARON</span>
+        </button>
+              </div>    
+  
+  
+  
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityUSEDTOWORK.html')"
+          style="background-color: ORANGE"
+        >
+          USED TO <span class="englishRoot">WORK</span>
+        <br><span id="score-value-usedtowork"></span><br>
+</button>
+
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+<span class="verbRoot">TRABAJ</span><span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span>
+        </button>
+
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+          <span class="verbRoot">TRABAJ</span><span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span
+          ><span style="color: pink">S</span>
+        </button>
+
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+       <span class="verbRoot">TRABAJ</span><span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+        <span class="verbRoot">TRABAJ</span><span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+         <span class="verbRoot">TRABAJ</span><span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span
+          ><span style="color: PINK">IS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+        <span class="verbRoot">TRABAJ</span><span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span
+          ><span style="color: PINK">N</span>
+        </button>
+      </div>      
+
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityHAVEWORKED.html')"
+          style="background-color: lightgreen"
+        >
+HAVE <span class="englishRoot">WORK</span>ED
+         <br><span id="score-value-haveworked"></span><br>
+</button>
+
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+    H<span style="color: lime;">E</span>
+</button>
+          
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        H<span style="color: PINK">AS</span>
+          
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         H<span style="color: PINK">A</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+       H<span style="color: lime">E</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        HAB<span style="color: lime">É</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         H<span style="color: PINK">AN</span> 
+        </button>
+         <button class="answer-btn" onclick="playAudio(this)" style="background-color: white;color:black">
+      <span class="verbRoot">TRABAJ</span><span style="color:red"
+            >ADO</span
+          >
+        </button>
+      </div>
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWORK.html')"
+          style="background-color: WHITE"
+        >
+          <span class="englishRoot">WORK</span>
+         <br><span id="score-value-work"></span><br>
+</button>
+
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: lightblue">O</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: PINK">AS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: PINK">A</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span style="color: LIME"><span class="verbRoot">TRABAJ</span>AMOS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: PINK">ÁIS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          <span class="verbRoot">TRABAJ</span><span style="color: PINK">AN</span>
+        </button>
+      </div>
+
+   
+      <div class="column">
+<button class="title-button" onclick="loadInnerActivity('activityWILLWORK.html')" style="background-color: black;border:0.3vh solid yellow; color: yellow;font-size:1.7vh;           animation: press 0.5s infinite ease-in-out;">WILL <span class="englishRoot">WORK</span><br><span id="score-value-willwork" style=""></span></button>
+        
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: lime">É</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+          <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: PINK">ÁS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: PINK">Á</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: lime">E</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: lime">É</span><span style="color: PINK">IS</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: PINK">ÁN</span>
+        </button>
+
+    
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWOULDWORK.html')"
+          style="background-color: YELLOW"
+        >
+          WOULD <span class="englishRoot">WORK</span><br><span id="score-value-wouldwork" style=""></span></button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: yellow">ÍA</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">S</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+         <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: yellow">ÍA</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+         <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+         <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+          <span style="color: white"><span class="verbRoot">TRABAJ</span>AR</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span>
+        </button>
+
+
+
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityIFWORKED.html')"
+          style=""
+        >
+          IF... <span class="englishRoot">WORK</span>ED <br><span id="score-value-ifworked" style=""></span></button>
+        
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+        <span style="color: #ccff15">si</span> <span class="verbRoot">TRABAJ</span><span
+            style="color: orange"
+            >A<span style="color: cyan">R</span>A</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+        <span style="color: #ccff15">si</span> <span class="verbRoot">TRABAJ</span><span
+            style="color: orange"
+            >A<span style="color: cyan">R</span>A</span
+          ><span style="color: PINK">S</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+        <span style="color: #ccff15">si</span> <span class="verbRoot">TRABAJ</span><span
+            style="color: orange"
+            >A<span style="color: cyan">R</span>A</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+        <span style="color: #ccff15">si</span> <span class="verbRoot">TRABAJ</span><span
+            style="color: orange"
+            >A<span style="color: cyan">R</span>A</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+        <span style="color: #ccff15">si</span> <span class="verbRoot">TRABAJ</span><span
+            style="color: orange"
+            >A</span
+          ><span style="color: cyan">R</span
+          ><span style="color: orange">A</span
+          ><span style="color: PINK">IS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+       <span style="color: #ccff15">si</span> TRABAJ<span
+            style="color: orange"
+            >A<span style="color: cyan">R</span>A</span
+          ><span style="color: PINK">N</span>
+        </button>
+       </div>      
+      </div>      
+
+
+
+<script>
+ function toggleGameMenu(show) {
+    const gameMenu = document.getElementById("gameMenu");
+    const playButton = document.getElementById("playButton");
+
+    if (show) {
+        gameMenu.classList.add("active");
+        playButton.style.display = "none"; // Hide "PLAY" button
+    } else {
+        gameMenu.classList.remove("active");
+        setTimeout(() => {
+            playButton.style.display = "block"; // Show "PLAY" button after animation
+        }, 500); // Match transition duration
+    }
+}
+  function toggleGameMenu2(show) {
+    const gameMenu = document.getElementById("gameMenu2");
+    const playButton2 = document.getElementById("playButton2");
+
+    if (show) {
+        gameMenu2.classList.add("active");
+        playButton2.style.display = "none"; // Hide "PLAY" button
+    } else {
+        gameMenu2.classList.remove("active");
+        setTimeout(() => {
+            playButton2.style.display = "block"; // Show "PLAY" button after animation
+        }, 500); // Match transition duration
+    }
+}
+  function updateVerb() {
+    var verbSelect = document.getElementById("verbSelect");
+    var verbRoot = verbSelect.value;
+    var englishRoot = verbSelect.options[verbSelect.selectedIndex].dataset.english;
+
+    // Update Spanish verb root inside verbButton
+    var verbButtons = document.getElementsByClassName("answer-btn");
+    for (var i = 0; i < verbButtons.length; i++) {
+        var rootSpan = verbButtons[i].querySelector(".verbRoot");
+        if (rootSpan) {
+            rootSpan.innerText = verbRoot;
+        } else {
+            console.warn("No .verbRoot found in button:", verbButtons[i]);
+        }
+    }
+
+    // Update ALL English root spans in ALL title buttons
+    var englishButtons = document.querySelectorAll(".title-button .englishRoot");
+    englishButtons.forEach(span => {
+        span.innerText = englishRoot;
+    });
+}
+function updateScoreDisplay(activityKey, elementId) { 
+    const savedScore = localStorage.getItem(activityKey);
+    if (savedScore !== null) {
+        document.getElementById(elementId).textContent = savedScore + "%"; // Append %
+    }
+}
+ updateScoreDisplay("score-matching", "score-value-matching");
+updateScoreDisplay("score-catchgame", "score-value-catchgame");
+updateScoreDisplay("score-listeningame", "score-value-listeningame");
+updateScoreDisplay("score-choosegame", "score-value-choosegame");   
+updateScoreDisplay("score-worked", "score-value-worked");
+updateScoreDisplay("score-usedtowork", "score-value-usedtowork");
+updateScoreDisplay("score-usedtobe", "score-value-usedtobe");
+updateScoreDisplay("score-haveworked", "score-value-haveworked");
+updateScoreDisplay("score-havebeen", "score-value-havebeen");
+ updateScoreDisplay("score-hadworked", "score-value-hadworked");
+updateScoreDisplay("score-work", "score-value-work");
+updateScoreDisplay("score-be", "score-value-be");
+updateScoreDisplay("score-ifhadworked", "score-value-ifhadworked");
+updateScoreDisplay("score-ifworked", "score-value-ifworked");
+updateScoreDisplay("score-willwork", "score-value-willwork");
+updateScoreDisplay("score-willbe", "score-value-willbe");
+updateScoreDisplay("score-wouldwork", "score-value-wouldwork");
+updateScoreDisplay("score-wouldhaveworked", "score-value-wouldhaveworked");
+updateScoreDisplay("score-wouldbe", "score-value-wouldbe");
+updateScoreDisplay("score-selectall", "score-value-selectall");
+
+function calculateOverallScore() {
+    let totalScore = 0;
+    let count = 0;
+
+    const scoreElements = document.querySelectorAll("[id^='score-value-']"); // Select all score elements
+    scoreElements.forEach(element => {
+        if (element.textContent.trim() !== "") { // Check if the element has a displayed value
+            const score = parseFloat(element.textContent.replace("%", "")); // Remove % and convert to number
+            if (!isNaN(score)) {
+                totalScore += score;
+                count++;
+            }
+        }
+    });
+
+    if (count > 0) {
+        const overallScore = (totalScore / count).toFixed(2); // Calculate average
+        document.getElementById("overall-score").textContent = overallScore + "%"; // Display result
+    } else {
+        document.getElementById("overall-score").textContent = "N/A"; // No scores available
+    }
+}
+
+// Call the function after updating individual scores
+calculateOverallScore();
+  
+  
+  var speechSynthesis = window.speechSynthesis;
+
+ function playAudio(button) {
+    const textContent = button.innerText; // Get the text content of the button
+    const utterance = new SpeechSynthesisUtterance(textContent);
+    utterance.lang = 'es-ES'; // Set the language to Spanish
+    speechSynthesis.speak(utterance); // Speak the text
+  }
+
+
+     
+      
+     function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+   function redirectToURL() {
+            const url = "https://importantverbsprogress.glitch.me/";  // URL to navigate to
+            window.location.href = url;  // Redirects to the URL
+        }
+    function redirectToURL2() {
+            const url = "https://fair-romantic-fright.glitch.me/";  // URL to navigate to
+            window.location.href = url;  // Redirects to the URL
+        }
+     function resetIframe() {
+            const iframe = document.getElementById("myIframe");
+            iframe.src = iframe.src; // Reloads the iframe
+        }
+    </script>
+  </body>
+</html>

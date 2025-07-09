@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            color: white;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 0.1vh; /* Adjust margin as needed */
+        }
+        .pronoun-container {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            margin-bottom: 1vh; /* Adjust margin as needed */
+        }
+        .pronoun-button {
+            height: 7vh;
+            font-size: 1.5vh;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            border: 0.7vh solid white;
+        }
+        .pronoun-button.selected {
+            background-color: cyan;
+            color: black;
+        }
+        .shuffle-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 0vh; /* Adjust margin as needed */
+            margin-bottom: 1vh; /* Adjust margin as needed */
+        }
+        #shuffleBtn {
+            background-color: #191919;
+            color: lightgray;
+            border: 0.7vh solid gray;
+            width: 90%; /* Adjust button width as needed */
+            font-size: 2.5vh;
+            height: 7vh;
+            animation: borderChange 1s infinite;
+        }
+        @keyframes borderChange {
+            0% { border-color: red; }
+            25% { border-color: yellow; }
+            50% { border-color: lime; }
+            75% { border-color: cyan; }
+            100% { border-color: magenta; }
+        }
+        #shuffleBtn.shuffle-white-border {
+            border-color: white;
+        }
+        .columns-container {
+            display: flex;
+            justify-content: space-between;
+            width: 99%; /* Adjust width as needed */
+            margin-top: 0vh; /* Adjust margin as needed */
+            margin-bottom: 2vh; /* Adjust margin as needed */
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2vh; /* Adjust gap between buttons */
+            box-sizing: border-box;
+            width: 50%; /* Adjust width as needed */
+        }
+        button {
+            width: 99%;
+            height: 6.5vh;
+            margin-top: 0vh;
+            font-size: 2.4vh;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            border: 0.5vh solid white;
+        }
+        .selected {
+            background-color: cyan;
+            color: black;
+        }
+        .matched {
+            border: 0.7vh solid lime;
+        }
+        .wrong {
+            background-color: darkred;
+            color: white;
+        }
+
+
+ .button.voice-recognition {    width: 33.3%;height:10vh;
+
+ background-color: white;
+    border: 0.2vh solid gray;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+
+
+.button.catch {   width: 33.3%; height:10vh;
+background-color: white;
+    border: 0.2vh solid gray;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+.button.listen {    width: 33.3%;height:10vh;
+ background-color: white;
+    border: 0.2vh solid gray;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+ .act-container {
+  display: flex; /* Use flexbox to align buttons horizontally */
+   width: 100%;
+}
+        #playPauseButton {
+          background-color:white;
+                 font-size: 4.5vh;
+          width:auto;
+position:absolute;
+         top:0.75vh;
+         left:1.1vh;
+          border:0.2vh solid #735bc1;  animation: wave 2s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+    </style>
+</head>
+<body>
+    <button id="playPauseButton">🎵</button>
+
+    <div class="shuffle-container">
+        <button id="shuffleBtn">Shuffle</button>
+    </div>
+    <div class="columns-container">
+        <div class="column" id="questionsColumn">
+            <!-- Questions will be added here dynamically -->
+        </div>
+        <div class="column" id="translationsColumn">
+            <!-- Translations will be added here dynamically -->
+        </div>
+    </div>
+  <div class="act-container">
+<button class="button voice-recognition" onclick="navigateToVoiceRecognition()">SPEAK</button>
+
+
+<button class="button catch" onclick="navigateTomainCATCH()">CATCH</button>
+
+<button class="button listen" onclick="navigateTolisten()">LISTEN</button>
+    <script>
+  let recoveredPhrases = [];
+let selectedPhrase = null;
+let selectedTranslation = null;
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Retrieve the mistakeData JSON from localStorage
+  const mistakeData = localStorage.getItem('mistakeData');
+
+  // If no mistakeData exists, alert the user and stop further execution
+  if (!mistakeData) {
+    console.error('No mistakeData found in localStorage.');
+    alert("No data found! Please check your saved phrases.");
+    return; // Stop further execution if no data is available
+  }
+
+  // Parse the retrieved JSON data into recoveredPhrases
+  recoveredPhrases = JSON.parse(mistakeData);
+
+  const questionsColumn = document.getElementById('questionsColumn');
+  const translationsColumn = document.getElementById('translationsColumn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+
+  // Create buttons for each question and translation
+  recoveredPhrases.forEach((phrase, index) => {
+    const questionBtn = document.createElement('button');
+    questionBtn.innerText = phrase.question; // Use 'question' instead of 'phrase'
+    questionBtn.dataset.index = index;
+    questionBtn.addEventListener('click', () => selectButton(questionBtn, 'question'));
+    questionsColumn.appendChild(questionBtn);
+
+    const translationBtn = document.createElement('button');
+    translationBtn.innerText = phrase.translation; // Use 'translation'
+    translationBtn.dataset.index = index;
+    translationBtn.addEventListener('click', () => selectButton(translationBtn, 'translation'));
+    translationsColumn.appendChild(translationBtn);
+  });
+
+  shuffleBtn.addEventListener('click', shuffleTranslations);
+
+   function selectButton(button, type) {
+    if (button.classList.contains('matched')) return;
+
+    if (type === 'question') {
+      // If the question is already selected, unselect it, otherwise select it
+      if (selectedPhrase === button) {
+        button.classList.remove('selected');
+        selectedPhrase = null;  // Unselect the question
+      } else {
+        if (selectedPhrase) selectedPhrase.classList.remove('selected');
+        selectedPhrase = button;
+        selectedPhrase.classList.add('selected');
+      }
+    } else if (type === 'translation') {
+      // If the translation is already selected, unselect it, otherwise select it
+      if (selectedTranslation === button) {
+        button.classList.remove('selected');
+        selectedTranslation = null;  // Unselect the translation
+      } else {
+        if (selectedTranslation) selectedTranslation.classList.remove('selected');
+        selectedTranslation = button;
+        selectedTranslation.classList.add('selected');
+      }
+    }
+
+    // Check for match if both question and translation are selected
+    if (selectedPhrase && selectedTranslation) {
+      checkMatch();
+    }
+  }
+
+   function checkMatch() {
+    // Only check for a match if both question and translation are selected
+    if (!selectedPhrase || !selectedTranslation) return;
+
+    const phraseIndex = selectedPhrase.dataset.index;
+    const translationIndex = selectedTranslation.dataset.index;
+
+    if (phraseIndex === translationIndex) {
+      selectedPhrase.classList.add('matched');
+      selectedTranslation.classList.add('matched');
+      selectedPhrase = null;
+      selectedTranslation = null;
+      checkCompletion();
+    } else {
+      selectedPhrase.classList.add('wrong');
+      selectedTranslation.classList.add('wrong');
+      setTimeout(() => {
+        selectedPhrase.classList.remove('wrong');
+        selectedTranslation.classList.remove('wrong');
+        selectedPhrase.classList.remove('selected');
+        selectedTranslation.classList.remove('selected');
+        selectedPhrase = null;
+        selectedTranslation = null;
+      }, 1000);
+    }
+  }
+
+ function checkCompletion() {
+    const matchedButtons = document.querySelectorAll('.matched');
+    if (matchedButtons.length === recoveredPhrases.length * 2) {
+      alert("Congratulations! You've matched all pairs.");
+    }
+  }
+
+   function shuffleTranslations() {
+    const translationsButtons = Array.from(translationsColumn.children);
+    for (let i = translationsButtons.length - 1; i >= 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      translationsColumn.appendChild(translationsButtons[j]);
+    }
+
+    shuffleBtn.classList.add('shuffle-white-border');
+    shuffleBtn.style.animation = 'none';
+  }
+});
+
+function navigateToVoiceRecognition() {
+  const questionsJSON = JSON.stringify(recoveredPhrases);
+  const url = `voicerecognition.html?questions=${encodeURIComponent(questionsJSON)}`;
+  window.location.href = url;
+}
+
+  function navigateTolisten() {
+    const questionsJSON = JSON.stringify(recoveredPhrases);
+    const url = `listen.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+  }
+      
+  function navigateTochoose() {
+    const questionsJSON = JSON.stringify(recoveredPhrases);
+    const url = `choose.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+  }
+
+  function navigateTomainCATCH() {
+    const questionsJSON = JSON.stringify(recoveredPhrases);
+    const url = `catch.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+  }
+        function makeAllButtonsResponsiveToBeat(audioUrl) {
+  let audioContext, analyser, dataArray, isPlaying = false;
+
+  // Create audio element but do not play it initially
+  const audio = new Audio(audioUrl);
+  audio.crossOrigin = "anonymous"; // Ensure CORS is handled for external URLs
+  audio.loop = true;
+
+  // Set up the Web Audio API when the audio starts
+  function setupAudioContext() {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 256;
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      const source = audioContext.createMediaElementSource(audio);
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+
+      visualize();
+    }
+  }
+
+  // Function to update visualization for all buttons
+  function visualize() {
+    requestAnimationFrame(visualize);
+    analyser.getByteFrequencyData(dataArray);
+
+    // Calculate the average volume
+    const avg = dataArray.reduce((sum, val) => sum + val, 0) / dataArray.length;
+
+    // Scale based on volume
+     const scale = 0.7 + avg / 400; // Adjust the scale to make it smoother
+
+    // Apply the scale to all buttons except the Play/Pause button
+    document.querySelectorAll("button").forEach((button) => {
+      if (button.id !== "playPauseButton") {
+        button.style.transform = `scale(${scale})`;
+      }
+    });
+  }
+
+  // Add functionality to the Play/Pause button
+  const playPauseButton = document.getElementById("playPauseButton");
+  playPauseButton.addEventListener("click", () => {
+    if (isPlaying) {
+      audio.pause();
+      playPauseButton.textContent = "🎵";
+    } else {
+      setupAudioContext(); // Ensure audio context is set up
+      audio.play();
+      playPauseButton.textContent = "🔇";
+    }
+    isPlaying = !isPlaying;
+  });
+}
+
+// Call the function with the audio URL
+makeAllButtonsResponsiveToBeat("https://cdn.glitch.global/fd235a8b-e271-4778-ad80-0ff4ed9ff6e3/Volver%20Volver%20-%20dj%20panik%20(REMASTERED%20remix)%20ft.%20vicente%20fernandez_%20lil%20jon_%20daddy%20yankee%20_%20pitbull(M4A_128K)_1.m4a?v=1737854552868");
+
+// Add dynamic buttons functionality
+const addButton = document.getElementById("addButton");
+let buttonCount = 1;
+
+addButton.addEventListener("click", () => {
+  const newButton = document.createElement("button");
+  newButton.textContent = `Dynamic Button ${buttonCount++}`;
+  document.body.appendChild(newButton);
+});
+</script>
+     
+
+</div>
+
+</body>
+</html>

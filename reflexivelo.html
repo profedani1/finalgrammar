@@ -1,0 +1,2466 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+body {
+    width: 95%;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+.question-container {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Center the question */
+    margin-bottom: 0vh;
+    padding: 0.5vh 1vh;
+    background-color: black;
+    color: yellow;
+    font-weight: bold;
+    font-size: 1.9vh;
+    border: 0.5vh solid yellow;
+}
+
+.button-container {
+    display: flex; /* Show columns in a row */
+    width: 100%; /* Adjust width as needed, e.g., 20% of viewport width */
+    margin-top: 2vh;
+    margin-left: 1.7vh;
+    height: 80vh;
+    background-color: black;
+    align-items: center; 
+    box-sizing: border-box;
+}
+
+.column {
+    display: flex; /* Use flexbox to align buttons */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%; /* Adjust width as needed, e.g., 20% of viewport width */
+    min-width: 15vw; /* Ensure columns don’t get too narrow */
+    margin: 0.1vh 0.1vh; /* Margin between columns */
+    height: 100%; /* Ensure column takes full height */
+    opacity: 0.5; /* Dim inactive columns */
+    transition: opacity 0.3s, transform 0.3s; /* Smooth transition for highlighting */
+    box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+.column.active {
+    opacity: 1; /* Highlight active column */
+    transform: scale(1); 
+    border: 0.2vh solid orange;
+}
+
+.column.active .translation-button {
+    background-color: lightyellow; /* Set yellow background for buttons in active column */
+    color: black; /* Optional: Change text color for better readability */
+    border: 0.2vh solid orange;
+}
+
+.translation-button {
+  font-size: clamp(3px, 3.2vw, 3.4rem);
+    color: #FFFFFF;
+  padding:0;
+    font-weight: bold;
+    background-color: black;
+    cursor: pointer;
+    width: 100%; /* Make buttons fill the column width */
+    border: 0.1vh solid white;
+    text-transform: uppercase;
+    flex: 1; /* Make buttons flexible */
+  
+}
+.translation-button:hover {
+    background-color: white;
+    color: black;
+    font-size: calc(1.1vh + 1.2vw);
+    padding: 0;
+}
+
+.translation-button.correct {
+    background-color: black; /* Green background */
+    color: lime;
+    border: 0.5vh solid lime;
+}
+
+.translation-button.incorrect {
+    background-color: black; /* Red background */
+    color: red; /* White text */
+    border: 0.5vh solid red;
+}
+
+.translation-button:selected {
+    background-color: black;
+    color: cyan;
+    font-size: 2vh;
+    padding: 0;
+}
+
+       button[onclick="navigateTomainRECOGNIZER()"] {
+   background-color:black;
+         color:pink;
+         font-weight:bold;
+         margin-top:5vh;
+     font-size: 3vh;
+ border: 0.3vh solid red;
+
+}
+ #timer {
+     position:absolute;
+     bottom:2vh;
+    left:2vh;
+   background-color:transparent;
+         color:lightgreen;
+         font-weight:bold;
+         margin-top:4vh;
+     font-size: 5vh;
+  text-shadow: 0 0 0.5vh darkgreen, 0 0 0.5vh lightgreen, 0 0 0.7vh lime;
+}
+ #score {
+     position:absolute;
+     bottom:2vh;
+     right:2vh;
+   background-color:transparent;
+         color:yellow;
+         font-weight:bold;
+     font-size: 5vh;
+padding: 1vh 1vh;
+  text-shadow: 0 0 0.5vh brown, 0 0 0.5vh orange, 0 0 0.7vh yellow;
+}
+/* Correct background (green) */
+.correct-bg {
+    background-color: #568203;
+    transition: background-color 0.5s ease; /* Smooth transition effect */
+}
+
+/* Incorrect background (red) */
+.incorrect-bg {
+    background-color: #800000;
+    transition: background-color 0.5s ease; /* Smooth transition effect */
+}
+#end-game-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+#end-game-screen h1 {
+    font-size: 3rem;
+}
+
+#end-game-screen p {
+    font-size: 2rem;
+}
+
+#end-game-screen button {
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background: white;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+#end-game-screen button:hover {
+    background: lightgray;
+}
+    </style>
+  </head>
+  <body>
+      <div id="pronoun-container"></div>
+    <div id="question-container" class="question-container"></div>
+    <div class="button-container" id="button-container"></div>
+  
+<div id="timer">60</div>
+<div id="score"> 0%</div>
+
+<!-- Full-screen end game screen -->
+<div id="end-game-screen">
+    <h1>Game Over</h1>
+    <p id="final-score">Final Score: 0%</p>
+    <button onclick="tryAgain()">Try Again</button>
+</div>
+    <script>
+const pronouns = ['yo', 'yo2', 'tú', 'tú2', 'nosotros', 'nosotros2', 'vosotros', 'vosotros2', 'ellos', 'ellos2','él2', 'él'];
+
+const questions = new Map([
+    ['yo', [
+        {
+    phrase: "I WOULD HAVE BOUGHT IT FOR MYSELF",
+    translation: "YO ME LO HABRÍA COMPRADO"
+  },
+  {
+    phrase: "I WOULD HAVE BOUGHT THEM FOR YOU",
+    translation: "YO TE LOS HABRÍA COMPRADO"
+  },
+  {
+    phrase: "I WOULD HAVE BOUGHT IT FOR HIM",
+    translation: "YO SE LO HABRÍA COMPRADO"
+  },
+  {
+    phrase: "I WOULD HAVE BOUGHT THEM FOR YOU GUYS",
+    translation: "YO OS LOS HABRÍA COMPRADO"
+  },
+  {
+    phrase: "I WOULD HAVE BOUGHT IT FOR THEM",
+    translation: "YO SE LO HABRÍA COMPRADO"
+  },
+  {
+    phrase: "I HAD BOUGHT IT FOR MYSELF",
+    translation: "YO ME LO HABÍA COMPRADO"
+  },
+  {
+    phrase: "I HAD BOUGHT THEM FOR YOU",
+    translation: "YO TE LOS HABÍA COMPRADO"
+  },
+  {
+    phrase: "I HAD BOUGHT IT FOR HIM",
+    translation: "YO SE LO HABÍA COMPRADO"
+  },
+  {
+    phrase: "I HAD BOUGHT THEM FOR YOU GUYS",
+    translation: "YO OS LOS HABÍA COMPRADO"
+  },
+  {
+    phrase: "I HAD BOUGHT IT FOR THEM",
+    translation: "YO SE LO HABÍA COMPRADO"
+  },
+    {
+    phrase: "I HAVE BOUGHT IT FOR MYSELF",
+    translation: "YO ME LO HE COMPRADO"
+},
+{
+  phrase: "I USED TO BUY IT FOR MYSELF",
+  translation: "YO ME LO COMPRABA"
+},
+  {
+    phrase: "I BUY IT FOR MYSELF",
+    translation: "YO ME LO COMPRO"
+  },
+    {
+    phrase: "I WILL BUY IT FOR MYSELF",
+    translation: "YO ME LO COMPRARÉ"
+},
+    {
+    phrase: "I WOULD BUY IT FOR MYSELF",
+    translation: "YO ME LO COMPRARÍA"
+},
+{
+    phrase: "I HAVE BOUGHT THEM FOR HIM",
+    translation: "YO SE LOS HE COMPRADO"
+},
+{
+  phrase: "I USED TO BUY THEM FOR HIM",
+  translation: "YO SE LOS COMPRABA"
+},
+  {
+    phrase: "I BUY THEM FOR HIM",
+    translation: "YO SE LOS COMPRO"
+  },
+{
+    phrase: "I WILL BUY THEM FOR HIM",
+    translation: "YO SE LOS COMPRARÉ"
+},
+{
+    phrase: "I WOULD BUY THEM FOR HIM",
+    translation: "YO SE LOS COMPRARÍA"
+},
+{
+    phrase: "I HAVE BOUGHT THEM FOR YOU GUYS",
+    translation: "YO OS LOS HE COMPRADO"
+},
+{
+  phrase: "I USED TO BUY THEM FOR YOU GUYS",
+  translation: "YO OS LOS COMPRABA"
+},
+  {
+    phrase: "I BUY THEM FOR YOU GUYS",
+    translation: "YO OS LOS COMPRO"
+  },
+{
+    phrase: "I WILL BUY THEM FOR YOU GUYS",
+    translation: "YO OS LOS COMPRARÉ"
+},
+{
+    phrase: "I WOULD BUY THEM FOR YOU GUYS",
+    translation: "YO OS LOS COMPRARÍA"
+},
+{
+    phrase: "I HAVE BOUGHT THEM FOR THEM",
+    translation: "YO SE LOS HE COMPRADO"
+},
+{
+  phrase: "I USED TO BUY THEM FOR THEM",
+  translation: "YO SE LOS COMPRABA"
+},
+  {
+    phrase: "I BUY THEM FOR THEM",
+    translation: "YO SE LOS COMPRO"
+  },
+{
+    phrase: "I WILL BUY THEM FOR THEM",
+    translation: "YO SE LOS COMPRARÉ"
+},
+{
+    phrase: "I WOULD BUY THEM FOR THEM",
+    translation: "YO SE LOS COMPRARÍA"
+}
+]],
+     ['yo2', [
+       {phrase: "IF I HAD BOUGHT IT FOR MYSELF", 
+translation: "SI YO ME LO HUBIERA COMPRADO"},
+
+{phrase: "IF I HAD BOUGHT THEM FOR YOU", 
+translation: "SI YO TE LOS HUBIERA COMPRADO"},
+
+{phrase: "IF I HAD BOUGHT IT FOR HIM", 
+translation: "SI YO SE LO HUBIERA COMPRADO"},
+
+{phrase: "IF I HAD BOUGHT IT FOR YOU ALL", 
+translation: "SI YO OS LO HUBIERA COMPRADO"},
+
+{phrase: "IF I HAD BOUGHT THEM FOR THEM", 
+translation: "SI YO SE LOS HUBIERA COMPRADO"},
+
+{phrase: "IF I BOUGHT IT FOR MYSELF", 
+translation: "SI YO ME LO COMPRARA"},
+
+{phrase: "IF I BOUGHT THEM FOR YOU", 
+translation: "SI YO TE LOS COMPRARA"},
+
+{phrase: "IF I BOUGHT IT FOR HIM", 
+translation: "SI YO SE LO COMPRARA"},
+
+{phrase: "IF I BOUGHT IT FOR YOU ALL", 
+translation: "SI YO OS LO COMPRARA"},
+
+{phrase: "IF I BOUGHT THEM FOR THEM", 
+translation: "SI YO SE LOS COMPRARA"},
+
+
+{phrase: "IF I HAD BEEN BUYING IT FOR MYSELF", 
+translation: "SI YO ME LO HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF I HAD BEEN BUYING THEM FOR YOU", 
+translation: "SI YO TE LOS HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF I HAD BEEN BUYING IT FOR HIM", 
+translation: "SI YO SE LO HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF I HAD BEEN BUYING IT FOR YOU ALL", 
+translation: "SI YO OS LO HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF I HAD BEEN BUYING THEM FOR THEM", 
+translation: "SI YO SE LOS HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF I WERE BUYING IT FOR MYSELF", 
+translation: "SI YO ME LO ESTUVIERA COMPRANDO"},
+
+{phrase: "IF I WERE BUYING THEM FOR YOU", 
+translation: "SI YO TE LOS ESTUVIERA COMPRANDO"},
+
+{phrase: "IF I WERE BUYING IT FOR HIM", 
+translation: "SI YO SE LO ESTUVIERA COMPRANDO"},
+
+{phrase: "IF I WERE BUYING IT FOR YOU ALL", 
+translation: "SI YO OS LO ESTUVIERA COMPRANDO"},
+
+{phrase: "IF I WERE BUYING THEM FOR THEM", 
+translation: "SI YO SE LOS ESTUVIERA COMPRANDO"
+}
+]],
+    ['tú', [
+        {
+    phrase: "YOU WOULD HAVE BOUGHT IT FOR ME",
+    translation: "TÚ ME LO HABRÍAS COMPRADO"
+  },
+  {
+    phrase: "YOU WOULD HAVE BOUGHT THEM FOR YOURSELF",
+    translation: "TÚ TE LOS HABRÍAS COMPRADO"
+  },
+  {
+    phrase: "YOU WOULD HAVE BOUGHT IT FOR HIM",
+    translation: "TÚ SE LO HABRÍAS COMPRADO"
+  },
+  {
+    phrase: "YOU WOULD HAVE BOUGHT THEM FOR US",
+    translation: "TÚ NOS LOS HABRÍAS COMPRADO"
+  },
+  {
+    phrase: "YOU WOULD HAVE BOUGHT IT FOR THEM",
+    translation: "TÚ SE LOS HABRÍAS COMPRADO"
+  },
+
+        {
+    phrase: "YOU HAD BOUGHT IT FOR ME",
+    translation: "TÚ ME LO HABÍAS COMPRADO"
+  },
+  {
+    phrase: "YOU HAD BOUGHT THEM FOR YOURSELF",
+    translation: "TÚ TE LOS HABÍAS COMPRADO"
+  },
+  {
+    phrase: "YOU HAD BOUGHT IT FOR HIM",
+    translation: "TÚ SE LO HABÍAS COMPRADO"
+  },
+  {
+    phrase: "YOU HAD BOUGHT THEM FOR US",
+    translation: "TÚ NOS LOS HABÍAS COMPRADO"
+  },
+  {
+    phrase: "YOU HAD BOUGHT IT FOR THEM",
+    translation: "TÚ SE LOS HABÍAS COMPRADO"
+  },
+
+       {
+    phrase: "YOU HAVE BOUGHT IT FOR YOURSELF",
+    translation: "TÚ TE LO HAS COMPRADO"
+},
+{
+  phrase: "YOU USED TO BUY IT FOR YOURSELF",
+  translation: "TÚ TE LO COMPRABAS"
+},
+  {
+    phrase: "YOU BUY IT FOR YOURSELF",
+    translation: "TÚ TE LO COMPRAS"
+  },
+{
+    phrase: "YOU WILL BUY IT FOR YOURSELF",
+    translation: "TÚ TE LO COMPRARÁS"
+},
+{
+    phrase: "YOU WOULD BUY IT FOR YOURSELF",
+    translation: "TÚ TE LO COMPRARÍAS"
+},
+{
+    phrase: "YOU HAVE BOUGHT IT FOR HIM",
+    translation: "TÚ SE LO HAS COMPRADO"
+},
+{
+  phrase: "YOU USED TO BUY IT FOR HIM",
+  translation: "TÚ SE LO COMPRABAS"
+},
+  {
+    phrase: "YOU BUY IT FOR HIM",
+    translation: "TÚ SE LO COMPRAS"
+  },
+{
+    phrase: "YOU WILL BUY IT FOR HIM",
+    translation: "TÚ SE LO COMPRARÁS"
+},
+{
+    phrase: "YOU WOULD BUY IT FOR HIM",
+    translation: "TÚ SE LO COMPRARÍAS"
+},
+{
+    phrase: "YOU HAVE BOUGHT IT FOR US",
+    translation: "TÚ NOS LO HAS COMPRADO"
+},
+{
+  phrase: "YOU USED TO BUY IT FOR US",
+  translation: "TÚ NOS LO COMPRABAS"
+},
+  {
+    phrase: "YOU BUY IT FOR US",
+    translation: "TÚ NOS LO COMPRAS"
+  },
+{
+    phrase: "YOU WILL BUY IT FOR US",
+    translation: "TÚ NOS LO COMPRARÁS"
+},
+{
+    phrase: "YOU WOULD BUY IT FOR US",
+    translation: "TÚ NOS LO COMPRARÍAS"
+},
+{
+    phrase: "YOU HAVE BOUGHT IT FOR THEM",
+    translation: "TÚ SE LO HAS COMPRADO"
+},
+{
+  phrase: "YOU USED TO BUY IT FOR THEM",
+  translation: "TÚ SE LO COMPRABAS"
+},
+  {
+    phrase: "YOU BUY IT FOR THEM",
+    translation: "TÚ SE LO COMPRAS"
+  },
+{
+    phrase: "YOU WILL BUY IT FOR THEM",
+    translation: "TÚ SE LO COMPRARÁS"
+},
+{
+    phrase: "YOU WOULD BUY IT FOR THEM",
+    translation: "TÚ SE LO COMPRARÍAS"
+},
+{
+    phrase: "YOU HAVE BOUGHT THEM FOR ME",
+    translation: "TÚ ME LOS HAS COMPRADO"
+},
+{
+  phrase: "YOU USED TO BUY THEM FOR ME",
+  translation: "TÚ ME LOS COMPRABAS"
+},
+  {
+    phrase: "YOU BUY THEM FOR ME",
+    translation: "TÚ ME LOS COMPRAS"
+  },
+{
+    phrase: "YOU WILL BUY THEM FOR ME",
+    translation: "TÚ ME LOS COMPRARÁS"
+},
+{
+    phrase: "YOU WOULD BUY THEM FOR ME",
+    translation: "TÚ ME LOS COMPRARÍAS"
+},
+{
+    phrase: "YOU HAVE BOUGHT THEM FOR YOURSELF",
+    translation: "TÚ TE LOS HAS COMPRADO"
+},
+{
+  phrase: "YOU USED TO BUY THEM FOR YOURSELF",
+  translation: "TÚ TE LOS COMPRABAS"
+},
+  {
+    phrase: "YOU BUY THEM FOR YOURSELF",
+    translation: "TÚ TE LOS COMPRAS"
+  },
+{
+    phrase: "YOU WILL BUY THEM FOR YOURSELF",
+    translation: "TÚ TE LOS COMPRARÁS"
+},
+{
+    phrase: "YOU WOULD BUY THEM FOR YOURSELF",
+    translation: "TÚ TE LOS COMPRARÍAS"
+},
+{
+    phrase: "YOU HAVE BOUGHT THEM FOR HIM",
+    translation: "TÚ SE LOS HAS COMPRADO"
+},
+{
+  phrase: "YOU USED TO BUY THEM FOR HIM",
+  translation: "TÚ SE LOS COMPRABAS"
+},
+  {
+    phrase: "YOU BUY THEM FOR HIM",
+    translation: "TÚ SE LOS COMPRAS"
+  },
+{
+    phrase: "YOU WILL BUY THEM FOR HIM",
+    translation: "TÚ SE LOS COMPRARÁS"
+},
+{
+    phrase: "YOU WOULD BUY THEM FOR HIM",
+    translation: "TÚ SE LOS COMPRARÍAS"
+},
+{
+    phrase: "YOU HAVE BOUGHT THEM FOR US",
+    translation: "TÚ NOS LOS HAS COMPRADO"
+},
+{
+  phrase: "YOU USED TO BUY THEM FOR US",
+  translation: "TÚ NOS LOS COMPRABAS"
+},
+  {
+    phrase: "YOU BUY THEM FOR US",
+    translation: "TÚ NOS LOS COMPRAS"
+  },
+{
+    phrase: "YOU WILL BUY THEM FOR US",
+    translation: "TÚ NOS LOS COMPRARÁS"
+},
+{
+    phrase: "YOU WOULD BUY THEM FOR US",
+    translation: "TÚ NOS LOS COMPRARÍAS"
+},
+{
+    phrase: "YOU HAVE BOUGHT THEM FOR THEM",
+    translation: "TÚ SE LOS HAS COMPRADO"
+},
+{
+  phrase: "YOU USED TO BUY THEM FOR THEM",
+  translation: "TÚ SE LOS COMPRABAS"
+},
+  {
+    phrase: "YOU BUY THEM FOR THEM",
+    translation: "TÚ SE LOS COMPRAS"
+  },
+{
+    phrase: "YOU WILL BUY THEM FOR THEM",
+    translation: "TÚ SE LOS COMPRARÁS"
+},
+{
+    phrase: "YOU WOULD BUY THEM FOR THEM",
+    translation: "TÚ SE LOS COMPRARÍAS"
+}
+]],
+     ['tú2', [
+     {phrase: "IF YOU HAD BOUGHT IT FOR YOURSELF", 
+translation: "SI TÚ TE LO HUBIERAS COMPRADO"},
+
+{phrase: "IF YOU HAD BOUGHT THEM FOR ME", 
+translation: "SI TÚ ME LOS HUBIERAS COMPRADO"},
+
+{phrase: "IF YOU HAD BOUGHT IT FOR HIM", 
+translation: "SI TÚ SE LO HUBIERAS COMPRADO"},
+
+{phrase: "IF YOU HAD BOUGHT THEM FOR US", 
+translation: "SI TÚ NOS LOS HUBIERAS COMPRADO"},
+
+{phrase: "IF YOU HAD BOUGHT IT FOR THEM", 
+translation: "SI TÚ SE LO HUBIERAS COMPRADO"},
+
+{phrase: "IF YOU BOUGHT IT FOR YOURSELF", 
+translation: "SI TÚ TE LO COMPRARAS"},
+
+{phrase: "IF YOU BOUGHT THEM FOR ME", 
+translation: "SI TÚ ME LOS COMPRARAS"},
+
+{phrase: "IF YOU BOUGHT IT FOR HIM", 
+translation: "SI TÚ SE LO COMPRARAS"},
+
+{phrase: "IF YOU BOUGHT THEM FOR US", 
+translation: "SI TÚ NOS LOS COMPRARAS"},
+
+{phrase: "IF YOU BOUGHT IT FOR THEM", 
+translation: "SI TÚ SE LO COMPRARAS"},
+
+{phrase: "IF YOU HAD BEEN BUYING IT FOR YOURSELF", 
+translation: "SI TÚ TE LO HUBIERAS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU HAD BEEN BUYING THEM FOR ME", 
+translation: "SI TÚ ME LOS HUBIERAS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU HAD BEEN BUYING IT FOR HIM", 
+translation: "SI TÚ SE LO HUBIERAS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU HAD BEEN BUYING THEM FOR US", 
+translation: "SI TÚ NOS LOS HUBIERAS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU HAD BEEN BUYING IT FOR THEM", 
+translation: "SI TÚ SE LO HUBIERAS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU WERE BUYING IT FOR YOURSELF", 
+translation: "SI TÚ TE LO ESTUVIERAS COMPRANDO"},
+
+{phrase: "IF YOU WERE BUYING THEM FOR ME", 
+translation: "SI TÚ ME LOS ESTUVIERAS COMPRANDO"},
+
+{phrase: "IF YOU WERE BUYING IT FOR HIM", 
+translation: "SI TÚ SE LO ESTUVIERAS COMPRANDO"},
+
+{phrase: "IF YOU WERE BUYING THEM FOR US", 
+translation: "SI TÚ NOS LOS ESTUVIERAS COMPRANDO"},
+
+{phrase: "IF YOU WERE BUYING IT FOR THEM", 
+translation: "SI TÚ SE LO ESTUVIERAS COMPRANDO"} 
+    ]],
+     ['él', [
+         {
+    phrase: "HE WOULD HAVE BOUGHT IT FOR ME",
+    translation: "ÉL ME LO HABRÍA COMPRADO"
+  },
+  {
+    phrase: "HE WOULD HAVE BOUGHT THEM FOR YOU",
+    translation: "ÉL TE LOS HABRÍA COMPRADO"
+  },
+  {
+    phrase: "HE WOULD HAVE BOUGHT IT FOR HIM",
+    translation: "ÉL SE LO HABRÍA COMPRADO"
+  },
+  {
+    phrase: "HE WOULD HAVE BOUGHT THEM FOR US",
+    translation: "ÉL NOS LOS HABRÍA COMPRADO"
+  },
+
+  {
+    phrase: "HE WOULD HAVE BOUGHT THEM FOR YOU GUYS",
+    translation: "ÉL OS LOS HABRÍA COMPRADO"
+  },
+  {
+    phrase: "HE WOULD HAVE BOUGHT IT FOR THEM",
+    translation: "ÉL SE LO HABRÍA COMPRADO"
+  },
+ {
+    phrase: "HE HAD BOUGHT IT FOR ME",
+    translation: "ÉL ME LO HABÍA COMPRADO"
+  },
+  {
+    phrase: "HE HAD BOUGHT THEM FOR YOU",
+    translation: "ÉL TE LOS HABÍA COMPRADO"
+  },
+  {
+    phrase: "HE HAD BOUGHT IT FOR HIM",
+    translation: "ÉL SE LO HABÍA COMPRADO"
+  },
+  {
+    phrase: "HE HAD BOUGHT THEM FOR US",
+    translation: "ÉL NOS LOS HABÍA COMPRADO"
+  },
+
+  {
+    phrase: "HE HAD BOUGHT THEM FOR YOU GUYS",
+    translation: "ÉL OS LOS HABÍA COMPRADO"
+  },
+  {
+    phrase: "HE HAD BOUGHT IT FOR THEM",
+    translation: "ÉL SE LO HABÍA COMPRADO"
+  },
+
+    {
+    phrase: "HE HAS BOUGHT IT FOR ME",
+    translation: "ÉL ME LO HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT IT FOR YOU",
+    translation: "ÉL TE LO HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT IT FOR HIM",
+    translation: "ÉL SE LO HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT IT FOR US",
+    translation: "ÉL NOS LO HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT IT FOR YOU GUYS",
+    translation: "ÉL OS LO HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT IT FOR THEM",
+    translation: "ÉL SE LO HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT THEM FOR ME",
+    translation: "ÉL ME LOS HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT THEM FOR YOU",
+    translation: "ÉL TE LOS HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT THEM FOR HIM",
+    translation: "ÉL SE LOS HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT THEM FOR US",
+    translation: "ÉL NOS LOS HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT THEM FOR YOU GUYS",
+    translation: "ÉL OS LOS HA COMPRADO"
+},
+{
+    phrase: "HE HAS BOUGHT THEM FOR THEM",
+    translation: "ÉL SE LOS HA COMPRADO"
+},
+{
+  phrase: "HE USED TO BUY IT FOR ME",
+  translation: "ÉL ME LO COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY IT FOR YOU",
+  translation: "ÉL TE LO COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY IT FOR HIM",
+  translation: "ÉL SE LO COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY IT FOR US",
+  translation: "ÉL NOS LO COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY IT FOR YOU GUYS",
+  translation: "ÉL OS LO COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY IT FOR THEM",
+  translation: "ÉL SE LO COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY THEM FOR ME",
+  translation: "ÉL ME LOS COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY THEM FOR YOU",
+  translation: "ÉL TE LOS COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY THEM FOR HIM",
+  translation: "ÉL SE LOS COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY THEM FOR US",
+  translation: "ÉL NOS LOS COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY THEM FOR YOU GUYS",
+  translation: "ÉL OS LOS COMPRABA"
+},
+{
+  phrase: "HE USED TO BUY THEM FOR THEM",
+  translation: "ÉL SE LOS COMPRABA"
+},
+  {
+    phrase: "HE BUYS IT FOR ME",
+    translation: "ÉL ME LO COMPRA"
+  },
+  {
+    phrase: "HE BUYS IT FOR YOU",
+    translation: "ÉL TE LO COMPRA"
+  },
+  {
+    phrase: "HE BUYS IT FOR HIM",
+    translation: "ÉL SE LO COMPRA"
+  },
+  {
+    phrase: "HE BUYS IT FOR US",
+    translation: "ÉL NOS LO COMPRA"
+  },
+  {
+    phrase: "HE BUYS IT FOR YOU GUYS",
+    translation: "ÉL OS LO COMPRA"
+  },
+  {
+    phrase: "HE BUYS IT FOR THEM",
+    translation: "ÉL SE LO COMPRA"
+  },
+  {
+    phrase: "HE BUYS THEM FOR ME",
+    translation: "ÉL ME LOS COMPRA"
+  },
+  {
+    phrase: "HE BUYS THEM FOR YOU",
+    translation: "ÉL TE LOS COMPRA"
+  },
+  {
+    phrase: "HE BUYS THEM FOR HIM",
+    translation: "ÉL SE LOS COMPRA"
+  },
+  {
+    phrase: "HE BUYS THEM FOR US",
+    translation: "ÉL NOS LOS COMPRA"
+  },
+  {
+    phrase: "HE BUYS THEM FOR YOU GUYS",
+    translation: "ÉL OS LOS COMPRA"
+  },
+  {
+    phrase: "HE BUYS THEM FOR THEM",
+    translation: "ÉL SE LOS COMPRA"
+  },
+{
+    phrase: "HE WILL BUY IT FOR ME",
+    translation: "ÉL ME LO COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY IT FOR YOU",
+    translation: "ÉL TE LO COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY IT FOR HIM",
+    translation: "ÉL SE LO COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY IT FOR US",
+    translation: "ÉL NOS LO COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY IT FOR YOU GUYS",
+    translation: "ÉL OS LO COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY IT FOR THEM",
+    translation: "ÉL SE LO COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY THEM FOR ME",
+    translation: "ÉL ME LOS COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY THEM FOR YOU",
+    translation: "ÉL TE LOS COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY THEM FOR HIM",
+    translation: "ÉL SE LOS COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY THEM FOR US",
+    translation: "ÉL NOS LOS COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY THEM FOR YOU GUYS",
+    translation: "ÉL OS LOS COMPRARÁ"
+},
+{
+    phrase: "HE WILL BUY THEM FOR THEM",
+    translation: "ÉL SE LOS COMPRARÁ"
+},
+{
+    phrase: "HE WOULD BUY IT FOR ME",
+    translation: "ÉL ME LO COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY IT FOR YOU",
+    translation: "ÉL TE LO COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY IT FOR HIM",
+    translation: "ÉL SE LO COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY IT FOR US",
+    translation: "ÉL NOS LO COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY IT FOR YOU GUYS",
+    translation: "ÉL OS LO COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY IT FOR THEM",
+    translation: "ÉL SE LO COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY THEM FOR ME",
+    translation: "ÉL ME LOS COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY THEM FOR YOU",
+    translation: "ÉL TE LOS COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY THEM FOR HIM",
+    translation: "ÉL SE LOS COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY THEM FOR US",
+    translation: "ÉL NOS LOS COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY THEM FOR YOU GUYS",
+    translation: "ÉL OS LOS COMPRARÍA"
+},
+{
+    phrase: "HE WOULD BUY THEM FOR THEM",
+    translation: "ÉL SE LOS COMPRARÍA"
+}
+]],
+      ['él2', [
+{phrase: "IF HE HAD BOUGHT IT FOR ME", 
+translation: "SI ÉL ME LO HUBIERA COMPRADO"},
+
+{phrase: "IF HE HAD BOUGHT IT FOR HIMSELF", 
+translation: "SI ÉL SE LO HUBIERA COMPRADO"},
+
+{phrase: "IF HE HAD BOUGHT THEM FOR YOU", 
+translation: "SI ÉL TE LOS HUBIERA COMPRADO"},
+
+{phrase: "IF HE HAD BOUGHT IT FOR YOU ALL", 
+translation: "SI ÉL OS LO HUBIERA COMPRADO"},
+
+
+{phrase: "IF HE HAD BOUGHT IT FOR HER", 
+translation: "SI ÉL SE LO HUBIERA COMPRADO"},
+
+{phrase: "IF HE HAD BOUGHT THEM FOR US", 
+translation: "SI ÉL NOS LOS HUBIERA COMPRADO"},
+
+{phrase: "IF HE HAD BOUGHT IT FOR THEM", 
+translation: "SI ÉL SE LO HUBIERA COMPRADO"},
+
+{phrase: "IF HE BOUGHT IT FOR ME", 
+translation: "SI ÉL ME LO COMPRARA"},
+
+{phrase: "IF HE BOUGHT IT FOR HIMSELF", 
+translation: "SI ÉL SE LO COMPRARA"},
+
+{phrase: "IF HE BOUGHT THEM FOR YOU", 
+translation: "SI ÉL TE LOS COMPRARA"},
+
+{phrase: "IF HE BOUGHT THEM FOR YOU ALL", 
+translation: "SI ÉL OS LOS COMPRARA"},
+
+{phrase: "IF HE BOUGHT IT FOR HER", 
+translation: "SI ÉL SE LO COMPRARA"},
+
+{phrase: "IF HE BOUGHT THEM FOR US", 
+translation: "SI ÉL NOS LOS COMPRARA"},
+
+{phrase: "IF HE BOUGHT THEM FOR THEM", 
+translation: "SI ÉL SE LOS COMPRARA"},
+
+{phrase: "IF HE HAD BEEN BUYING IT FOR ME", 
+translation: "SI ÉL ME LO HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF HE HAD BEEN BUYING IT FOR HIMSELF", 
+translation: "SI ÉL SE LO HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF HE HAD BEEN BUYING THEM FOR YOU", 
+translation: "SI ÉL TE LOS HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF HE HAD BEEN BUYING IT FOR YOU ALL", 
+translation: "SI ÉL OS LO HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF HE HAD BEEN BUYING IT FOR HER", 
+translation: "SI ÉL SE LO HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF HE HAD BEEN BUYING THEM FOR US", 
+translation: "SI ÉL NOS LOS HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF HE HAD BEEN BUYING IT FOR THEM", 
+translation: "SI ÉL SE LO HUBIERA ESTADO COMPRANDO"},
+
+{phrase: "IF HE WERE BUYING IT FOR HIMSELF", 
+translation: "SI ÉL SE LO ESTUVIERA COMPRANDO"},
+
+{phrase: "IF HE WERE BUYING THEM FOR YOU", 
+translation: "SI ÉL TE LOS ESTUVIERA COMPRANDO"},
+
+{phrase: "IF HE WERE BUYING THEM FOR YOU ALL", 
+translation: "SI ÉL OS LOS ESTUVIERA COMPRANDO"},
+
+{phrase: "IF HE WERE BUYING IT FOR HER", 
+translation: "SI ÉL SE LO ESTUVIERA COMPRANDO"},
+
+{phrase: "IF HE WERE BUYING THEM FOR US", 
+translation: "SI ÉL NOS LOS ESTUVIERA COMPRANDO"},
+
+{phrase: "IF HE WERE BUYING THEM FOR THEM", 
+translation: "SI ÉL SE LOS ESTUVIERA COMPRANDO"
+}
+]],
+     ['nosotros', [
+           {
+    phrase: "WE WOULD HAVE BOUGHT THEM FOR YOU",
+    translation: "NOSOTROS TE LOS HABRÍAMOS COMPRADO"
+  },
+  {
+    phrase: "WE WOULD HAVE BOUGHT IT FOR HIM",
+    translation: "NOSOTROS SE LO HABRÍAMOS COMPRADO"
+  },
+  {
+    phrase: "WE WOULD HAVE BOUGHT THEM FOR OURSELVES",
+    translation: "NOSOTROS NOS LOS HABRÍAMOS COMPRADO"
+  },
+
+  {
+    phrase: "WE WOULD HAVE BOUGHT THEM FOR YOU GUYS",
+    translation: "NOSOTROS OS LOS HABRÍAMOS COMPRADO"
+  },
+  {
+    phrase: "WE WOULD HAVE BOUGHT IT FOR THEM",
+    translation: "NOSOTROS SE LO HABRÍAMOS COMPRADO"
+  },
+
+         {
+    phrase: "WE HAD BOUGHT THEM FOR YOU",
+    translation: "NOSOTROS TE LOS HABÍAMOS COMPRADO"
+  },
+  {
+    phrase: "WE HAD BOUGHT IT FOR HIM",
+    translation: "NOSOTROS SE LO HABÍAMOS COMPRADO"
+  },
+  {
+    phrase: "WE HAD BOUGHT THEM FOR OURSELVES",
+    translation: "NOSOTROS NOS LOS HABÍAMOS COMPRADO"
+  },
+
+  {
+    phrase: "WE HAD BOUGHT THEM FOR YOU GUYS",
+    translation: "NOSOTROS OS LOS HABÍAMOS COMPRADO"
+  },
+  {
+    phrase: "WE HAD BOUGHT IT FOR THEM",
+    translation: "NOSOTROS SE LO HABÍAMOS COMPRADO"
+  },
+
+      {
+    phrase: "WE HAVE BOUGHT IT FOR YOU",
+    translation: "NOSOTROS TE LO HEMOS COMPRADO"
+},
+{
+    phrase: "WE HAVE BOUGHT IT FOR HIM",
+    translation: "NOSOTROS SE LO HEMOS COMPRADO"
+},
+{
+    phrase: "WE HAVE BOUGHT IT FOR OURSELVES",
+    translation: "NOSOTROS NOS LO HEMOS COMPRADO"
+},
+{
+    phrase: "WE HAVE BOUGHT IT FOR YOU GUYS",
+    translation: "NOSOTROS OS LO HEMOS COMPRADO"
+},
+{
+    phrase: "WE HAVE BOUGHT IT FOR THEM",
+    translation: "NOSOTROS SE LO HEMOS COMPRADO"
+},
+{
+    phrase: "WE HAVE BOUGHT THEM FOR YOU",
+    translation: "NOSOTROS TE LOS HEMOS COMPRADO"
+},
+{
+    phrase: "WE HAVE BOUGHT THEM FOR HIM",
+    translation: "NOSOTROS SE LOS HEMOS COMPRADO"
+},
+{
+    phrase: "WE HAVE BOUGHT THEM FOR OURSELVES",
+    translation: "NOSOTROS NOS LOS HEMOS COMPRADO"
+},
+{
+    phrase: "WE HAVE BOUGHT THEM FOR YOU GUYS",
+    translation: "NOSOTROS OS LOS HEMOS COMPRADO"
+},
+{
+    phrase: "WE HAVE BOUGHT THEM FOR THEM",
+    translation: "NOSOTROS SE LOS HEMOS COMPRADO"
+},
+{
+  phrase: "WE USED TO BUY IT FOR YOU",
+  translation: "NOSOTROS TE LO COMPRÁBAMOS"
+},
+{
+  phrase: "WE USED TO BUY IT FOR HIM",
+  translation: "NOSOTROS SE LO COMPRÁBAMOS"
+},
+{
+  phrase: "WE USED TO BUY IT FOR OURSELVES",
+  translation: "NOSOTROS NOS LO COMPRÁBAMOS"
+},
+{
+  phrase: "WE USED TO BUY IT FOR YOU GUYS",
+  translation: "NOSOTROS OS LO COMPRÁBAMOS"
+},
+{
+  phrase: "WE USED TO BUY IT FOR THEM",
+  translation: "NOSOTROS SE LO COMPRÁBAMOS"
+},
+{
+  phrase: "WE USED TO BUY THEM FOR YOU",
+  translation: "NOSOTROS TE LOS COMPRÁBAMOS"
+},
+{
+  phrase: "WE USED TO BUY THEM FOR HIM",
+  translation: "NOSOTROS SE LOS COMPRÁBAMOS"
+},
+{
+  phrase: "WE USED TO BUY THEM FOR OURSELVES",
+  translation: "NOSOTROS NOS LOS COMPRÁBAMOS"
+},
+{
+  phrase: "WE USED TO BUY THEM FOR YOU GUYS",
+  translation: "NOSOTROS OS LOS COMPRÁBAMOS"
+},
+{
+  phrase: "WE USED TO BUY THEM FOR THEM",
+  translation: "NOSOTROS SE LOS COMPRÁBAMOS"
+},
+  {
+    phrase: "WE BUY IT FOR YOU",
+    translation: "NOSOTROS TE LO COMPRAMOS"
+  },
+  {
+    phrase: "WE BUY IT FOR HIM",
+    translation: "NOSOTROS SE LO COMPRAMOS"
+  },
+  {
+    phrase: "WE BUY IT FOR OURSELVES",
+    translation: "NOSOTROS NOS LO COMPRAMOS"
+  },
+  {
+    phrase: "WE BUY IT FOR YOU GUYS",
+    translation: "NOSOTROS OS LO COMPRAMOS"
+  },
+  {
+    phrase: "WE BUY IT FOR THEM",
+    translation: "NOSOTROS SE LO COMPRAMOS"
+  },
+  {
+    phrase: "WE BUY THEM FOR YOU",
+    translation: "NOSOTROS TE LOS COMPRAMOS"
+  },
+  {
+    phrase: "WE BUY THEM FOR HIM",
+    translation: "NOSOTROS SE LOS COMPRAMOS"
+  },
+  {
+    phrase: "WE BUY THEM FOR OURSELVES",
+    translation: "NOSOTROS NOS LOS COMPRAMOS"
+  },
+  {
+    phrase: "WE BUY THEM FOR YOU GUYS",
+    translation: "NOSOTROS OS LOS COMPRAMOS"
+  },
+  {
+    phrase: "WE BUY THEM FOR THEM",
+    translation: "NOSOTROS SE LOS COMPRAMOS"
+  },
+{
+    phrase: "WE WILL BUY IT FOR YOU",
+    translation: "NOSOTROS TE LO COMPRARÉMOS"
+},
+{
+    phrase: "WE WILL BUY IT FOR HIM",
+    translation: "NOSOTROS SE LO COMPRARÉMOS"
+},
+{
+    phrase: "WE WILL BUY IT FOR OURSELVES",
+    translation: "NOSOTROS NOS LO COMPRARÉMOS"
+},
+{
+    phrase: "WE WILL BUY IT FOR YOU GUYS",
+    translation: "NOSOTROS OS LO COMPRARÉMOS"
+},
+{
+    phrase: "WE WILL BUY IT FOR THEM",
+    translation: "NOSOTROS SE LO COMPRARÉMOS"
+},
+{
+    phrase: "WE WILL BUY THEM FOR YOU",
+    translation: "NOSOTROS TE LOS COMPRARÉMOS"
+},
+{
+    phrase: "WE WILL BUY THEM FOR HIM",
+    translation: "NOSOTROS SE LOS COMPRARÉMOS"
+},
+{
+    phrase: "WE WILL BUY THEM FOR OURSELVES",
+    translation: "NOSOTROS NOS LOS COMPRARÉMOS"
+},
+{
+    phrase: "WE WILL BUY THEM FOR YOU GUYS",
+    translation: "NOSOTROS OS LOS COMPRARÉMOS"
+},
+{
+    phrase: "WE WILL BUY THEM FOR THEM",
+    translation: "NOSOTROS SE LOS COMPRARÉMOS"
+},
+{
+    phrase: "WE WOULD BUY IT FOR YOU",
+    translation: "NOSOTROS TE LO COMPRARÍAMOS"
+},
+{
+    phrase: "WE WOULD BUY IT FOR HIM",
+    translation: "NOSOTROS SE LO COMPRARÍAMOS"
+},
+{
+    phrase: "WE WOULD BUY IT FOR OURSELVES",
+    translation: "NOSOTROS NOS LO COMPRARÍAMOS"
+},
+{
+    phrase: "WE WOULD BUY IT FOR YOU GUYS",
+    translation: "NOSOTROS OS LO COMPRARÍAMOS"
+},
+{
+    phrase: "WE WOULD BUY IT FOR THEM",
+    translation: "NOSOTROS SE LO COMPRARÍAMOS"
+},
+{
+    phrase: "WE WOULD BUY THEM FOR YOU",
+    translation: "NOSOTROS TE LOS COMPRARÍAMOS"
+},
+{
+    phrase: "WE WOULD BUY THEM FOR HIM",
+    translation: "NOSOTROS SE LOS COMPRARÍAMOS"
+},
+{
+    phrase: "WE WOULD BUY THEM FOR OURSELVES",
+    translation: "NOSOTROS NOS LOS COMPRARÍAMOS"
+},
+{
+    phrase: "WE WOULD BUY THEM FOR YOU GUYS",
+    translation: "NOSOTROS OS LOS COMPRARÍAMOS"
+},
+{
+    phrase: "WE WOULD BUY THEM FOR THEM",
+    translation: "NOSOTROS SE LOS COMPRARÍAMOS"
+}
+]],
+      ['nosotros2', [
+         {phrase: "IF WE HAD BOUGHT IT FOR OURSELVES", 
+translation: "SI NOSOTROS NOS LO HUBIÉRAMOS COMPRADO"},
+
+{phrase: "IF WE HAD BOUGHT THEM FOR YOU", 
+translation: "SI NOSOTROS TE LOS HUBIÉRAMOS COMPRADO"},
+
+{phrase: "IF WE HAD BOUGHT IT FOR HIM", 
+translation: "SI NOSOTROS SE LO HUBIÉRAMOS COMPRADO"},
+
+{phrase: "IF WE HAD BOUGHT THEM FOR YOU GUYS", 
+translation: "SI NOSOTROS OS LOS HUBIÉRAMOS COMPRADO"},
+
+{phrase: "IF WE HAD BOUGHT IT FOR THEM", 
+translation: "SI NOSOTROS SE LO HUBIÉRAMOS COMPRADO"},
+
+{phrase: "IF WE BOUGHT IT FOR OURSELVES", 
+translation: "SI NOSOTROS NOS LO COMPRÁRAMOS"},
+
+{phrase: "IF WE BOUGHT THEM FOR YOU", 
+translation: "SI NOSOTROS TE LOS COMPRÁRAMOS"},
+
+{phrase: "IF WE BOUGHT IT FOR HIM", 
+translation: "SI NOSOTROS SE LO COMPRÁRAMOS"},
+
+{phrase: "IF WE BOUGHT THEM FOR YOU GUYS", 
+translation: "SI NOSOTROS OS LOS COMPRÁRAMOS"},
+
+{phrase: "IF WE BOUGHT IT FOR THEM", 
+translation: "SI NOSOTROS SE LO COMPRÁRAMOS"},
+
+{phrase: "IF WE HAD BEEN BUYING IT FOR OURSELVES", 
+translation: "SI NOSOTROS NOS LO HUBIÉRAMOS ESTADO COMPRANDO"},
+
+{phrase: "IF WE HAD BEEN BUYING THEM FOR YOU", 
+translation: "SI NOSOTROS TE LOS HUBIÉRAMOS ESTADO COMPRANDO"},
+
+{phrase: "IF WE HAD BEEN BUYING IT FOR HIM", 
+translation: "SI NOSOTROS SE LO HUBIÉRAMOS ESTADO COMPRANDO"},
+
+{phrase: "IF WE HAD BEEN BUYING THEM FOR YOU GUYS", 
+translation: "SI NOSOTROS OS LOS HUBIÉRAMOS ESTADO COMPRANDO"},
+
+{phrase: "IF WE HAD BEEN BUYING IT FOR THEM", 
+translation: "SI NOSOTROS SE LO HUBIÉRAMOS ESTADO COMPRANDO"},
+
+{phrase: "IF WE WERE BUYING IT FOR OURSELVES", 
+translation: "SI NOSOTROS NOS LO ESTUVIÉRAMOS COMPRANDO"},
+
+{phrase: "IF WE WERE BUYING THEM FOR YOU", 
+translation: "SI NOSOTROS TE LOS ESTUVIÉRAMOS COMPRANDO"},
+
+{phrase: "IF WE WERE BUYING IT FOR HIM", 
+translation: "SI NOSOTROS SE LO ESTUVIÉRAMOS COMPRANDO"},
+
+{phrase: "IF WE WERE BUYING THEM FOR YOU GUYS", 
+translation: "SI NOSOTROS OS LOS ESTUVIÉRAMOS COMPRANDO"},
+
+{phrase: "IF WE WERE BUYING IT FOR THEM", 
+translation: "SI NOSOTROS SE LO ESTUVIÉRAMOS COMPRANDO"}
+
+
+    ]],
+     ['vosotros', [
+           {
+    phrase: "YOU ALL HAD BOUGHT IT FOR ME",
+    translation: "VOSOTROS ME LO HABÍAIS COMPRADO"
+  },
+    {
+    phrase: "YOU ALL HAD BOUGHT IT FOR HIM",
+    translation: "VOSOTROS SE LO HABÍAIS COMPRADO"
+  },
+  {
+    phrase: "YOU ALL HAD BOUGHT THEM FOR US",
+    translation: "VOSOTROS NOS LOS HABÍAIS COMPRADO"
+  },
+
+  {
+    phrase: "YOU ALL HAD BOUGHT THEM FOR YOURSELVES",
+    translation: "VOSOTROS OS LOS HABÍAIS COMPRADO"
+  },
+  {
+    phrase: "YOU ALL HAD BOUGHT IT FOR THEM",
+    translation: "VOSOTROS SE LO HABÍAIS COMPRADO"
+  },
+  {
+    phrase: "YOU ALL WOULD HAVE BOUGHT IT FOR ME",
+    translation: "VOSOTROS ME LO HABRÍAIS COMPRADO"
+  },
+    {
+    phrase: "YOU ALL WOULD HAVE BOUGHT IT FOR HIM",
+    translation: "VOSOTROS SE LO HABRÍAIS COMPRADO"
+  },
+  {
+    phrase: "YOU ALL WOULD HAVE BOUGHT THEM FOR US",
+    translation: "VOSOTROS NOS LOS HABRÍAIS COMPRADO"
+  },
+
+  {
+    phrase: "YOU ALL WOULD HAVE BOUGHT THEM FOR YOURSELVES",
+    translation: "VOSOTROS OS LOS HABRÍAIS COMPRADO"
+  },
+  {
+    phrase: "YOU ALL WOULD HAVE BOUGHT IT FOR THEM",
+    translation: "VOSOTROS SE LO HABRÍAIS COMPRADO"
+  },
+
+      {
+    phrase: "YOU ALL HAVE BOUGHT IT FOR ME",
+    translation: "VOSOTROS ME LO HABÉIS COMPRADO"
+},
+{
+    phrase: "YOU ALL HAVE BOUGHT IT FOR HIM",
+    translation: "VOSOTROS SE LO HABÉIS COMPRADO"
+},
+{
+    phrase: "YOU ALL HAVE BOUGHT IT FOR US",
+    translation: "VOSOTROS NOS LO HABÉIS COMPRADO"
+},
+{
+    phrase: "YOU ALL HAVE BOUGHT IT FOR YOURSELVES",
+    translation: "VOSOTROS OS LO HABÉIS COMPRADO"
+},
+{
+    phrase: "YOU ALL HAVE BOUGHT IT FOR THEM",
+    translation: "VOSOTROS SE LO HABÉIS COMPRADO"
+},
+{
+    phrase: "YOU ALL HAVE BOUGHT THEM FOR ME",
+    translation: "VOSOTROS ME LOS HABÉIS COMPRADO"
+},
+{
+    phrase: "YOU ALL HAVE BOUGHT THEM FOR HIM",
+    translation: "VOSOTROS SE LOS HABÉIS COMPRADO"
+},
+{
+    phrase: "YOU ALL HAVE BOUGHT THEM FOR US",
+    translation: "VOSOTROS NOS LOS HABÉIS COMPRADO"
+},
+{
+    phrase: "YOU ALL HAVE BOUGHT THEM FOR YOURSELVES",
+    translation: "VOSOTROS OS LOS HABÉIS COMPRADO"
+},
+{
+    phrase: "YOU GUYS HAVE BOUGHT THEM FOR THEM",
+    translation: "VOSOTROS SE LOS HABÉIS COMPRADO"
+},
+{
+  phrase: "YOU ALL USED TO BUY IT FOR ME",
+  translation: "VOSOTROS ME LO COMPRABAIS"
+},
+{
+  phrase: "YOU ALL USED TO BUY IT FOR HIM",
+  translation: "VOSOTROS SE LO COMPRABAIS"
+},
+{
+  phrase: "YOU ALL USED TO BUY IT FOR US",
+  translation: "VOSOTROS NOS LO COMPRABAIS"
+},
+{
+  phrase: "YOU ALL USED TO BUY IT FOR YOURSELVES",
+  translation: "VOSOTROS OS LO COMPRABAIS"
+},
+{
+  phrase: "YOU ALL USED TO BUY IT FOR THEM",
+  translation: "VOSOTROS SE LO COMPRABAIS"
+},
+{
+  phrase: "YOU ALL USED TO BUY THEM FOR ME",
+  translation: "VOSOTROS ME LOS COMPRABAIS"
+},
+{
+  phrase: "YOU ALL USED TO BUY THEM FOR HIM",
+  translation: "VOSOTROS SE LOS COMPRABAIS"
+},
+{
+  phrase: "YOU ALL USED TO BUY THEM FOR US",
+  translation: "VOSOTROS NOS LOS COMPRABAIS"
+},
+{
+  phrase: "YOU ALL USED TO BUY THEM FOR YOURSELVES",
+  translation: "VOSOTROS OS LOS COMPRABAIS"
+},
+{
+  phrase: "YOU ALL USED TO BUY THEM FOR THEM",
+  translation: "VOSOTROS SE LOS COMPRABAIS"
+},
+  {
+    phrase: "YOU ALL BUY IT FOR ME",
+    translation: "VOSOTROS ME LO COMPRÁIS"
+  },
+  {
+    phrase: "YOU ALL BUY IT FOR HIM",
+    translation: "VOSOTROS SE LO COMPRÁIS"
+  },
+  {
+    phrase: "YOU ALL BUY IT FOR US",
+    translation: "VOSOTROS NOS LO COMPRÁIS"
+  },
+  {
+    phrase: "YOU ALL BUY IT FOR YOURSELVES",
+    translation: "VOSOTROS OS LO COMPRÁIS"
+  },
+  {
+    phrase: "YOU ALL BUY IT FOR THEM",
+    translation: "VOSOTROS SE LO COMPRÁIS"
+  },
+  {
+    phrase: "YOU ALL BUY THEM FOR ME",
+    translation: "VOSOTROS ME LOS COMPRÁIS"
+  },
+  {
+    phrase: "YOU ALL BUY THEM FOR HIM",
+    translation: "VOSOTROS SE LOS COMPRÁIS"
+  },
+  {
+    phrase: "YOU ALL BUY THEM FOR US",
+    translation: "VOSOTROS NOS LOS COMPRÁIS"
+  },
+  {
+    phrase: "YOU ALL BUY THEM FOR YOURSELVES",
+    translation: "VOSOTROS OS LOS COMPRÁIS"
+  },
+  {
+    phrase: "YOU ALL BUY THEM FOR THEM",
+    translation: "VOSOTROS SE LOS COMPRÁIS"
+  },
+{
+    phrase: "YOU ALL WILL BUY IT FOR ME",
+    translation: "VOSOTROS ME LO COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WILL BUY IT FOR HIM",
+    translation: "VOSOTROS SE LO COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WILL BUY IT FOR US",
+    translation: "VOSOTROS NOS LO COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WILL BUY IT FOR YOURSELVES",
+    translation: "VOSOTROS OS LO COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WILL BUY IT FOR THEM",
+    translation: "VOSOTROS SE LO COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WILL BUY THEM FOR ME",
+    translation: "VOSOTROS ME LOS COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WILL BUY THEM FOR HIM",
+    translation: "VOSOTROS SE LOS COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WILL BUY THEM FOR US",
+    translation: "VOSOTROS NOS LOS COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WILL BUY THEM FOR YOURSELVES",
+    translation: "VOSOTROS OS LOS COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WILL BUY THEM FOR THEM",
+    translation: "VOSOTROS SE LOS COMPRARÉIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY IT FOR ME",
+    translation: "VOSOTROS ME LO COMPRARÍAIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY IT FOR HIM",
+    translation: "VOSOTROS SE LO COMPRARÍAIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY IT FOR US",
+    translation: "VOSOTROS NOS LO COMPRARÍAIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY IT FOR YOURSELVES",
+    translation: "VOSOTROS OS LO COMPRARÍAIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY IT FOR THEM",
+    translation: "VOSOTROS SE LO COMPRARÍAIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY THEM FOR ME",
+    translation: "VOSOTROS ME LOS COMPRARÍAIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY THEM FOR HIM",
+    translation: "VOSOTROS SE LOS COMPRARÍAIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY THEM FOR US",
+    translation: "VOSOTROS NOS LOS COMPRARÍAIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY THEM FOR YOURSELVES",
+    translation: "VOSOTROS OS LOS COMPRARÍAIS"
+},
+{
+    phrase: "YOU ALL WOULD BUY THEM FOR THEM",
+    translation: "VOSOTROS SE LOS COMPRARÍAIS"
+}
+
+
+    ]],
+      ['vosotros2', [
+      {phrase: "IF YOU ALL HAD BOUGHT IT FOR YOURSELVES", 
+translation: "SI VOSOTROS OS LO HUBIERAIS COMPRADO"},
+
+{phrase: "IF YOU ALL HAD BOUGHT THEM FOR ME", 
+translation: "SI VOSOTROS ME LOS HUBIERAIS COMPRADO"},
+
+{phrase: "IF YOU ALL HAD BOUGHT IT FOR HIM", 
+translation: "SI VOSOTROS SE LO HUBIERAIS COMPRADO"},
+
+{phrase: "IF YOU ALL HAD BOUGHT THEM FOR US", 
+translation: "SI VOSOTROS NOS LOS HUBIERAIS COMPRADO"},
+
+{phrase: "IF YOU ALL HAD BOUGHT IT FOR THEM", 
+translation: "SI VOSOTROS SE LO HUBIERAIS COMPRADO"},
+
+{phrase: "IF YOU ALL BOUGHT IT FOR YOURSELVES", 
+translation: "SI VOSOTROS OS LO COMPRARAIS"},
+
+{phrase: "IF YOU ALL BOUGHT THEM FOR ME", 
+translation: "SI VOSOTROS ME LOS COMPRARAIS"},
+
+{phrase: "IF YOU ALL BOUGHT IT FOR HIM", 
+translation: "SI VOSOTROS SE LO COMPRARAIS"},
+
+{phrase: "IF YOU ALL BOUGHT THEM FOR US", 
+translation: "SI VOSOTROS NOS LOS COMPRARAIS"},
+
+{phrase: "IF YOU ALL BOUGHT IT FOR THEM", 
+translation: "SI VOSOTROS SE LO COMPRARAIS"},
+
+{phrase: "IF YOU ALL HAD BEEN BUYING IT FOR YOURSELVES", 
+translation: "SI VOSOTROS OS LO HUBIERAIS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU ALL HAD BEEN BUYING THEM FOR ME", 
+translation: "SI VOSOTROS ME LOS HUBIERAIS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU ALL HAD BEEN BUYING IT FOR HIM", 
+translation: "SI VOSOTROS SE LO HUBIERAIS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU ALL HAD BEEN BUYING THEM FOR US", 
+translation: "SI VOSOTROS NOS LOS HUBIERAIS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU ALL HAD BEEN BUYING IT FOR THEM", 
+translation: "SI VOSOTROS SE LO HUBIERAIS ESTADO COMPRANDO"},
+
+{phrase: "IF YOU ALL WERE BUYING IT FOR YOURSELVES", 
+translation: "SI VOSOTROS OS LO ESTUVIERAIS COMPRANDO"},
+
+{phrase: "IF YOU ALL WERE BUYING THEM FOR ME", 
+translation: "SI VOSOTROS ME LOS ESTUVIERAIS COMPRANDO"},
+
+{phrase: "IF YOU ALL WERE BUYING IT FOR HIM", 
+translation: "SI VOSOTROS SE LO ESTUVIERAIS COMPRANDO"},
+
+{phrase: "IF YOU ALL WERE BUYING THEM FOR US", 
+translation: "SI VOSOTROS NOS LOS ESTUVIERAIS COMPRANDO"},
+
+{phrase: "IF YOU ALL WERE BUYING IT FOR THEM", 
+translation: "SI VOSOTROS SE LO ESTUVIERAIS COMPRANDO"
+}
+]],
+      ['ellos2', [
+     {phrase: "IF THEY HAD BOUGHT IT FOR ME", 
+translation: "SI ELLOS ME LO HUBIERAN COMPRADO"},
+
+{phrase: "IF THEY HAD BOUGHT IT FOR THEMSELVES", 
+translation: "SI ELLOS SE LO HUBIERAN COMPRADO"},
+
+{phrase: "IF THEY HAD BOUGHT THEM FOR YOU", 
+translation: "SI ELLOS TE LOS HUBIERAN COMPRADO"},
+
+{phrase: "IF THEY HAD BOUGHT IT FOR HIM", 
+translation: "SI ELLOS SE LO HUBIERAN COMPRADO"},
+
+{phrase: "IF THEY HAD BOUGHT THEM FOR US", 
+translation: "SI ELLOS NOS LOS HUBIERAN COMPRADO"},
+
+{phrase: "IF THEY HAD BOUGHT IT FOR YOU ALL", 
+translation: "SI ELLOS OS LO HUBIERAN COMPRADO"},
+
+{phrase: "IF THEY BOUGHT THEM FOR ME", 
+translation: "SI ELLOS ME LOS COMPRARAN"},
+
+{phrase: "IF THEY BOUGHT IT FOR THEMSELVES", 
+translation: "SI ELLOS SE LO COMPRARAN"},
+
+{phrase: "IF THEY BOUGHT THEM FOR YOU", 
+translation: "SI ELLOS TE LOS COMPRARAN"},
+
+{phrase: "IF THEY BOUGHT IT FOR HIM", 
+translation: "SI ELLOS SE LO COMPRARAN"},
+
+{phrase: "IF THEY BOUGHT THEM FOR US", 
+translation: "SI ELLOS NOS LOS COMPRARAN"},
+
+{phrase: "IF THEY BOUGHT IT FOR YOU ALL", 
+translation: "SI ELLOS OS LO COMPRARAN"},
+
+{phrase: "IF THEY HAD BEEN BUYING THEM FOR ME", 
+translation: "SI ELLOS ME LOS HUBIERAN ESTADO COMPRANDO"},
+
+{phrase: "IF THEY HAD BEEN BUYING IT FOR THEMSELVES", 
+translation: "SI ELLOS SE LO HUBIERAN ESTADO COMPRANDO"},
+
+{phrase: "IF THEY HAD BEEN BUYING THEM FOR YOU", 
+translation: "SI ELLOS TE LOS HUBIERAN ESTADO COMPRANDO"},
+
+{phrase: "IF THEY HAD BEEN BUYING IT FOR HIM", 
+translation: "SI ELLOS SE LO HUBIERAN ESTADO COMPRANDO"},
+
+{phrase: "IF THEY HAD BEEN BUYING THEM FOR US", 
+translation: "SI ELLOS NOS LOS HUBIERAN ESTADO COMPRANDO"},
+
+{phrase: "IF THEY HAD BEEN BUYING IT FOR YOU ALL", 
+translation: "SI ELLOS OS LO HUBIERAN ESTADO COMPRANDO"},
+
+{phrase: "IF THEY WERE BUYING IT FOR ME", 
+translation: "SI ELLOS ME LO ESTUVIERAN COMPRANDO"},
+
+{phrase: "IF THEY WERE BUYING IT FOR THEMSELVES", 
+translation: "SI ELLOS SE LO ESTUVIERAN COMPRANDO"},
+
+{phrase: "IF THEY WERE BUYING THEM FOR YOU", 
+translation: "SI ELLOS TE LOS ESTUVIERAN COMPRANDO"},
+
+{phrase: "IF THEY WERE BUYING IT FOR HIM", 
+translation: "SI ELLOS SE LO ESTUVIERAN COMPRANDO"},
+
+{phrase: "IF THEY WERE BUYING THEM FOR US", 
+translation: "SI ELLOS NOS LOS ESTUVIERAN COMPRANDO"},
+
+{phrase: "IF THEY WERE BUYING IT FOR YOU ALL", 
+translation: "SI ELLOS OS LO ESTUVIERAN COMPRANDO"
+}
+]],
+     ['ellos', [
+         {
+    phrase: "THEY HAD BOUGHT IT FOR ME",
+    translation: "ELLOS ME LO HABÍAN COMPRADO"
+  },
+  {
+    phrase: "THEY HAD BOUGHT THEM FOR YOU",
+    translation: "ELLOS TE LOS HABÍAN COMPRADO"
+  },
+  {
+    phrase: "THEY HAD BOUGHT IT FOR HIM",
+    translation: "ELLOS SE LO HABÍAN COMPRADO"
+  },
+ {
+    phrase: "THEY HAD BOUGHT THEM FOR US",
+    translation: "ELLOS NOS LOS HABÍAN COMPRADO"
+  },
+
+  {
+    phrase: "THEY HAD BOUGHT THEM FOR YOU GUYS",
+    translation: "ELLOS OS LOS HABÍAN COMPRADO"
+  },
+  {
+    phrase: "THEY HAD BOUGHT IT FOR THEMSELVES ",
+    translation: "ELLOS SE LO HABÍAN COMPRADO"
+  },
+
+   {
+    phrase: "THEY WOULD HAVE BOUGHT IT FOR ME",
+    translation: "ELLOS ME LO HABRÍAN COMPRADO"
+  },
+  {
+    phrase: "THEY WOULD HAVE BOUGHT THEM FOR YOU",
+    translation: "ELLOS TE LOS HABRÍAN COMPRADO"
+  },
+  {
+    phrase: "THEY WOULD HAVE BOUGHT IT FOR HIM",
+    translation: "ELLOS SE LO HABRÍAN COMPRADO"
+  },
+ {
+    phrase: "THEY WOULD HAVE BOUGHT THEM FOR US",
+    translation: "ELLOS NOS LOS HABRÍAN COMPRADO"
+  },
+
+  {
+    phrase: "THEY WOULD HAVE BOUGHT THEM FOR YOU GUYS",
+    translation: "ELLOS OS LOS HABRÍAN COMPRADO"
+  },
+  {
+    phrase: "THEY WOULD HAVE BOUGHT IT FOR THEMSELVES ",
+    translation: "ELLOS SE LO HABRÍAN COMPRADO"
+  },
+
+
+      {phrase: "THEY HAVE BOUGHT IT FOR ME",
+    translation: "ELLOS ME LO HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT IT FOR YOU",
+    translation: "ELLOS TE LO HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT IT FOR HIM",
+    translation: "ELLOS SE LO HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT IT FOR US",
+    translation: "ELLOS NOS LO HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT IT FOR YOU GUYS",
+    translation: "ELLOS OS LO HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT IT FOR THEM",
+    translation: "ELLOS SE LO HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT THEM FOR ME",
+    translation: "ELLOS ME LOS HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT THEM FOR YOU",
+    translation: "ELLOS TE LOS HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT THEM FOR HIM",
+    translation: "ELLOS SE LOS HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT THEM FOR US",
+    translation: "ELLOS NOS LOS HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT THEM FOR YOU GUYS",
+    translation: "ELLOS OS LOS HAN COMPRADO"
+},
+{
+    phrase: "THEY HAVE BOUGHT THEM FOR THEM",
+    translation: "ELLOS SE LOS HAN COMPRADO"
+},
+{
+  phrase: "THEY USED TO BUY IT FOR ME",
+  translation: "ELLOS ME LO COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY IT FOR YOU",
+  translation: "ELLOS TE LO COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY IT FOR HIM",
+  translation: "ELLOS SE LO COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY IT FOR US",
+  translation: "ELLOS NOS LO COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY IT FOR YOU GUYS",
+  translation: "ELLOS OS LO COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY IT FOR THEM",
+  translation: "ELLOS SE LO COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY THEM FOR ME",
+  translation: "ELLOS ME LOS COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY THEM FOR YOU",
+  translation: "ELLOS TE LOS COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY THEM FOR HIM",
+  translation: "ELLOS SE LOS COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY THEM FOR US",
+  translation: "ELLOS NOS LOS COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY THEM FOR YOU GUYS",
+  translation: "ELLOS OS LOS COMPRABAN"
+},
+{
+  phrase: "THEY USED TO BUY THEM FOR THEM",
+  translation: "ELLOS SE LOS COMPRABAN"
+},
+  {
+    phrase: "THEY BUY IT FOR ME",
+    translation: "ELLOS ME LO COMPRAN"
+  },
+  {
+    phrase: "THEY BUY IT FOR YOU",
+    translation: "ELLOS TE LO COMPRAN"
+  },
+  {
+    phrase: "THEY BUY IT FOR HIM",
+    translation: "ELLOS SE LO COMPRAN"
+  },
+  {
+    phrase: "THEY BUY IT FOR US",
+    translation: "ELLOS NOS LO COMPRAN"
+  },
+  {
+    phrase: "THEY BUY IT FOR YOU GUYS",
+    translation: "ELLOS OS LO COMPRAN"
+  },
+  {
+    phrase: "THEY BUY IT FOR THEM",
+    translation: "ELLOS SE LO COMPRAN"
+  },
+  {
+    phrase: "THEY BUY THEM FOR ME",
+    translation: "ELLOS ME LOS COMPRAN"
+  },
+  {
+    phrase: "THEY BUY THEM FOR YOU",
+    translation: "ELLOS TE LOS COMPRAN"
+  },
+  {
+    phrase: "THEY BUY THEM FOR HIM",
+    translation: "ELLOS SE LOS COMPRAN"
+  },
+  {
+    phrase: "THEY BUY THEM FOR US",
+    translation: "ELLOS NOS LOS COMPRAN"
+  },
+  {
+    phrase: "THEY BUY THEM FOR YOU GUYS",
+    translation: "ELLOS OS LOS COMPRAN"
+  },
+  {
+    phrase: "THEY BUY THEM FOR THEM",
+    translation: "ELLOS SE LOS COMPRAN"
+  },
+{
+    phrase: "THEY WILL BUY IT FOR ME",
+    translation: "ELLOS ME LO COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY IT FOR YOU",
+    translation: "ELLOS TE LO COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY IT FOR HIM",
+    translation: "ELLOS SE LO COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY IT FOR US",
+    translation: "ELLOS NOS LO COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY IT FOR YOU GUYS",
+    translation: "ELLOS OS LO COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY IT FOR THEM",
+    translation: "ELLOS SE LO COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY THEM FOR ME",
+    translation: "ELLOS ME LOS COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY THEM FOR YOU",
+    translation: "ELLOS TE LOS COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY THEM FOR HIM",
+    translation: "ELLOS SE LOS COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY THEM FOR US",
+    translation: "ELLOS NOS LOS COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY THEM FOR YOU GUYS",
+    translation: "ELLOS OS LOS COMPRARÁN"
+},
+{
+    phrase: "THEY WILL BUY THEM FOR THEM",
+    translation: "ELLOS SE LOS COMPRARÁN"
+},
+{
+    phrase: "THEY WOULD BUY IT FOR ME",
+    translation: "ELLOS ME LO COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY IT FOR YOU",
+    translation: "ELLOS TE LO COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY IT FOR HIM",
+    translation: "ELLOS SE LO COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY IT FOR US",
+    translation: "ELLOS NOS LO COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY IT FOR YOU GUYS",
+    translation: "ELLOS OS LO COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY IT FOR THEM",
+    translation: "ELLOS SE LO COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY THEM FOR ME",
+    translation: "ELLOS ME LOS COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY THEM FOR YOU",
+    translation: "ELLOS TE LOS COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY THEM FOR HIM",
+    translation: "ELLOS SE LOS COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY THEM FOR US",
+    translation: "ELLOS NOS LOS COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY THEM FOR YOU GUYS",
+    translation: "ELLOS OS LOS COMPRARÍAN"
+},
+{
+    phrase: "THEY WOULD BUY THEM FOR THEM",
+    translation: "ELLOS SE LOS COMPRARÍAN"
+}
+    ]]
+]);
+let currentColumnIndex = 0; // Tracks the current word position for the user to select. 
+let currentTranslationWords = []; // Holds the words of the current translation to be matched.
+let currentPronoun = ''; // Empty string to be filled with a randomly selected pronoun
+let currentQuestionIndex = 0; // Default question index
+
+// Function to randomly select a pronoun
+function selectRandomPronoun() {
+    const pronounUsageCount = {
+        'yo': 0,
+        'tú': 0,
+        'él': 0,
+        'nosotros': 0,
+        'vosotros': 0,
+        'ellos': 0,
+         'yo2': 0,
+        'tú2': 0,
+        'él2': 0,
+        'nosotros2': 0,
+        'vosotros2': 0,
+        'ellos2': 0
+    };
+
+    // Randomly select a pronoun with an even distribution
+    const selectedPronoun = pronouns[Math.floor(Math.random() * pronouns.length)];
+    currentPronoun = selectedPronoun;
+}
+   
+const exceptions = [
+ "YO ME",
+"YO TE",
+"YO SE",
+"YO OS",
+"TÚ ME",
+"TÚ TE",
+"TÚ SE",
+"TÚ NOS",
+"ÉL ME",
+"ÉL TE",
+"ÉL SE",
+"ÉL NOS",
+"ÉL OS",
+"NOSOTROS TE",
+"NOSOTROS SE",
+"NOSOTROS NOS",
+"NOSOTROS OS",
+"VOSOTROS ME",
+"VOSOTROS SE",
+"VOSOTROS NOS",
+"VOSOTROS OS",
+"ELLOS ME",
+"ELLOS TE",
+"ELLOS SE",
+"ELLOS NOS",
+"ELLOS OS",
+"HE COMPRADO",
+"HAS COMPRADO",
+"HA COMPRADO",
+"HEMOS COMPRADO",
+"HABÉIS COMPRADO",
+"HAN COMPRADO",
+"HABRÍA COMPRADO",
+"HABRÍAS COMPRADO",
+"HABRÍAMOS COMPRADO",
+"HABRÍAIS COMPRADO",
+"HABRÍAN COMPRADO",
+"HABÍA COMPRADO",
+"HABÍAS COMPRADO",
+"HABÍAMOS COMPRADO",
+"HABÍAIS COMPRADO",
+"HABÍAN COMPRADO",
+"SI YO ME",
+"SI YO TE",
+"SI YO SE",
+"SI YO OS",
+"SI TÚ ME",
+"SI TÚ TE",
+"SI TÚ SE",
+"SI TÚ NOS",
+"SI ÉL ME",
+"SI ÉL TE",
+"SI ÉL SE",
+"SI ÉL NOS",
+"SI ÉL OS",
+"SI NOSOTROS TE",
+"SI NOSOTROS SE",
+"SI NOSOTROS NOS",
+"SI NOSOTROS OS",
+"SI VOSOTROS ME",
+"SI VOSOTROS SE",
+"SI VOSOTROS NOS",
+"SI VOSOTROS OS",
+"SI ELLOS ME",
+"SI ELLOS TE",
+"SI ELLOS SE",
+"SI ELLOS NOS",
+"SI ELLOS OS",
+"HUBIERA COMPRADO",
+"HUBIERAS COMPRADO",
+"HUBIÉRAMOS COMPRADO",
+"HUBIERAIS COMPRADO",
+"HUBIERAN COMPRADO",
+"HUBIERA ESTADO COMPRANDO",
+"HUBIERAS ESTADO COMPRANDO",
+"HUBIÉRAMOS ESTADO COMPRANDO",
+"HUBIERAIS ESTADO COMPRANDO",
+"HUBIERAN ESTADO COMPRANDO",
+"ESTUVIERA COMPRANDO",
+"ESTUVIERAS COMPRANDO",
+"ESTUVIÉRAMOS COMPRANDO",
+"ESTUVIERAIS COMPRANDO",
+"ESTUVIERAN COMPRANDO",
+  
+];
+ 
+// Modified createColumnsByWordPosition
+function createColumnsByWordPosition(translations) {
+    const wordPositions = [];
+    translations.forEach(translation => {
+        const words = splitTranslation(translation); // Use splitTranslation to split the translation
+        words.forEach((word, index) => {
+            if (!wordPositions[index]) wordPositions[index] = new Set();
+            wordPositions[index].add(word);
+        });
+    });
+    return wordPositions.map(set => Array.from(set));
+}
+
+// Helper function to split a translation into words or exceptions
+function splitTranslation(translation) {
+    let words = [];
+    let remainingText = translation;
+
+    while (remainingText) {
+        let matchedException = exceptions.find(exception => remainingText.startsWith(exception));
+        if (matchedException) {
+            words.push(matchedException);
+            remainingText = remainingText.slice(matchedException.length).trim();
+        } else {
+            let firstSpaceIndex = remainingText.indexOf(' ');
+            if (firstSpaceIndex === -1) {
+                words.push(remainingText);
+                remainingText = "";
+            } else {
+                words.push(remainingText.slice(0, firstSpaceIndex));
+                remainingText = remainingText.slice(firstSpaceIndex + 1).trim();
+            }
+        }
+    }
+
+    return words;
+}
+
+// Shuffle an Array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+}
+
+// Shuffle the questions for each pronoun
+function shuffleQuestions() {
+    pronouns.forEach(pronoun => {
+        const questionSet = questions.get(pronoun);
+        shuffleArray(questionSet); // Shuffle the questions for each pronoun
+    });
+}
+
+// Load Question
+function loadQuestion(index) {
+    selectRandomPronoun();  // Randomly select the pronoun
+
+    const questionSet = questions.get(currentPronoun);
+    if (!questionSet) return;
+
+    const { phrase, translation } = questionSet[index];
+    const translations = questionSet.map(q => q.translation);
+    const columnsData = createColumnsByWordPosition(translations);
+    currentTranslationWords = splitTranslation(translation); // Use splitTranslation to split the translation
+
+    document.getElementById('question-container').innerText = phrase;
+
+    const buttonContainer = document.getElementById('button-container');
+    buttonContainer.innerHTML = ''; // Clear the existing buttons
+
+    columnsData.forEach((words, colIndex) => {
+        const columnContainer = document.createElement('div');
+        columnContainer.classList.add('column');
+
+        shuffleArray(words); // Shuffle words to randomize the options
+
+        words.forEach(word => {
+            const button = document.createElement('button');
+            button.innerText = word;
+            button.classList.add('translation-button');
+            button.onclick = () => handleWordClick(button, word); // Attach word click handler
+            columnContainer.appendChild(button);
+        });
+
+        buttonContainer.appendChild(columnContainer);
+    });
+
+    showColumns(); // Display columns
+}
+let timeLeft = 60; // 1-minute timer
+let score = 0;
+let timerInterval;
+
+window.onload = function () {
+    startGame(); // Automatically start the game when the page loads
+};
+
+function startGame() {
+    timeLeft = 60; // Reset time
+    score = 0; // Reset score
+    document.getElementById('timer').innerText = `Time: ${timeLeft}s`;
+    document.getElementById('score').innerText = ` ${score}%`;
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').innerText = `${timeLeft}`;
+
+        if (timeLeft <= 0) {
+            endGame();
+        }
+    }, 1000);
+
+    loadQuestion(0);
+}
+
+function endGame() {
+    clearInterval(timerInterval);
+
+    // Show end game screen
+    const endGameScreen = document.getElementById('end-game-screen');
+    endGameScreen.style.display = 'flex'; // Show the overlay
+    document.getElementById('final-score').innerText = `Final Score: ${score}%`;
+}
+
+function tryAgain() {
+    document.getElementById('end-game-screen').style.display = 'none'; // Hide the overlay
+    startGame(); // Restart game
+}
+
+function handleWordClick(button, word) {
+    const body = document.body; // Reference to the body element
+
+    if (currentTranslationWords[currentColumnIndex] === word) {
+        // Correct answer
+        button.classList.add('correct');
+        speakWord(word);
+
+        score = Math.min(100, score + 10);
+        document.getElementById('score').innerText = `${score}%`;
+
+        setTimeout(() => {
+            button.classList.remove('correct');
+            currentColumnIndex++;
+
+            if (currentColumnIndex < currentTranslationWords.length) {
+                showColumns();
+            } else {
+                // Change background to green before next question
+                body.classList.add('correct-bg');
+                speakPhrase(currentTranslationWords.join(' '));
+
+                setTimeout(() => {
+                    body.classList.remove('correct-bg');
+                    loadNextQuestion();
+                }, 2500);
+            }
+        }, 100);
+    } else {
+        // Incorrect answer
+        button.classList.add('incorrect');
+        body.classList.add('incorrect-bg');
+        score = Math.max(0, score - 5);
+        document.getElementById('score').innerText = `${score}%`;
+
+        setTimeout(() => {
+            button.classList.remove('incorrect');
+            body.classList.remove('incorrect-bg');
+
+            // Reload the **same** question instead of moving forward
+            currentColumnIndex = 0; // Reset to first word
+            loadCurrentQuestion(); // Reload the same question
+        }, 1000);
+    }
+}
+function shuffleArrayWithAnimation(container, array) {
+    const buttons = Array.from(container.querySelectorAll('.translation-button'));
+
+    // Step 1: Store initial vertical positions
+    const positions = buttons.map(button => {
+        return { button, top: button.getBoundingClientRect().top };
+    });
+
+    // Step 2: Shuffle array
+    shuffleArray(array);
+
+    // Step 3: Apply shuffled order in the DOM
+    array.forEach(word => {
+        const button = buttons.find(btn => btn.innerText === word);
+        if (button) container.appendChild(button);
+    });
+
+    // Step 4: Store new vertical positions and apply inverse transform
+    requestAnimationFrame(() => {
+        positions.forEach(({ button, top }) => {
+            const newTop = button.getBoundingClientRect().top;
+            const deltaY = top - newTop;
+
+            // Apply only vertical transform
+            button.style.transform = `translateY(${deltaY}px)`;
+            button.style.transition = 'transform 0s';
+        });
+
+       requestAnimationFrame(() => {
+            buttons.forEach(button => {
+                button.style.transition = 'transform 0.5s ease-in-out, background-color 0.5s ease-in-out, color 0.5s ease-in-out, border-color 0.5s ease-in-out';
+                button.style.transform = '';
+                button.style.backgroundColor = 'orange'; // Change background to yellow
+                button.style.color = 'lightyellow'; // Change text color to light yellow
+                button.style.borderColor = 'lightyellow'; // Change border color to light yellow
+            });
+
+            // Step 6: Reset styles to original CSS
+            setTimeout(() => {
+                buttons.forEach(button => {
+                    button.style.removeProperty('background-color'); // Reset to CSS
+                    button.style.removeProperty('color'); // Reset text color to CSS
+                    button.style.removeProperty('border-color'); // Reset border color to CSS
+                    button.style.removeProperty('transition');
+                });
+            }, 500); // Matches transition duration
+        });
+    });
+}
+
+function loadCurrentQuestion() {
+    const questionSet = questions.get(currentPronoun);
+    const { phrase, translation } = questionSet[currentQuestionIndex];
+    const translations = questionSet.map(q => q.translation);
+    const columnsData = createColumnsByWordPosition(translations);
+    currentTranslationWords = splitTranslation(translation); // Use splitTranslation to split the translation
+
+    document.getElementById('question-container').innerText = phrase;
+
+    const buttonContainer = document.getElementById('button-container');
+    buttonContainer.innerHTML = ''; // Clear the existing buttons
+
+    columnsData.forEach((words, colIndex) => {
+        const columnContainer = document.createElement('div');
+        columnContainer.classList.add('column');
+
+        words.forEach(word => {
+            const button = document.createElement('button');
+            button.innerText = word;
+            button.classList.add('translation-button');
+            button.onclick = () => handleWordClick(button, word); // Attach word click handler
+            columnContainer.appendChild(button);
+        });
+
+        buttonContainer.appendChild(columnContainer);
+
+        // Animate the shuffle process
+        shuffleArrayWithAnimation(columnContainer, words);
+    });
+
+    showColumns(); // Display columns
+}
+
+
+function loadNextQuestion() {
+    const questionSet = questions.get(currentPronoun);
+    currentQuestionIndex = (currentQuestionIndex + 1) % questionSet.length; // Loop through questions
+    currentColumnIndex = 0; // Reset column index
+    loadQuestion(currentQuestionIndex); // Load the next question
+}
+
+// Show Active Column
+function showColumns() {
+    const columns = document.querySelectorAll('.column');
+    columns.forEach((col, index) => {
+        col.classList.toggle('active', index === currentColumnIndex); // Show the active column based on current index
+    });
+}
+
+// Text-to-Speech
+function speakWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'es-ES';
+    speechSynthesis.speak(utterance);
+}
+
+function speakPhrase(phrase) {
+    const utterance = new SpeechSynthesisUtterance(phrase);
+    utterance.lang = 'es-ES';
+    speechSynthesis.speak(utterance);
+}
+
+// Initialize the Questions and Load First Question
+shuffleQuestions(); // Shuffle questions before starting
+loadQuestion(currentQuestionIndex); // Load the first question
+
+     
+  
+ 
+ function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+        
+        function navigateTomainRECOGNIZER() {
+    // Convert the data array to JSON
+    const dataJSON = JSON.stringify(data);
+    
+    // Create the URL for navigation
+    const url = `mainRECOGNIZER.html?data=${encodeURIComponent(dataJSON)}`;
+    
+    // Navigate to the activity page
+    window.location.href = url;
+}
+</script>
+</body>
+</html>

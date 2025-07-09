@@ -1,0 +1,597 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+width: 95%;
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: black;
+}
+
+.question-container {
+width: 100%;
+display: flex;
+justify-content: left;
+margin-bottom: 0vh;
+padding: 0.5vh 1vh;
+background-color: #021303;
+color: lime;
+font-weight: bold;
+  font-size: clamp(6px, 4vw, 4rem);
+border: 0.3vh solid lime;
+margin-top: 0.5vh;
+}
+
+.button-container {
+display: flex;
+width: 100%;
+margin-top: 2vh;
+margin-left: 1.7vh;
+height: 80vh;
+background-color: black;
+align-items: center;
+box-sizing: border-box;
+
+
+overflow-x: auto;
+scroll-behavior: smooth;
+gap: 1px;
+}
+
+.column {
+flex-shrink: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 200px;
+justify-content: space-around;
+width: 95%;
+min-width: 15vw;
+margin: 0.1vh 0.1vh;
+height: 99%;
+opacity: 1;
+transition: opacity 0.3s, transform 0.3s;
+box-sizing: border-box;
+}
+
+.column.active {
+    opacity: 1; /* Fully visible */
+    background-color: #f9f9f9; /* Light background */
+    pointer-events: auto; /* Allow interaction */
+}
+.column.inactive, .column.completed {
+    opacity: 0.5; /* Dim inactive/completed columns */
+    background-color: #ddd; /* Gray out inactive/completed columns */
+    pointer-events: none; /* Prevent interaction */
+}
+
+
+.translation-button {
+  font-size: clamp(3px, 8vw, 8rem);
+    color: #FFFFFF;
+  padding:0;
+    font-weight: bold;
+    background-color: black;
+    cursor: pointer;
+    width: 100%; /* Make buttons fill the column width */
+    border: 0.1vh solid white;
+    text-transform: uppercase;
+    flex: 1; /* Make buttons flexible */
+  
+}
+
+.translation-button:hover {
+color: yellow;
+    border: 0.1vh solid yellow;
+}
+
+.translation-button.correct {
+background-color: black;
+color: lime;
+border: 0.5vh solid lime;
+}
+
+.translation-button.incorrect {
+background-color: black;
+color: red;
+border: 0.5vh solid red;
+}
+
+.translation-button:selected {
+background-color: black;
+color: cyan;
+font-size: 2vh;
+padding: 0;
+}
+
+button[onclick="navigateTomainRECOGNIZER()"] {
+background-color:black;
+color:pink;
+font-weight:bold;
+margin-top:5vh;
+font-size: 3vh;
+border: 0.3vh solid red;
+
+}
+
+.correct-bg {
+background-color: green;
+transition: background-color 0.5s ease;
+}
+
+
+.incorrect-bg {
+background-color: red;
+transition: background-color 0.5s ease;
+}
+.translation-button.correct {
+background-color: black; /* Red background */
+color: lime;
+border: 0.5vh solid lime;
+
+}
+
+.translation-button.incorrect {
+background-color: black; /* Red background */
+color: red; /* White text */
+border: 0.5vh solid red;
+}
+
+
+  .save-score {
+  background-color:#0b150b;
+position:absolute; top:90%; right:1%;
+color: lime;
+  padding: 1vh 1vh;
+  font-size: 16px;
+            border: 0.5vh solid lime;
+
+  font-weight: bold;
+  border-radius: 1vh;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+  #score-display   {
+  background-color: transparent;
+position:absolute; bottom:0%; right:0%;
+color: white;
+  font-size: 6vh;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+} 
+.save-score:hover {
+  background-color: #45A049;
+  transform: scale(1.05);
+}
+
+.save-score:active {
+  background-color: yellow;
+  color:black;
+  transform: scale(0.98);
+}
+
+@keyframes focusOutline {
+  0% {
+    outline-offset: 0;
+    outline-color: transparent;
+  }
+  25% {
+    outline-offset: 1vh;
+    outline-color: #4CAF50;
+  }
+  50% {
+    outline-offset: 2vh;
+    outline-color: #4CAF50;
+  }
+  75% {
+    outline-offset: 1vh;
+    outline-color: #4CAF50;
+  }
+  100% {
+    outline-offset: 0vh;
+    outline-color: #4CAF50;
+  }
+}
+
+.save-score:focus {
+  outline: 0.5vh solid #4CAF50;
+  outline-offset: 2vh;
+  animation: focusOutline 2s ease-in-out forwards;
+}
+ 
+</style>
+</head>
+<body>
+<div id="question-container" class="question-container"></div>
+<div class="button-container" id="button-container"></div>
+   <div id="score-display">0%</div>
+<script>
+const params = new URLSearchParams(window.location.search);
+const dataJSON = params.get('data');
+let phraseGroups = [];
+
+if (dataJSON) {
+    try {
+        // Decode and parse the JSON string from the URL
+        const data = JSON.parse(decodeURIComponent(dataJSON));
+        
+        // Map the data to the phrase groups
+        phraseGroups = data.map(group => ({
+            phrases: group.phrases,
+            translations: group.translations
+        }));
+    } catch (error) {
+        console.error('Failed to parse data JSON:', error);
+        alert('Error loading phrase data. Please try again.');
+    }
+} else {
+    console.error('No data found in URL');
+}
+
+// Step 2: Exceptions list
+const exceptions = [
+    "pero", "así que", "por que", "y", 
+    "en la casa", "en la oficina", "en la avenida", 
+    "en el mercado", "en la biblioteca", "en la farmacia", 
+    "en el hospital", "en el museo", "en el restaurante", 
+    "en el banco", "en el parque", "en la calle", 
+    "en la tienda", "en la escuela"
+];
+
+// Step 3: Function to generate combinations
+function generateCombinations(sections, index = 0, currentPhrase = "", currentTranslation = "", combinations = []) {
+    if (index === sections.length) {
+        combinations.push({
+            phrase: currentPhrase.trim(),
+            translation: currentTranslation.trim()
+        });
+        return;
+    }
+
+    sections[index].phrases.forEach((phrase, i) => {
+        generateCombinations(
+            sections,
+            index + 1,
+            currentPhrase + " " + phrase,
+            currentTranslation + " " + sections[index].translations[i],
+            combinations
+        );
+    });
+
+    return combinations;
+}
+
+// Step 4: Generate combinations using the phrase groups
+const combinations = generateCombinations(phraseGroups);
+
+// Optional: Log combinations for debugging
+console.log(combinations);
+// Create columns by word position
+function createColumnsByWordPosition(translations) {
+    const wordPositions = [];
+
+    translations.forEach(translation => {
+        let words = splitTranslation(translation);
+        words.forEach((word, index) => {
+            if (!wordPositions[index]) {
+                wordPositions[index] = new Set();
+            }
+            wordPositions[index].add(word);
+        });
+    });
+
+    return wordPositions.map(positionSet => Array.from(positionSet));
+}
+
+// Split translation into words
+function splitTranslation(translation) {
+    let words = [];
+    let remainingText = translation;
+
+    while (remainingText) {
+        // Check if the remaining text starts with a full exception phrase
+        let matchedException = exceptions.find(exception => {
+            // Check if the exception is a full match at the start of the remaining text
+            return remainingText.startsWith(exception) && (remainingText[exception.length] === ' ' || remainingText[exception.length] === undefined);
+        });
+
+        if (matchedException) {
+            // If an exception is found, add the exception word to the words array
+            words.push(matchedException);
+            // Remove the exception word from the remaining text
+            remainingText = remainingText.slice(matchedException.length).trim();
+        } else {
+            // If no exception is found, split based on the first space
+            let firstSpaceIndex = remainingText.indexOf(' ');
+            if (firstSpaceIndex === -1) {
+                // If no space is found, the whole remaining text is a single word
+                words.push(remainingText);
+                remainingText = ""; // No text left to process
+            } else {
+                // If a space is found, split the word at the space
+                words.push(remainingText.slice(0, firstSpaceIndex));
+                remainingText = remainingText.slice(firstSpaceIndex + 1).trim();
+            }
+        }
+    }
+
+    return words;
+}
+
+
+// Shuffle array function
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Create columns data
+const columnsData = createColumnsByWordPosition(combinations.map(({ translation }) => translation));
+
+let currentQuestionIndex = getRandomQuestionIndex();
+let currentColumnIndex = 0;
+
+// Get random question index
+function getRandomQuestionIndex() {
+    return Math.floor(Math.random() * combinations.length);
+}
+let correctAnswerCount = 0;
+let incorrectAnswerCount = 0;
+let totalPlayed = 0;
+let selectedVoice = null;
+
+// Function to populate voice selection dropdown
+function populateVoiceList() {
+    const voices = window.speechSynthesis.getVoices().filter(voice => voice.lang.startsWith('es'));
+    const voiceSelect = document.getElementById('voice-select');
+    voiceSelect.innerHTML = '';
+    
+    voices.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = voice.name;
+        voiceSelect.appendChild(option);
+    });
+    
+    if (voices.length > 0) {
+        selectedVoice = voices[0]; // Default to the first Spanish voice
+    }
+}
+
+window.speechSynthesis.onvoiceschanged = populateVoiceList;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const voiceSelect = document.createElement('select');
+    voiceSelect.id = 'voice-select';
+    voiceSelect.addEventListener('change', function () {
+        const voices = window.speechSynthesis.getVoices().filter(voice => voice.lang.startsWith('es'));
+        selectedVoice = voices[this.value];
+    });
+    document.body.insertBefore(voiceSelect, document.body.firstChild);
+    populateVoiceList();
+});
+
+// Create a progress bar dynamically
+const progressBar = document.createElement('div');
+progressBar.id = 'progress-bar';
+progressBar.style.position = 'absolute';
+progressBar.style.top = '80';
+progressBar.style.left = '0';
+progressBar.style.height = '10px';
+progressBar.style.width = '0%';
+progressBar.style.backgroundColor = 'red';
+progressBar.style.transition = 'none';
+document.body.appendChild(progressBar);
+
+let countdownTimer;  // Stores countdown reference
+let countdownEnded = false;  // Track if countdown reaches 0
+
+function startCountdown() {
+    stopCountdown();  // ✅ Stop any previous countdown
+    countdownEnded = false;  // Reset countdown state
+
+    progressBar.style.transition = 'none';  
+    progressBar.style.width = '100%';  
+    progressBar.style.visibility = 'visible';
+
+    setTimeout(() => {
+        progressBar.style.transition = 'width 10s linear';  
+        progressBar.style.width = '0%';  
+    }, 50);
+
+    countdownTimer = setTimeout(() => {
+        progressBar.style.visibility = 'hidden';  
+        countdownEnded = true;  // Countdown hit 0
+        handleDelay();  // Treat as a mistake and move to next question
+    }, 10000);
+}
+
+function stopCountdown() {
+    clearTimeout(countdownTimer);
+    progressBar.style.transition = 'none';  
+    progressBar.style.width = '0%';  
+    progressBar.style.visibility = 'hidden';  
+}
+
+// 🛑 If the user takes too long, reduce score and load next question
+function handleDelay() {
+    if (countdownEnded) {  
+        incorrectAnswerCount++;  
+        totalPlayed++;  
+        updateScoreDisplay();
+        setTimeout(() => {
+            currentQuestionIndex = getRandomQuestionIndex();
+            loadQuestion(currentQuestionIndex);  
+        }, 1000);  // Short delay before loading the next question
+    }
+}
+
+function loadQuestion(index) {
+    stopCountdown();  // ✅ Stop any existing countdown
+    startCountdown(); // ✅ Start a new 8s countdown
+
+    const { phrase, translation } = combinations[index];
+    const currentTranslationWords = splitTranslation(translation);
+
+    document.getElementById('question-container').innerText = `${phrase}`;
+    const buttonContainer = document.getElementById('button-container');
+    buttonContainer.innerHTML = '';
+
+    let completedColumns = new Set();
+    let currentColumnIndex = 0;
+
+    columnsData.forEach((words, colIndex) => {
+        const columnContainer = document.createElement('div');
+        columnContainer.classList.add('column');
+
+        if (colIndex !== 0) {
+            columnContainer.classList.add('inactive'); 
+        }
+
+        shuffleArray(words);
+
+        let displayedWords = words.includes(currentTranslationWords[colIndex])
+            ? [currentTranslationWords[colIndex], ...words.filter(word => word !== currentTranslationWords[colIndex])]
+            : [currentTranslationWords[colIndex], ...words];
+
+        displayedWords = displayedWords.slice(0, 3);
+        shuffleArray(displayedWords);
+
+        displayedWords.forEach(word => {
+            const button = document.createElement('button');
+            button.innerText = word;
+            button.classList.add('translation-button');
+
+            if (colIndex !== 0) {
+                button.disabled = true;
+            }
+
+            button.onclick = function () {
+                if (completedColumns.has(colIndex)) return;
+
+                totalPlayed++;
+
+                if (currentTranslationWords[colIndex] === word) {
+                    correctAnswerCount++;
+                    button.classList.add('correct');
+                    speakWord(word);
+
+                    completedColumns.add(colIndex);
+                    columnContainer.classList.add('completed');
+                    columnContainer.classList.remove('active');
+
+                    if (colIndex + 1 < columnsData.length) {
+                        activateColumn(colIndex + 1);  
+                        moveToNextColumn(colIndex + 1);  // ✅ Ensures scrolling happens after unlocking
+                    }
+
+                    if (completedColumns.size === currentTranslationWords.length) {
+                        stopCountdown();  // ✅ Stop countdown if phrase is completed
+                        speakPhrase(translation);
+
+                        setTimeout(() => {
+                            currentQuestionIndex = getRandomQuestionIndex();
+                            loadQuestion(currentQuestionIndex);
+                        }, 3000);
+                    }
+                } else {
+                    incorrectAnswerCount++;
+                    button.classList.add('incorrect');
+                }
+
+                updateScoreDisplay();
+            };
+
+            columnContainer.appendChild(button);
+        });
+
+        buttonContainer.appendChild(columnContainer);
+    });
+
+      moveToNextColumn(0);
+}
+
+function updateScoreDisplay() {
+    let accuracy = totalPlayed > 0 ? (correctAnswerCount / totalPlayed) * 100 : 0;
+    document.getElementById("score-display").innerText = ` ${Math.round(accuracy)}%`;
+}
+
+function moveToNextColumn(columnIndex) {
+    const columnElements = document.getElementsByClassName('column');
+    if (columnIndex < columnElements.length) {
+        const nextColumn = columnElements[columnIndex];
+        const columnOffset = nextColumn.offsetLeft;
+        document.getElementById('button-container').scrollLeft = columnOffset;  
+    }
+}
+
+function activateColumn(columnIndex) {
+    const columns = document.getElementsByClassName('column');
+    if (columns[columnIndex]) {
+        columns[columnIndex].classList.remove('inactive');
+        columns[columnIndex].classList.add('active');
+        const buttons = columns[columnIndex].getElementsByTagName('button');
+        for (let button of buttons) {
+            button.disabled = false;  // ✅ Enable buttons in the next column
+        }
+    }
+}
+
+// ✅ Start first question + countdown on page load
+window.onload = function () {
+    currentQuestionIndex = getRandomQuestionIndex();
+    loadQuestion(currentQuestionIndex);
+};
+
+
+function speakWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.voice = selectedVoice;
+    window.speechSynthesis.speak(utterance);
+}
+
+function speakPhrase(phrase) {
+    const utterance = new SpeechSynthesisUtterance(phrase);
+    utterance.voice = selectedVoice;
+    window.speechSynthesis.speak(utterance);
+}
+
+// Show column
+function showColumn(index) {
+    const columns = document.querySelectorAll('.column');
+    columns.forEach((col, colIndex) => {
+        col.style.display = colIndex === index ? 'flex' : 'none';
+    });
+}
+function saveScore(activityKey) {
+    const scoreElement = document.getElementById("score-display");
+    const scoreText = scoreElement.textContent.trim();
+
+    // Extract numeric percentage (e.g., "75%") → "75"
+    const score = scoreText.replace("%", "").trim();
+
+    localStorage.setItem(activityKey, score);
+  }
+// Initialize with the first question
+loadQuestion(currentQuestionIndex);
+  function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+  
+</script>
+</body>
+</html>

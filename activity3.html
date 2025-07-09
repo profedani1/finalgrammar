@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background-color: #333;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Prevent scrolling */
+    }
+
+    .screen {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: black;
+      width: 95vw;
+      height: 85vh;
+      border: 2px solid black;
+      overflow: hidden;
+    }
+
+    .rectangle {
+      position: absolute;
+      background-color: #fff;
+      color: black;
+      padding: 1vh 1vw;
+      text-align: center;
+      font-size: 2vh;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.5s, border 0.5s;
+    }
+
+    .selected {
+      border: 0.8vh solid #ff0000;
+      color: darkred;
+    }
+
+    .mismatched {
+      background-color: darkred;
+      color: white;
+    }
+  </style>
+  <script>
+    let questions = [];
+    let currentQuestionIndex = 0;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const screen = document.querySelector(".screen");
+      const questionsJSON = localStorage.getItem("questions");
+
+      if (questionsJSON) {
+        try {
+          questions = JSON.parse(questionsJSON);
+          if (questions.length > 0) {
+            initializeGame();
+          } else {
+            console.warn("No questions available.");
+          }
+        } catch (error) {
+          console.error("Error loading questions:", error);
+        }
+      } else {
+        console.warn("No questions found in local storage.");
+      }
+
+      function initializeGame() {
+        const rectangles = [];
+        const pairs = new Map();
+        let selectedRectangle = null;
+        let matches = 0;
+
+        function createRectangle(text, type) {
+          const rectangle = document.createElement("div");
+          rectangle.classList.add("rectangle");
+          rectangle.innerText = text;
+          rectangle.dataset.type = type;
+          rectangles.push(rectangle);
+          screen.appendChild(rectangle);
+        }
+
+        function positionRectangle(rectangle, rectangles, screenWidth, screenHeight) {
+          const [minX, minY, maxX, maxY] = getBounds(screenWidth, screenHeight, rectangle);
+          let initialX, initialY;
+
+          do {
+            initialX = getRandom(minX, maxX);
+            initialY = getRandom(minY, maxY);
+            rectangle.style.left = `${initialX}px`;
+            rectangle.style.top = `${initialY}px`;
+          } while (checkCollision(rectangle, rectangles));
+        }
+
+        function getBounds(screenWidth, screenHeight, rectangle) {
+          const rectWidth = rectangle.offsetWidth;
+          const rectHeight = rectangle.offsetHeight;
+          return [0, 0, screenWidth - rectWidth, screenHeight - rectHeight];
+        }
+
+        function getRandom(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function checkCollision(rectangle, rectangles) {
+          const rect1 = rectangle.getBoundingClientRect();
+          return rectangles.some(otherRectangle => {
+            if (otherRectangle !== rectangle) {
+              const rect2 = otherRectangle.getBoundingClientRect();
+              return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+            }
+            return false;
+          });
+        }
+
+        function moveRectangle(rectangle, rectangles) {
+          let [directionX, directionY] = [1, 1]; // Initial direction
+
+          function move() {
+            let currentX = parseInt(rectangle.style.left) || 0;
+            let currentY = parseInt(rectangle.style.top) || 0;
+
+            if (currentX <= 0 || currentX >= screen.offsetWidth - rectangle.offsetWidth) directionX *= -1;
+            if (currentY <= 0 || currentY >= screen.offsetHeight - rectangle.offsetHeight) directionY *= -1;
+
+            rectangle.style.left = `${currentX + directionX}px`;
+            rectangle.style.top = `${currentY + directionY}px`;
+
+            if (checkCollision(rectangle, rectangles)) {
+              directionX *= -1;
+              directionY *= -1;
+            }
+
+            requestAnimationFrame(move);
+          }
+
+          move();
+        }
+
+        function handleRectangleClick(rectangle) {
+          if (!selectedRectangle) {
+            selectedRectangle = rectangle;
+            selectedRectangle.classList.add("selected");
+          } else if (selectedRectangle === rectangle) {
+            selectedRectangle.classList.remove("selected");
+            selectedRectangle = null;
+          } else {
+            const selectedText = selectedRectangle.innerText;
+            const currentText = rectangle.innerText;
+
+            if (pairs.get(selectedText) === currentText) {
+              selectedRectangle.style.display = "none";
+              rectangle.style.display = "none";
+              matches++;
+            } else {
+              selectedRectangle.classList.add("mismatched");
+              rectangle.classList.add("mismatched");
+              setTimeout(() => {
+                selectedRectangle.classList.remove("mismatched");
+                rectangle.classList.remove("mismatched");
+              }, 500);
+            }
+
+            selectedRectangle.classList.remove("selected");
+            selectedRectangle = null;
+
+            if (matches === questions.length) {
+              setTimeout(() => {
+                alert("Congratulations! You've matched all the rectangles.");
+              }, 100);
+            }
+          }
+        }
+
+        function initializeRectangles() {
+          screen.innerHTML = "";
+          rectangles.length = 0;
+          selectedRectangle = null;
+          matches = 0;
+
+          questions.forEach(item => {
+            createRectangle(item.question, "question");
+            createRectangle(item.translation, "translation");
+            pairs.set(item.question, item.translation);
+            pairs.set(item.translation, item.question);
+          });
+
+          const screenWidth = screen.offsetWidth;
+          const screenHeight = screen.offsetHeight;
+
+          rectangles.forEach(rectangle => {
+            positionRectangle(rectangle, rectangles, screenWidth, screenHeight);
+            rectangle.addEventListener("click", () => handleRectangleClick(rectangle));
+            moveRectangle(rectangle, rectangles);
+          });
+        }
+
+        window.addEventListener("resize", () => {
+          clearTimeout(window.resizeTimeout);
+          window.resizeTimeout = setTimeout(initializeRectangles, 500);
+        });
+
+        initializeRectangles();
+      }
+    });
+     document.addEventListener('contextmenu', function(event) {
+      event.preventDefault(); // Disable right-click
+    });
+
+    document.addEventListener('mousedown', function(event) {
+      if (event.button === 0) { // Left-click
+        event.preventDefault();
+      }
+    });
+  </script>
+</head>
+<body>
+  <div class="screen"></div>
+</body>
+</html>

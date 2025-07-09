@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+body {
+    width: 95%;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+.question-container {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Center the question */
+    margin-bottom: 0vh;
+    padding: 0.5vh 1vh;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    font-size: 3vh;
+    border: 0.5vh solid white;
+}
+
+.button-container {
+    display: flex; /* Show columns in a row */
+      width: 100%; /* Adjust width as needed, e.g., 20% of viewport width */
+margin-top:2vh;
+margin-left:1.7vh;
+    height: 70vh;
+    background-color: black;
+    align-items: center; 
+    box-sizing: border-box;
+}
+
+.column {
+    display: flex; /* Use flexbox to align buttons */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%; /* Adjust width as needed, e.g., 20% of viewport width */
+    min-width: 15vw; /* Ensure columns don’t get too narrow */
+    margin: 0.1vh 0.1vh; /* Margin between columns */
+    height: 100%; /* Ensure column takes full height */
+    opacity: 0.5; /* Dim inactive columns */
+    transition: opacity 0.3s, transform 0.3s; /* Smooth transition for highlighting */
+    box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+.column.active {
+    opacity: 1; /* Highlight active column */
+    transform: scale(1); 
+        border: 0.2vh solid yellow;
+
+}
+
+.translation-button {
+    font-size: 1.7vh;
+    color: white;
+    font-weight: bold;
+    background-color: black;
+    cursor: pointer;
+    width: 100%; /* Make buttons fill the column width */
+    border: 0.1vh solid white;
+    text-transform: uppercase;
+    flex: 1; /* Make buttons flexible */
+    transition: background-color 0.3s; /* Smooth transition for feedback */
+}
+
+.translation-button:hover {
+    background-color: darkgrey;
+    color: black;
+    font-size: 2.3vh;
+      padding: 0;
+
+}
+
+.translation-button.correct {
+    background-color: black; /* Green background */
+    color: lime;
+    border: 0.5vh solid lime;
+}
+
+.translation-button.incorrect {
+    background-color: black; /* Red background */
+    color: red; /* White text */
+    border: 0.5vh solid red;
+}
+.translation-button:selected {
+    background-color: black;
+    color: cyan;
+    font-size: 2vh;
+      padding: 0;
+
+}
+       button[onclick="navigateTomainRECOGNIZER()"] {
+   background-color:black;
+         color:pink;
+         font-weight:bold;
+         margin-top:5vh;
+     font-size: 3vh;
+ border: 0.3vh solid red;
+
+}
+    </style>
+  </head>
+  <body>
+    <div id="question-container" class="question-container"></div>
+    <div class="button-container" id="button-container"></div>
+    <button class="button" onclick="navigateTomainRECOGNIZER()">VOICE RECOGNITION <br> </button>
+
+    <script>
+const data = [
+    {
+        phrases: ["I AM",
+"YOU ARE",
+"HE IS",
+"WE ARE",
+"YOU GUYS ARE",
+"THEY ARE"
+        ],
+        translations: ["YO ESTOY",
+"TU ESTÁS",
+"EL ESTÁ",
+"NOSOTROS ESTAMOS",
+"VOSOTROS ESTÁIS",
+"ELLOS ESTÁN"
+  ]  },
+    {
+        phrases: [
+          "SPEAKING",
+"STUDYING",
+"WALKING",
+"WAITING",
+"BUYING",
+"RESTING",
+"WORKING"
+        ],
+        translations: [
+           "HABLANDO",
+"ESTUDIANDO",
+"CAMINANDO",
+"ESPERANDO",
+"COMPRANDO",
+"DESCANSANDO",
+"TRABAJANDO"
+        ]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const exceptions = [
+    "SI YO",    "SI TÚ",    "SI ÉL",    "SI ELLA",    "SI NOSOTROS",
+    "SI VOSOTROS",    "SI ELLOS", "HABÍA ESTADO", "HE ESTADO",
+"HABÍAS ESTADO", "HAS ESTADO",
+"HABÍA ESTADO", "HA ESTADO",
+"HABÍAMOS ESTADO", "HEMOS ESTADO",
+"HABÍAIS ESTADO", "HABÉIS ESTADO",
+"HABÍAN ESTADO",  "HAN ESTADO",
+
+
+
+
+
+
+"un poco",
+"ya que",
+"si tú",
+"si él",
+"si ella",
+"si nosotros",
+"si vosotros",
+"si yo",
+"si ellos",
+"en el futuro",
+"en la casa",
+"en la oficina",
+"en la avenida",
+"en el mercado",
+"en la biblioteca",
+"en la farmacia",
+"en el hospital",
+"en el museo",
+"en el restaurante",
+"en el banco",
+"en el parque",
+"en la calle",
+"en la tienda",
+"en la escuela"];
+
+
+
+// Generate combinations
+function generateCombinations(sections, index = 0, currentPhrase = "", currentTranslation = "", combinations = []) {
+    if (index === sections.length) {
+        combinations.push({
+            phrase: currentPhrase.trim(),
+            translation: currentTranslation.trim()
+        });
+        return;
+    }
+
+    sections[index].phrases.forEach((phrase, i) => {
+        generateCombinations(
+            sections,
+            index + 1,
+            currentPhrase + " " + phrase,
+            currentTranslation + " " + sections[index].translations[i],
+            combinations
+        );
+    });
+
+    return combinations;
+}
+
+const combinations = generateCombinations(data);
+
+// Create columns by word position
+function createColumnsByWordPosition(translations) {
+    const wordPositions = [];
+
+    translations.forEach(translation => {
+        let words = splitTranslation(translation);
+        words.forEach((word, index) => {
+            if (!wordPositions[index]) {
+                wordPositions[index] = new Set();
+            }
+            wordPositions[index].add(word);
+        });
+    });
+
+    return wordPositions.map(positionSet => Array.from(positionSet));
+}
+
+// Split translation into words
+function splitTranslation(translation) {
+    let words = [];
+    let remainingText = translation;
+
+    while (remainingText) {
+        let matchedException = exceptions.find(exception => remainingText.startsWith(exception));
+        if (matchedException) {
+            words.push(matchedException);
+            remainingText = remainingText.slice(matchedException.length).trim();
+        } else {
+            let firstSpaceIndex = remainingText.indexOf(' ');
+            if (firstSpaceIndex === -1) {
+                words.push(remainingText);
+                remainingText = "";
+            } else {
+                words.push(remainingText.slice(0, firstSpaceIndex));
+                remainingText = remainingText.slice(firstSpaceIndex + 1).trim();
+            }
+        }
+    }
+
+    return words;
+}
+
+// Shuffle array function
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Create columns data
+const columnsData = createColumnsByWordPosition(combinations.map(({ translation }) => translation));
+
+let currentQuestionIndex = getRandomQuestionIndex();
+let currentColumnIndex = 0;
+
+// Get random question index
+function getRandomQuestionIndex() {
+    return Math.floor(Math.random() * combinations.length);
+}
+
+// Load question
+function loadQuestion(index) {
+    const { phrase, translation } = combinations[index];
+    const currentTranslationWords = splitTranslation(translation);
+
+    document.getElementById('question-container').innerText = `${phrase}`;
+    const buttonContainer = document.getElementById('button-container');
+    buttonContainer.innerHTML = '';
+
+    columnsData.forEach((words, colIndex) => {
+        const columnContainer = document.createElement('div');
+        columnContainer.classList.add('column');
+
+        shuffleArray(words);
+
+        // Ensure the correct word is included and limit buttons to 10
+        let displayedWords = words.includes(currentTranslationWords[colIndex])
+            ? [currentTranslationWords[colIndex], ...words.filter(word => word !== currentTranslationWords[colIndex])]
+            : [currentTranslationWords[colIndex], ...words];
+
+        displayedWords = displayedWords.slice(0, 7);
+        shuffleArray(displayedWords); // Shuffle after slicing to randomize the order again
+
+        displayedWords.forEach(word => {
+            const button = document.createElement('button');
+            button.innerText = word;
+            button.classList.add('translation-button');
+            button.onclick = function() {
+                if (currentTranslationWords[currentColumnIndex] === word) {
+                    button.classList.add('correct');
+                    speakWord(word);
+                    setTimeout(() => {
+                        button.classList.remove('correct');
+                        if (currentColumnIndex < columnsData.length - 1) {
+                            currentColumnIndex++;
+                            showColumns();
+                        } else {
+                            speakPhrase(translation);
+                            setTimeout(() => {
+                                currentColumnIndex = 0;
+                                currentQuestionIndex = getRandomQuestionIndex();
+                                loadQuestion(currentQuestionIndex);
+                            }, 2500);
+                        }
+                    }, 100);
+                } else {
+                    button.classList.add('incorrect');
+                    setTimeout(() => {
+                        button.classList.remove('incorrect');
+                        currentColumnIndex = 0;
+                        loadQuestion(currentQuestionIndex);
+                    }, 1000);
+                }
+            };
+            columnContainer.appendChild(button);
+        });
+
+        buttonContainer.appendChild(columnContainer);
+    });
+
+    showColumns();
+}
+
+// Show all columns but highlight the active one
+function showColumns() {
+    const columns = document.querySelectorAll('.column');
+    columns.forEach((col, colIndex) => {
+        col.classList.toggle('active', colIndex === currentColumnIndex);
+    });
+}
+
+// Speak word
+function speakWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'es-ES';
+    window.speechSynthesis.speak(utterance);
+}
+
+// Speak phrase
+function speakPhrase(phrase) {
+    const utterance = new SpeechSynthesisUtterance(phrase);
+    utterance.lang = 'es-ES';
+    window.speechSynthesis.speak(utterance);
+}
+
+// Initialize with the first question
+loadQuestion(currentQuestionIndex);
+ function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+        
+        function navigateTomainRECOGNIZER() {
+    // Convert the data array to JSON
+    const dataJSON = JSON.stringify(data);
+    
+    // Create the URL for navigation
+    const url = `mainRECOGNIZER.html?data=${encodeURIComponent(dataJSON)}`;
+    
+    // Navigate to the activity page
+    window.location.href = url;
+}
+</script>
+</body>
+</html>

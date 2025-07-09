@@ -1,0 +1,699 @@
+Put your HTML text here
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <title>Unique Hover Colors for Each Button</title>
+    <style>
+        body {
+            width: 97%;
+            height: 95%;
+            background-color: black;
+            font-family: Arial, sans-serif;
+            margin: 1vh 0 0 1vh;
+            padding: 0;
+            overflow-y: scroll;
+          font-weight:bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .savedOptionContainer {
+            flex: 1;
+            position: relative;
+            width: 100%;
+        }
+
+        .savedOptions {
+            display: none;
+            position: absolute;
+            z-index: 10;
+            background-color: black;
+            width: 100%;
+            color: white;
+        }
+
+        .savedOptionContainer:hover .savedOptions {
+            display: block;
+          
+        }
+
+        .savedOption {
+            display: flex;
+            justify-content: space-between;
+          
+            margin-top: -1vh;
+            width: 100%;
+            cursor: pointer;
+        }
+
+ 
+      .upload-button {
+            border:0.3VH solid white;
+height:10vh;
+        }
+        .upload-button:hover {
+            background-color: orange;
+             color:black;
+
+        }
+.save-set-button {
+                        border:0.3vh solid white;
+
+        }
+
+        .save-set-button:hover {
+            background-color: purple;
+        }
+
+        .confirm-button:hover {
+            background-color: pink;
+          color:black;
+                    border:0.5VH solid black;
+
+        }
+
+        .add-pair-button:hover {
+            background-color: lightblue;
+          border:0.5VH solid black; color:black;
+        }
+
+        .save-progress-button:hover {
+            background-color: lightgreen;
+          border:0.5VH solid black; color:black;
+        }
+
+        .activities-button:hover {
+            background-color: lightcoral;
+                     border:0.5VH solid black; color:black;
+ 
+        }
+  .matching-button { 
+height:27%;   
+}
+
+        .translate-button {
+           height:27%;   
+
+        }
+
+        .catching-button {
+          height:27%;   
+
+        }
+        .matching-button:hover {
+            background-color:brown ;
+        }
+
+        .translate-button:hover {
+            background-color:darkgoldenrod ;
+          border:0.5VH solid black; color:black;
+        }
+
+        .catching-button:hover {
+            background-color: lightsalmon;
+          border:0.5VH solid black; color:black;
+        }
+#rawTextContainer {
+    position:absolute;
+    top:-8%;
+    width:100%;
+    height:100%;
+    margin-left:-1vh;
+        }
+        #seeRawTextButton {
+    position:absolute;
+    bottom:0%;
+    left:0%;
+    width:100%;
+    height:10%;
+        }
+        #saveProgressButton {
+    position:absolute;
+    bottom:22%;
+    left:50%;
+    width:49%;
+    height:10%;
+        } 
+        #addPairButton {
+    position:absolute;
+    bottom:22%;
+    left:0%;
+    width:49%;
+    height:10%;
+        }
+        #playNowButton {
+    position:absolute;
+    TOP:22%;
+    right:0%;
+    width:15%;
+    height:10%;
+    font-size:2vh;
+    font-weight:bold;
+              border:0.3VH solid lightblue;
+ background-color: #000018;
+   text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+  color:lightblue;
+        border-radius: 50%;  
+                transition: all 1s ease;
+
+        }  
+        
+  #playNowButton:hover {
+               border:0.3VH solid cyan;
+ background-color: #000018;
+   text-shadow: 0 0 0.7vh cyan, 0 0 0.7vh blue, 0 0 0.9vh darkblue;
+    box-shadow: 0 0 3vh cyan, 0 0 5vh blue, 0 0 7vh darkblue;
+  box-sizing: border-box;
+  color:lightblue;
+
+  
+        }
+        button {
+            background-color: black;
+            color: white;
+            border:0.5VH solid white;
+            cursor: pointer;
+            padding: 1vh 2vw;
+            font-size: 3vh;
+            width: 100%;
+            transition: background-color 0.3s;
+            font-weight:bold;
+        }
+
+        .container2 {
+            background-color: black;
+            position: fixed;
+            top: 26%;
+            left: 1vh;
+            width: 96%;
+            height: 40%;
+            overflow-y: auto;
+                      border:0.2vh solid white;
+
+        }
+
+        .textPair {
+            margin-top: 0.5vh;
+            display: flex;
+        }
+ .phraseContainer, .translationContainer {
+    position: relative;
+               margin-left: 1vh;
+            width: 47.5%;
+}
+   
+
+.phraseContainer textarea, .translationContainer textarea {
+    width: 87%;
+    height: 4vh;
+    border: none;
+    resize: none;
+    box-sizing: border-box; 
+      font-size: 2vh;   
+    overflow-y: auto; /* Vertical scrollbar appears only when needed */
+}
+
+      .deleteButton {
+    background-color: red; /* Button background color */
+    color: white;          /* Text color */
+    border: none; 
+    height:2%;width:15%;/* Remove border */
+    font-size: 4vh;       /* Text size */
+    cursor: pointer;       /* Pointer cursor on hover */
+    display: flex;         /* Flexbox for centering content */
+    justify-content: center; /* Center content horizontally */
+    align-items: center;     /* Center content vertically */
+}
+
+.deleteButton:hover {
+    background-color: darkred; /* Background color on hover */
+}
+  
+
+.microphone-icon {
+    position: absolute;
+    right: 0;
+    top: -3%;
+    left:88%;
+    padding:0.2vh 0.5vh;
+    font-size: 4vh;
+    color: red;
+    border-radius: 50%;    
+  background-color:white;
+    cursor: pointer;
+    width:4vh;
+    height:4.5vh;
+        display: flex;         /* Flexbox for centering content */
+    box-sizing: border-box; 
+
+    justify-content: center; /* Center content horizontally */
+    align-items: center;     /* Center content vertically */
+}
+.text-container {
+            display: flex;
+            width: 100%;
+        }
+        .text-container div {     font-size: 3.5vh;
+
+            flex: 1;
+            margin: 0;
+            padding: 0.5vh; /* Adjust padding as needed */
+            box-sizing: border-box; /* Ensures padding is included in width */
+            overflow: hidden; /* Hides overflow text */
+            background: transparent; /* Makes background transparent */
+            border: none; /* No border */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="display: flex; width: 100%;">
+     <button id="downloadBtn"><span style="font-size:2vh;">DOWNLOAD GROUPS TO YOUR DEVICE</span></button>
+    <input type="file" id="uploadInput" style="display: none;">
+    <button id="uploadBtn"><span style="font-size:2vh;">LOAD GROUPS FROM YOUR DEVICE </span></button>
+
+               </div>
+
+
+    <div style="display: flex; justify-content: space-between; ">
+        <div class="savedOptionContainer" style="flex: 1;">
+            <button class="upload-button" onclick="displaySavedOptions()">
+                UPLOAD</button>
+            <div class="savedOptions" id="savedOptions"></div>
+        </div>
+        <div class="savedOptionContainer" style="flex: 1;">
+           <button class="save-set-button" onclick="toggleTextName()">
+                SAVE SET
+            </button>
+            <div id="textNameContainer" class="savedOptions hidden">
+                <label for="textName">Set Name:</label>
+                <input type="text" id="textName" placeholder="Enter a name">
+                <br>
+                <button onclick="confirmTextName()" class="confirm-button">
+                    CONFIRM
+                </button>
+            </div>
+            </div>
+
+    <div class="container2">
+      <div class="text-container">
+         <div style="color:white;margin-left:5vh;">INGLES</div>
+        <div style="color:white;margin-left:0vh;">ESPAÑOL</div>
+    </div>
+        <div id="textPairs"></div>
+      
+        <br>
+         </div>
+         <button id="addPairButton" onclick="addTextPair()" class="add-pair-button">+</button>
+         
+         <button id="saveProgressButton" onclick="saveProgress()" class="hidden save-progress-button">Save Progress</button> 
+        <button id="seeRawTextButton" onclick="seeRawText()" class="hidden activities-button">ACTIVITIES</button>
+             
+
+        <div id="rawTextContainer" class="hidden">
+            <textarea id="rawText" style="visibility: hidden;
+"></textarea>
+            <button id="parseAndSaveButton2" onclick="parseAndSaveRawText('activity2')" class="matching-button">MATCHING</button>
+            <br>
+            <button id="parseAndSaveButton" onclick="parseAndSaveRawText('activity1')" class="translate-button">TRANSLATE</button>
+            <br>
+            <button id="parseAndSaveButton3" onclick="parseAndSaveRawText('activity3')" class="catching-button">CATCHING</button>
+        </div>
+<button id="playNowButton" onclick="playNow()" class="play-now-button">PLAY NOW</button>
+
+   <script>
+        let currentTextName = null;
+        let pairCount = 0;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            for (let i = 0; i < 3; i++) {
+                addTextPair();
+            }
+        });
+
+        function toggleTextName(show) {
+            document.getElementById('textNameContainer').classList.toggle('hidden', !show);
+        }
+
+        function confirmTextName() {
+            const textNameInput = document.getElementById('textName');
+            const textName = textNameInput.value.trim();
+            if (textName === '') return;
+
+            for (let i = 1; i <= pairCount; i++) {
+                const phrase = document.getElementById(`phrase${i}`).value.trim();
+                const translation = document.getElementById(`translation${i}`).value.trim();
+                if (phrase === '' || translation === '') return;
+
+                localStorage.setItem(`${textName}_phrase${i}`, phrase);
+                localStorage.setItem(`${textName}_translation${i}`, translation);
+            }
+
+            textNameInput.value = '';
+            document.querySelectorAll('.phraseContainer textarea, .translationContainer textarea').forEach(textarea => {
+                textarea.value = '';
+            });
+
+            document.getElementById('textNameContainer').classList.add('hidden');
+            displaySavedOptions();
+        }
+
+        function saveProgress() {
+            if (!currentTextName) return;
+
+            for (let i = 1; i <= pairCount; i++) {
+                const phrase = document.getElementById(`phrase${i}`).value.trim();
+                const translation = document.getElementById(`translation${i}`).value.trim();
+                if (phrase === '' || translation === '') return;
+
+                localStorage.setItem(`${currentTextName}_phrase${i}`, phrase);
+                localStorage.setItem(`${currentTextName}_translation${i}`, translation);
+            }
+        }
+
+        function deleteText(name) {
+            if (confirm(`Are you sure you want to delete '${name}'?`)) {
+                let i = 1;
+                while (localStorage.getItem(`${name}_phrase${i}`) !== null) {
+                    localStorage.removeItem(`${name}_phrase${i}`);
+                    localStorage.removeItem(`${name}_translation${i}`);
+                    i++;
+                }
+
+                if (currentTextName === name) {
+                    document.getElementById('saveProgressButton').classList.add('hidden');
+                    document.getElementById('seeRawTextButton').classList.add('hidden');
+                    currentTextName = null;
+                    clearTextPairs();
+                    for (let i = 0; i < 3; i++) {
+                        addTextPair();
+                    }
+                }
+            }
+        }
+
+        function displaySavedOptions() {
+            const savedOptionsContainer = document.getElementById('savedOptions');
+            savedOptionsContainer.innerHTML = '';
+
+            const savedNames = Object.keys(localStorage);
+            if (savedNames.length === 0) {
+                savedOptionsContainer.textContent = 'No saved texts found.';
+                return;
+            }
+
+            const uniqueNames = new Set();
+            savedNames.forEach(key => {
+                if (key.endsWith('_phrase1')) {
+                    uniqueNames.add(key.replace(/_phrase1$/, ''));
+                }
+            });
+
+            uniqueNames.forEach(name => {
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('savedOption');
+
+                const optionButton = document.createElement('button');
+                optionButton.textContent = name;
+                optionButton.addEventListener('click', function() {
+                    loadText(name);
+                });
+
+              const deleteButton = document.createElement('button');
+deleteButton.textContent = 'X';
+deleteButton.classList.add('deleteButton');
+deleteButton.addEventListener('click', function() {
+                    deleteText(name);
+                });
+
+                optionDiv.appendChild(optionButton);
+                optionDiv.appendChild(deleteButton);
+                savedOptionsContainer.appendChild(optionDiv);
+            });
+        }
+
+      function loadText(name) {
+    clearTextPairs();
+    let i = 1;
+    while (true) {
+        const phraseKey = `${name}_phrase${i}`;
+        const translationKey = `${name}_translation${i}`;
+
+        const savedPhrase = localStorage.getItem(phraseKey);
+        const savedTranslation = localStorage.getItem(translationKey);
+
+        if (savedPhrase !== null && savedTranslation !== null) {
+            addTextPair(savedPhrase, savedTranslation);
+            i++;
+        } else {
+            break;
+        }
+    }
+
+    currentTextName = name;
+    document.getElementById('saveProgressButton').classList.remove('hidden');
+    document.getElementById('seeRawTextButton').classList.remove('hidden');
+    
+    updatePlayNowVisibility(); // Update visibility when loading a set
+}
+
+
+        function clearTextPairs() {
+            document.getElementById('textPairs').innerHTML = '';
+            pairCount = 0;
+        }
+
+   function addTextPair(phrase = '', translation = '') {
+    pairCount++;
+    const textPairs = document.getElementById('textPairs');
+
+    const textPairDiv = document.createElement('div');
+    textPairDiv.classList.add('textPair');
+
+    // Create Phrase Container with Textarea and Microphone Button
+    const phraseContainer = document.createElement('div');
+    phraseContainer.classList.add('phraseContainer');
+    const phraseTextarea = document.createElement('textarea');
+    phraseTextarea.setAttribute('id', `phrase${pairCount}`);
+    phraseTextarea.value = phrase;
+    phraseTextarea.addEventListener('click', () => showMicrophoneButton(phraseTextarea));
+    phraseContainer.appendChild(phraseTextarea);
+
+    // Create and append microphone button
+    const phraseMicrophoneButton = document.createElement('i');
+    phraseMicrophoneButton.classList.add('fas', 'fa-microphone', 'microphone-icon');
+    phraseMicrophoneButton.style.display = 'none'; // Initially hidden
+    phraseMicrophoneButton.addEventListener('click', () => startSpeechRecognition('en-EN', phraseTextarea, phraseMicrophoneButton));
+    phraseContainer.appendChild(phraseMicrophoneButton);
+
+    // Create Translation Container with Textarea and Microphone Button
+    const translationContainer = document.createElement('div');
+    translationContainer.classList.add('translationContainer');
+    const translationTextarea = document.createElement('textarea');
+    translationTextarea.setAttribute('id', `translation${pairCount}`);
+    translationTextarea.value = translation;
+    translationTextarea.addEventListener('click', () => showMicrophoneButton(translationTextarea));
+    translationContainer.appendChild(translationTextarea);
+
+    // Create and append microphone button
+    const translationMicrophoneButton = document.createElement('i');
+    translationMicrophoneButton.classList.add('fas', 'fa-microphone', 'microphone-icon');
+    translationMicrophoneButton.style.display = 'none'; // Initially hidden
+    translationMicrophoneButton.addEventListener('click', () => startSpeechRecognition('es-ES', translationTextarea, translationMicrophoneButton));
+    translationContainer.appendChild(translationMicrophoneButton);
+
+    textPairDiv.appendChild(phraseContainer);
+    textPairDiv.appendChild(translationContainer);
+
+    textPairs.appendChild(textPairDiv);
+}
+
+function showMicrophoneButton(textarea) {
+    const button = textarea.nextElementSibling;
+    button.style.display = 'block'; // Show microphone button when text area is clicked
+}
+
+function startSpeechRecognition(lang, textarea, button) {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = lang;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        textarea.value = transcript;
+    };
+
+    recognition.onerror = function(event) {
+        console.error('Speech recognition error detected: ' + event.error);
+    };
+
+    // Hide the button after use or after an error
+    recognition.onend = function() {
+        button.style.display = 'none'; // Hide microphone button after recognition ends
+    };
+}
+
+
+
+  function seeRawText() {
+    if (!currentTextName) return;
+
+    let rawTextContainer = document.getElementById('rawTextContainer');
+
+    // Toggle visibility
+    if (!rawTextContainer.classList.contains('hidden')) {
+        rawTextContainer.classList.add('hidden'); // Hide if already visible
+        return;
+    }
+
+    let rawText = 'const questions = [\n';
+    let i = 1;
+    let isFirstItem = true;
+
+    while (true) {
+        const phrase = localStorage.getItem(`${currentTextName}_phrase${i}`);
+        const translation = localStorage.getItem(`${currentTextName}_translation${i}`);
+
+        if (phrase !== null && translation !== null) {
+            if (!isFirstItem) {
+                rawText += ',\n';
+            }
+            rawText += `  {\n    "question": "${phrase}",\n    "translation": "${translation}"\n  }`;
+            isFirstItem = false;
+            i++;
+        } else {
+            break;
+        }
+    }
+
+    rawText += '\n];\n';
+    document.getElementById('rawText').value = rawText;
+    rawTextContainer.classList.remove('hidden'); // Show the container
+}
+
+
+     function parseAndSaveRawText(activity) {
+    const textareaContent = document.getElementById('rawText').value;
+
+    try {
+        const jsonContent = textareaContent.substring('const questions = '.length, textareaContent.length - 2);
+        const questions = JSON.parse(jsonContent);
+        localStorage.setItem('questions', JSON.stringify(questions));
+
+        // Hide the raw text container after choosing an activity
+        document.getElementById('rawTextContainer').classList.add('hidden');
+
+        if (activity === 'activity1') {
+            window.location.href = 'activity1.html';
+        } else if (activity === 'activity2') {
+            window.location.href = 'activity2.html';
+        } else if (activity === 'activity3') {
+            window.location.href = 'activity3.html';
+        } else {
+            throw new Error('Invalid activity specified.');
+        }
+
+    } catch (error) {
+        alert('An error occurred while parsing the content. Please ensure it is in the correct format.\n\n' + error.message);
+    }
+}
+
+
+        function loadInnerActivity(url) {
+            window.location.href = url;
+        }
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const data = JSON.stringify(localStorage, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            a.download = `${year}-${month}-${day}.json`;
+
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('uploadBtn').addEventListener('click', () => {
+            document.getElementById('uploadInput').click();
+        });
+
+        document.getElementById('uploadInput').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        for (const key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                localStorage.setItem(key, data[key]);
+                            }
+                        }
+                        alert('Local storage updated successfully!');
+                    } catch (error) {
+                        alert('Error parsing JSON file.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+      function playNow() {
+    const phrase1 = document.getElementById('phrase1').value.trim();
+    const translation1 = document.getElementById('translation1').value.trim();
+
+    if (phrase1 === '' || translation1 === '') {
+        alert("Enter at least one phrase and its translation to play.");
+        return;
+    }
+
+    const textName = phrase1.replace(/\s+/g, '_'); // Use first phrase as name
+
+    for (let i = 1; i <= pairCount; i++) {
+        const phrase = document.getElementById(`phrase${i}`).value.trim();
+        const translation = document.getElementById(`translation${i}`).value.trim();
+        
+        if (phrase !== '' && translation !== '') {
+            localStorage.setItem(`${textName}_phrase${i}`, phrase);
+            localStorage.setItem(`${textName}_translation${i}`, translation);
+        }
+    }
+
+    currentTextName = textName;
+    document.getElementById('saveProgressButton').classList.remove('hidden');
+    document.getElementById('seeRawTextButton').classList.remove('hidden');
+
+    updatePlayNowVisibility(); // Hide "PLAY NOW" after playing
+
+    alert(`Set "${textName}" saved! Choose an activity.`);
+}
+
+function updatePlayNowVisibility() {
+    const activitiesButton = document.getElementById('seeRawTextButton');
+    const playNowButton = document.getElementById('playNowButton');
+
+    if (activitiesButton.classList.contains('hidden')) {
+        playNowButton.classList.remove('hidden');
+    } else {
+        playNowButton.classList.add('hidden');
+    }
+}
+
+    </script>
+</body>
+</html>

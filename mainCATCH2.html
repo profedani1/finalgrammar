@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      background-color: #333;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Prevent scrolling */
+    }
+
+    .question-area {
+      position: absolute;
+      top: 6%;
+      width: 100%;
+      text-align: center;
+      font-size: 3vh;
+      font-weight: bold;
+      color: black;
+      background-color: lightgrey;
+      text-transform: uppercase;
+    }
+
+    .screen {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: black;
+      width: 100vw;
+      height: 80vh;
+      border: 2px solid black;
+      overflow: hidden;
+    }
+
+    .rectangle {
+      position: absolute;
+      background-color: #fff;
+      color: black;
+      width:14vh;
+      padding: 0.5vh 0.5vw;
+      text-align: center;
+      font-size: 1.5vh;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.5s, border 0.5s;
+    }
+    
+    .rectangle:active {
+      background-color: lightgreen;
+    }
+
+    .selected {
+      border: 0.8vh solid #ff0000;
+      color: darkred;
+    }
+
+    .mismatched {
+      background-color: darkred;
+      color: white;
+    }
+
+    .record-button {
+      position: absolute;
+      bottom: 0.5%;
+      top:89%;
+      left:45%;
+      width:10vh;
+      height:10%;
+      padding: 2vh 2vw;
+      background-color: black;
+      color: white;
+      font-size: 2vh;
+      font-weight: bold;
+      cursor: pointer;
+      border: 0.2vh solid red;
+      border-radius: 10vh;
+      transition: background-color 0.3s;
+    }
+
+    .record-button:active {
+      border: 0.2vh solid red;
+    }
+
+    .recognized-text {
+      position: absolute;
+      bottom: 9%;
+      width: 100%;
+      text-align: center;
+            font-weight: bold;
+      text-transform: uppercase;
+
+      font-size: 2.5vh;
+      color: red;
+      visibility: hidden;
+      opacity: 0;
+      background-color:lightgrey;
+      transition: opacity 0.5s;
+    }
+    .microphone-icon {
+  margin-top:2.8vh;
+      margin-right:0.5vh;
+    transform: translateY(-50%);
+    font-size: 6vh;
+    color: red;
+  background-color:black;
+    cursor: pointer;
+}
+ .pronoun-container {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            margin-bottom: 6vh;
+        }
+    .pronoun-buttons {
+      margin-top: 0.6vh;
+      width: 100%;
+    }
+
+    .pronoun-buttons button {
+      background-color: black;
+      color: white;
+      border: 0.2vh solid white;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 2.4vh;
+      cursor: pointer;
+          text-transform: uppercase;
+      padding: 1vh 1vw;
+
+
+    }
+
+    .pronoun-buttons button.active {
+      background-color: #ff0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="pronoun-buttons">
+    <button id="btn-yo">Yo</button>
+    <button id="btn-tu">Tú</button>
+    <button id="btn-el">Él</button>
+    <button id="btn-nosotros">Nosotros</button>
+    <button id="btn-vosotros">Vosotros</button>
+    <button id="btn-ellos">Ellos</button>
+  </div>
+  
+  <div class="question-area" id="question-area">Question will appear here</div>
+  
+  <button class="record-button" id="record-button"><i class="fas fa-microphone microphone-icon"></i></button>
+  <div class="recognized-text" id="recognized-text">Recognized text will appear here</div>
+  <div class="screen"></div>
+  
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const screen = document.querySelector(".screen");
+  const questionArea = document.getElementById("question-area");
+  const recordButton = document.getElementById("record-button");
+  const recognizedText = document.getElementById("recognized-text");
+
+  let currentPronoun = 'yo'; // Default pronoun
+  let currentQuestionIndex = 0;
+  let matches = 0;
+  let rectangles = [];
+  let recognition;
+
+  // Fetch the 'questions' data from the URL parameters
+  const params = new URLSearchParams(window.location.search);
+  const questionsJSON = params.get('questions');
+  const questions = new Map(JSON.parse(questionsJSON));
+
+  function initializeGame() {
+    let currentQuestions = questions.get(currentPronoun);
+    rectangles = [];
+
+    function createRectangle(text) {
+      const rectangle = document.createElement("div");
+      rectangle.classList.add("rectangle");
+      rectangle.innerText = text;
+      rectangles.push(rectangle);
+      screen.appendChild(rectangle);
+    }
+
+    function positionRectangle(rectangle, screenWidth, screenHeight) {
+      const [minX, minY, maxX, maxY] = getBounds(screenWidth, screenHeight, rectangle);
+      let initialX, initialY;
+
+      do {
+        initialX = getRandom(minX, maxX);
+        initialY = getRandom(minY, maxY);
+        rectangle.style.left = `${initialX}px`;
+        rectangle.style.top = `${initialY}px`;
+      } while (checkCollision(rectangle, rectangles));
+    }
+
+    function getBounds(screenWidth, screenHeight, rectangle) {
+      const rectWidth = rectangle.offsetWidth;
+      const rectHeight = rectangle.offsetHeight;
+      return [0, 0, screenWidth - rectWidth, screenHeight - rectHeight];
+    }
+
+    function getRandom(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function checkCollision(rectangle, rectangles) {
+      const rect1 = rectangle.getBoundingClientRect();
+      return rectangles.some(otherRectangle => {
+        if (otherRectangle !== rectangle) {
+          const rect2 = otherRectangle.getBoundingClientRect();
+          return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+        }
+        return false;
+      });
+    }
+
+    function moveRectangle(rectangle) {
+      let [directionX, directionY] = [1, 1];
+
+      function move() {
+        let currentX = parseInt(rectangle.style.left) || 0;
+        let currentY = parseInt(rectangle.style.top) || 0;
+
+        if (currentX <= 0 || currentX >= screen.offsetWidth - rectangle.offsetWidth) directionX *= -1;
+        if (currentY <= 0 || currentY >= screen.offsetHeight - rectangle.offsetHeight) directionY *= -1;
+
+        rectangle.style.left = `${currentX + directionX}px`;
+        rectangle.style.top = `${currentY + directionY}px`;
+
+        if (checkCollision(rectangle, rectangles)) {
+          directionX *= -1;
+          directionY *= -1;
+        }
+
+        requestAnimationFrame(move);
+      }
+
+      move();
+    }
+
+    function handleRectangleClick(rectangle) {
+      const selectedText = rectangle.innerText;
+      const currentQuestion = currentQuestions[currentQuestionIndex].translation;
+
+      if (selectedText === currentQuestion) {
+        rectangle.style.backgroundColor = "lightgreen";
+        setTimeout(() => {
+          rectangle.style.display = "none";
+        }, 500);
+        
+        matches++;
+
+        if (matches < currentQuestions.length) {
+          currentQuestionIndex++;
+          displayNextQuestion();
+        } else {
+          setTimeout(() => {
+            alert("Congratulations! You've completed all levels.");
+          }, 100);
+        }
+      } else {
+        rectangle.classList.add("mismatched");
+        setTimeout(() => {
+          rectangle.classList.remove("mismatched");
+        }, 500);
+      }
+    }
+
+    function displayNextQuestion() {
+      questionArea.innerText = currentQuestions[currentQuestionIndex].question;
+    }
+
+    function initializeNextLevel() {
+      screen.innerHTML = "";
+      rectangles.length = 0;
+      matches = 0;
+      currentQuestionIndex = 0;
+
+      currentQuestions.forEach(item => {
+        createRectangle(item.translation);
+      });
+
+      const screenWidth = screen.offsetWidth;
+      const screenHeight = screen.offsetHeight;
+
+      rectangles.forEach(rectangle => {
+        positionRectangle(rectangle, screenWidth, screenHeight);
+        rectangle.addEventListener("click", () => handleRectangleClick(rectangle));
+        moveRectangle(rectangle);
+      });
+
+      displayNextQuestion();
+    }
+
+    initializeNextLevel();
+
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.lang = "es-ES";
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onresult = (event) => {
+        const spokenText = event.results[0][0].transcript.trim().toLowerCase();
+        let matched = false;
+
+        rectangles.forEach(rectangle => {
+          if (rectangle.innerText.toLowerCase() === spokenText) {
+            rectangle.click();
+            matched = true;
+          }
+        });
+
+        if (!matched) {
+          recognizedText.innerText = ` ${spokenText}?`;
+          recognizedText.style.visibility = 'visible';
+          recognizedText.style.opacity = 1;
+          setTimeout(() => {
+            recognizedText.style.opacity = 0;
+          }, 5000);
+        }
+      };
+
+      recognition.onerror = (event) => {
+        recognizedText.innerText = `Error: ${event.error}`;
+        recognizedText.style.visibility = 'visible';
+        recognizedText.style.opacity = 1;
+        setTimeout(() => {
+          recognizedText.style.opacity = 0;
+        }, 5000);
+      };
+    }
+
+    recordButton.addEventListener('click', () => recognition.start());
+  }
+
+  // Pronoun selection logic
+  document.querySelectorAll('.pronoun-buttons button').forEach(button => {
+    button.addEventListener('click', (event) => {
+      currentPronoun = event.target.innerText.toLowerCase();
+      initializeGame();
+    });
+  });
+
+  initializeGame();
+});
+
+</script>
+</body>
+</html>

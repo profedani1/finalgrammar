@@ -1,0 +1,512 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #121313;
+        width:100%;
+        margin-left:1vh;
+      }
+
+      #question {
+        font-size: 3vh;
+        background: #00002E;
+        color: cyan;
+        font-weight: bold;
+        height: 4vh;
+        position:absolute;
+        top:20%;
+        width:96%;
+        padding:0vh 0vh;
+        left:1%;
+   justify-content: center;
+            align-items: center;
+        padding:1% 0%;
+   text-align: center;
+        border:0.5vh solid cyan
+      }
+#answers {
+        position:absolute;
+  top:27%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      width: 98.7%;
+    text-align: center;     /* Centered text */
+  justify-content: center;
+            align-items: center;
+      }
+      .answer-btn {
+          margin-top:0.2vh;
+width:99%;
+font-size:2vh;
+height:6.9vh;font-weight: bold;
+        box-sizing: border-box;
+        background-color: BLACK;
+        color: lightgrey;
+        border: 0.2vh solid lightgrey;
+        border-radius: 0.5vh;
+        cursor: pointer;
+  
+            
+      }
+
+     
+.answer-btn:hover {
+        transition: font-size 0.3s;
+        background-color: black;
+          border: 0.2vh solid yellow;
+
+        color:yellow; animation: soft-vibrate 0.3s infinite; /* Apply vibration animation */
+  animation-timing-function: ease-in-out; 
+      }
+      #feedback {
+        position:absolute;
+        top:10%;
+        left:62%;
+              text-transform: uppercase;
+ animation: soft-vibrate 0.3s infinite; /* Apply vibration animation */
+  animation-timing-function: ease-in-out; 
+        font-weight: bold;
+      }
+         
+    @keyframes soft-vibrate {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-0.5px, 0.5px); }
+  50% { transform: translate(0.5px, -0.5px); }
+  75% { transform: translate(-0.5px, -0.5px); }
+  100% { transform: translate(0, 0); }
+}
+.correct {
+    color: lime;
+    font-weight: bold;
+        font-size: 4vh;
+         text-shadow: 0vh 0vh 0.5vh lime;
+
+}
+
+.incorrect {
+    color: #FF2400;
+    font-weight: bold;
+        font-size: 4vh;
+           text-shadow: 0vh 0vh 0.3vh yellow;
+
+}
+      #countdown-bar {
+        height: 2vh;
+        background-color: #3498db;
+        transition: width 1s linear;
+        position:absolute;
+        top:18%;
+        left:1%;
+        width:97.95%;
+      }
+
+      #counters {
+ position:absolute;
+        top:7.5%;        font-size: 2.5vh;
+        color: yellow;
+            text-align: left;     /* Centered text */
+
+      }
+
+      #gameResult {
+        position:absolute;
+        top:10.5%;
+        font-size: 2.5vh;
+        font-weight: bold;
+        color: white;
+      }
+
+      #consecutiveCounter {
+        position:absolute;
+        top:7.5%;
+        left:30%;
+        font-size: 2.5vh;
+        font-weight: bold;
+        color: lightgreen;
+                    text-align: left;     /* Centered text */
+
+      }
+
+      #controlButtons {
+      }
+
+      #startBtn{
+        font-size: 5vh;
+        cursor: pointer;
+        background-color: #0d260d;
+        color: lime;
+        width:48%;
+        height:6vh;
+        border: 0.5vh solid lime;
+        border-radius: 1vh;
+        position:absolute;
+        top:1%;
+        left:1.5%;
+        padding:0% 0%;
+        font-weight:bold;
+      }
+       #startBtn:hover {
+       
+    background-color: darkgreen; 
+    color: white;    
+    border: 0.5vh solid lightgreen;   
+}
+      #pauseBtn {
+         font-size: 5vh;
+        cursor: pointer;
+        background-color: #420000;
+        color: pink;
+        width:47%;
+        height:6vh;
+        border: 0.5vh solid pink;
+        border-radius: 1vh;
+        position:absolute;
+        top:1%;
+        margin-left:0vh;
+       padding:0% 0%;
+        font-weight:bold;
+      }
+#pauseBtn:hover {
+       
+    background-color: red; 
+    color: white;    
+    border: 0.5vh solid pink;   
+}
+      #pauseBtn[disabled] {
+        background-color: #212121;
+        color:white;
+                border: 0.5vh solid white;
+        height:6vh;
+
+        cursor: not-allowed;
+      }
+      .answer-btn.disabled {
+        background-color: #555; /* Greyed out color */
+        color: #aaa; 
+        
+        border: 0.5vh solid #aaa; /* Greyed out border */
+        cursor: not-allowed;
+      }
+    </style>
+</head>
+<body>
+    <div id="quiz">
+        <div id="question"></div>
+        <div id="countdown-bar"></div>
+        <div id="answers"></div>
+        <div id="feedback"></div>
+        <div id="counters"></div>
+        <div id="consecutiveCounter"></div>
+        <button id="startBtn" onclick="startGame()">START</button>
+        <button id="pauseBtn" onclick="togglePause()">PAUSE</button>
+    </div>
+    <div id="endGameScreen" style="display: none;">
+        <h2>Game Over</h2>
+        <div id="finalResults"></div>
+        <button onclick="startGame()">RESTART</button>
+    </div>
+
+    <script>
+        const verbs = {
+            believe: { rootEn: "BELIEVE", rootEs: "CRE" },
+            owe: { rootEn: "OWE", rootEs: "DEB" },
+            promise: { rootEn: "PROMISE", rootEs: "PROMET" },
+            respond: { rootEn: "RESPOND", rootEs: "RESPOND" },
+            fear: { rootEn: "FEAR", rootEs: "TEM" },
+
+           
+        };
+
+        // Initialize arrays for tracking used verbs and pronouns
+        let usedVerbs = [];
+        let usedPronouns = [];
+const pronouns = ["I", "YOU", "HE", "WE", "YOU GUYS", "THEY"];
+        let currentQuestion = {};
+        let correctWordOrder = [];
+        let currentTranslations = [];
+
+        const questions = [];
+        let currentQuestionIndex = 0;
+        let correctAnswerCount = 0;
+        let incorrectAnswerCount = 0;
+        let notAnsweredCount = 0;
+        let consecutiveCorrectAnswers = 0;
+        let maxConsecutiveCorrectAnswers = 0;
+        let timer;
+        let countdownDuration = 15; // 10 seconds
+        let countdownPaused = false;
+        let quizRunning = false;
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'es-ES';
+        recognition.interimResults = false;
+
+    
+function generateQuestions(verb, pronoun) {
+    // Determine the English past tense
+    let rootEnPast;
+
+    // Specific exception for "FEAR"
+    if (verb.rootEn === 'FEAR') {
+        rootEnPast = 'FEARED';
+    }
+    // Rule for verbs ending in 'E'
+    else if (verb.rootEn.endsWith('E')) {
+        rootEnPast = verb.rootEn + 'D';
+    }
+    // Rule for verbs ending in 'D'
+    else if (verb.rootEn.endsWith('D')) {
+        rootEnPast = verb.rootEn + 'ED';
+    }
+    // Default rule for regular past tense
+    else {
+        rootEnPast = verb.rootEn + 'ED';
+    }
+
+    // Get the root forms in English and Spanish
+    const rootEn = verb.rootEn;
+    const rootEs = verb.rootEs.toUpperCase();
+    let questions = [];
+
+      if (pronoun === "I") {
+    questions.push(
+               {question: `I HAD ${rootEnPast}`, translation: `HABÍA ${verb.rootEs}IDO` },
+    { question: `I ${rootEnPast}`, translation: `${rootEs}Í` },
+    { question: `I USED TO ${verb.rootEn}`, translation: `${rootEs}ÍA` },
+    { question: `I HAVE ${rootEnPast}`, translation: `HE ${verb.rootEs}IDO` },
+    { question: `I ${verb.rootEn}`, translation: `${rootEs}O` },
+    { question: `I WILL ${verb.rootEn}`, translation: `${rootEs}ERÉ` },
+    { question: `I WOULD ${verb.rootEn}`, translation: `${rootEs}ERÍA` },
+    { question: `IF I ${rootEnPast}`, translation: `SI ${rootEs}IERA` },
+    { question: `I WOULD HAVE ${rootEnPast}`, translation: `HABRÍA ${verb.rootEs}IDO` },
+    { question: `IF I HAD ${rootEnPast}`, translation: `SI HUBIERA ${verb.rootEs}IDO` },     
+
+    );
+} else if (pronoun === "YOU") {
+    questions.push(
+               { question: `YOU HAD ${rootEnPast}`, translation: `HABÍAS ${verb.rootEs}IDO` },
+    { question: `YOU ${rootEnPast}`, translation: `${rootEs}ISTE` },
+    { question: `YOU USED TO ${verb.rootEn}`, translation: `${rootEs}ÍAS` },
+    { question: `YOU HAVE ${rootEnPast}`, translation: `HAS ${verb.rootEs}IDO` },
+    { question: `YOU ${verb.rootEn}`, translation: `${rootEs}ES` },
+    { question: `YOU WILL ${verb.rootEn}`, translation: `${rootEs}ERÁS` },
+    { question: `YOU WOULD ${verb.rootEn}`, translation: `${rootEs}ERÍAS` },
+    { question: `IF YOU ${rootEnPast}`, translation: `SI ${rootEs}IERAS` },
+    { question: `YOU WOULD HAVE ${rootEnPast}`, translation: `HABRÍAS ${verb.rootEs}IDO` },
+    { question: `IF YOU HAD ${rootEnPast}`, translation: `SI HUBIERAS ${verb.rootEs}IDO` },     
+
+    );
+} else if (pronoun === "HE") {
+    questions.push(
+               { question: `HE HAD ${rootEnPast}`, translation: `HABÍA ${verb.rootEs}IDO` },
+    { question: `HE ${rootEnPast}`, translation: `${rootEs}IÓ` },
+    { question: `HE USED TO ${verb.rootEn}`, translation: `${rootEs}ÍA` },
+    { question: `HE HAS ${rootEnPast}`, translation: `HA ${verb.rootEs}IDO` },
+    { question: `HE ${verb.rootEn}S`, translation: `${rootEs}E` },
+    { question: `HE WILL ${verb.rootEn}`, translation: `${rootEs}ERÁ` },
+    { question: `HE WOULD ${verb.rootEn}`, translation: `${rootEs}ERÍA` },
+    { question: `IF HE ${rootEnPast}`, translation: `SI ${rootEs}IERA` },
+    { question: `HE WOULD HAVE ${rootEnPast}`, translation: `HABRÍA ${verb.rootEs}IDO` },
+    { question: `IF HE HAD ${rootEnPast}`, translation: `SI HUBIERA ${verb.rootEs}IDO`},     
+
+    );
+} else if (pronoun === "WE") {
+    questions.push(
+               { question: `WE HAD ${rootEnPast}`, translation: `HABÍAMOS ${verb.rootEs}IDO` },
+    { question: `WE ${rootEnPast}`, translation: `${rootEs}IMOS` },
+    { question: `WE USED TO ${verb.rootEn}`, translation: `${rootEs}ÍAMOS` },
+    { question: `WE HAVE ${rootEnPast}`, translation: `HEMOS ${verb.rootEs}IDO` },
+    { question: `WE ${verb.rootEn}`, translation: `${rootEs}EMOS` },
+    { question: `WE WILL ${verb.rootEn}`, translation: `${rootEs}EREMOS` },
+    { question: `WE WOULD ${verb.rootEn}`, translation: `${rootEs}ERÍAMOS` },
+    { question: `IF WE ${rootEnPast}`, translation: `SI ${rootEs}IÉRAMOS` },
+    { question: `WE WOULD HAVE ${rootEnPast}`, translation: `HABRÍAMOS ${verb.rootEs}IDO` },
+    { question: `IF WE HAD ${rootEnPast}`, translation: `SI HUBIÉRAMOS ${verb.rootEs}IDO`},     
+
+    );
+} else if (pronoun === "YOU GUYS"){
+    questions.push(
+               { question: `YOU GUYS HAD ${rootEnPast}`, translation: `HABÍAIS ${verb.rootEs}IDO` },
+    { question: `YOU GUYS ${rootEnPast}`, translation: `${rootEs}ISTEIS` },
+    { question: `YOU GUYS USED TO ${verb.rootEn}`, translation: `${rootEs}ÍAIS` },
+    { question: `YOU GUYS HAVE ${rootEnPast}`, translation: `HABÉIS ${verb.rootEs}IDO` },
+    { question: `YOU GUYS ${verb.rootEn}`, translation: `${rootEs}ÉIS` },
+    { question: `YOU GUYS WILL ${verb.rootEn}`, translation: `${rootEs}ERÉIS` },
+    { question: `YOU GUYS WOULD ${verb.rootEn}`, translation: `${rootEs}ERÍAIS` },
+    { question: `IF YOU GUYS ${rootEnPast}`, translation: `SI ${rootEs}IERAIS` },
+    { question: `YOU GUYS WOULD HAVE ${rootEnPast}`, translation: `HABRÍAIS ${verb.rootEs}IDO` },
+    { question: `IF YOU GUYS HAD ${rootEnPast}`, translation: `SI HUBIERAIS ${verb.rootEs}IDO` },     
+
+    );
+} else if (pronoun === "THEY") {
+    questions.push(
+               { question: `THEY HAD ${rootEnPast}`, translation: `HABÍAN ${verb.rootEs}IDO` },
+    { question: `THEY ${rootEnPast}`, translation: `${rootEs}IERON` },
+    { question: `THEY USED TO ${verb.rootEn}`, translation: `${rootEs}ÍAN` },
+    { question: `THEY HAVE ${rootEnPast}`, translation: `HAN ${verb.rootEs}IDO` },
+    { question: `THEY ${verb.rootEn}`, translation: `${rootEs}EN` },
+    { question: `THEY WILL ${verb.rootEn}`, translation: `${rootEs}ERÁN` },
+    { question: `THEY WOULD ${verb.rootEn}`, translation: `${rootEs}ERÍAN` },
+    { question: `IF THEY ${rootEnPast}`, translation: `SI ${rootEs}IERAN` },
+    { question: `THEY WOULD HAVE ${rootEnPast}`, translation: `HABRÍAN ${verb.rootEs}IDO` },
+    { question: `IF THEY HAD ${rootEnPast}`, translation: `SI HUBIERAN ${verb.rootEs}IDO` }
+    );
+}
+       return questions;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateRandomPhrase() {
+            if (usedVerbs.length === Object.keys(verbs).length) {
+                usedVerbs = [];
+            }
+            if (usedPronouns.length === pronouns.length) {
+                usedPronouns = [];
+            }
+
+            let randomVerbKey;
+            do {
+                randomVerbKey = Object.keys(verbs)[Math.floor(Math.random() * Object.keys(verbs).length)];
+            } while (usedVerbs.includes(randomVerbKey));
+            usedVerbs.push(randomVerbKey);
+
+            let randomPronoun;
+            do {
+                randomPronoun = pronouns[Math.floor(Math.random() * pronouns.length)];
+            } while (usedPronouns.includes(randomPronoun));
+            usedPronouns.push(randomPronoun);
+
+            const selectedVerb = verbs[randomVerbKey];
+            const generatedQuestions = generateQuestions(selectedVerb, randomPronoun);
+            const randomIndex = Math.floor(Math.random() * generatedQuestions.length);
+            currentQuestion = generatedQuestions[randomIndex];
+
+            document.getElementById('question').textContent = currentQuestion.question;
+            currentTranslations = generatedQuestions.map(q => q.translation);
+            createTranslationButtons(currentTranslations);
+            resetCountdown();
+        }
+
+      function createTranslationButtons(translations) {
+    const answersDiv = document.getElementById("answers");
+    answersDiv.innerHTML = '';
+
+    // Create buttons in the original order of translations
+    translations.forEach((translation, index) => {
+        const button = document.createElement('button');
+        button.className = 'answer-btn';
+        button.textContent = translation;
+        button.onclick = () => checkAnswer(button.textContent);
+        answersDiv.appendChild(button);
+    });
+}
+
+
+ function checkAnswer(selectedTranslation) {
+    if (!quizRunning) return;
+
+    const feedbackElement = document.getElementById('feedback');
+    
+    // Remove previous feedback classes
+    feedbackElement.classList.remove('correct', 'incorrect');
+
+    if (selectedTranslation === currentQuestion.translation) {
+        consecutiveCorrectAnswers++;
+        if (consecutiveCorrectAnswers > maxConsecutiveCorrectAnswers) {
+            maxConsecutiveCorrectAnswers = consecutiveCorrectAnswers;
+        }
+        feedbackElement.textContent = "Correct";
+        feedbackElement.classList.add('correct'); // Add correct class
+        correctAnswerCount++;
+
+        // Play audio of the correct answer
+        playCorrectAnswerAudio(selectedTranslation);
+
+    } else {
+        consecutiveCorrectAnswers = 0;
+        feedbackElement.textContent = "Incorrect";
+        feedbackElement.classList.add('incorrect'); // Add incorrect class
+        incorrectAnswerCount++;
+    }
+    updateCounters();
+
+    // Show feedback for 2 seconds, then clear it
+    setTimeout(() => {
+        feedbackElement.textContent = "";
+        feedbackElement.classList.remove('correct', 'incorrect'); // Remove feedback class after 2 seconds
+    }, 2000);
+
+    setTimeout(generateRandomPhrase, 1000);
+}
+
+function playCorrectAnswerAudio(answer) {
+    const utterance = new SpeechSynthesisUtterance(answer);
+    utterance.lang = 'es-ES'; // Set the language to Spanish (Spain)
+    speechSynthesis.speak(utterance);
+}
+
+
+
+       function updateCounters() {
+    document.getElementById('counters').innerHTML = 
+        `Correct: ${correctAnswerCount}<br>Incorrect: ${incorrectAnswerCount}<br>Not Answered: ${notAnsweredCount}`;
+    document.getElementById('consecutiveCounter').innerHTML = 
+        `Consecutive: ${consecutiveCorrectAnswers}<br>Max: ${maxConsecutiveCorrectAnswers}`;
+}
+
+        function resetCountdown() {
+            clearInterval(timer);
+            let width = 100;
+            const countdownBar = document.getElementById('countdown-bar');
+            countdownBar.style.width = width + '%';
+            timer = setInterval(() => {
+                if (countdownPaused) return;
+                width -= 1;
+                countdownBar.style.width = width + '%';
+                if (width <= 0) {
+                    notAnsweredCount++;
+                    updateCounters();
+                    consecutiveCorrectAnswers = 0;
+                    document.getElementById('feedback').textContent = "Time's up!";
+                    clearInterval(timer);
+                    setTimeout(generateRandomPhrase, 1000);
+                }
+            }, (countdownDuration * 10));
+        }
+
+        function togglePause() {
+            countdownPaused = !countdownPaused;
+            document.getElementById('pauseBtn').textContent = countdownPaused ? "CONTINUE" : "PAUSE";
+        }
+
+        function startGame() {
+            usedVerbs = [];
+            usedPronouns = [];
+            correctAnswerCount = 0;
+            incorrectAnswerCount = 0;
+            notAnsweredCount = 0;
+            consecutiveCorrectAnswers = 0;
+            maxConsecutiveCorrectAnswers = 0;
+            quizRunning = true;
+            document.getElementById('endGameScreen').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            generateRandomPhrase();
+        }
+      
+    </script>
+</body>
+</html>

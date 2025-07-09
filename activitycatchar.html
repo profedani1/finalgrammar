@@ -1,0 +1,317 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Learning Game</title>
+  <style>
+    body {
+      background-color: #333;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      margin-top: -1vh;
+      padding: 0;
+      overflow: hidden; /* Prevent scrolling */
+    }
+    #screen {
+      position: relative;
+      width: 100%;
+      height: 85vh;
+      border: 1px solid #ccc;
+      overflow: hidden;
+    }
+    .rectangle {
+      position: absolute;
+      padding: 9px;
+      width:18vh;
+      background-color: white;
+      color:black;
+      font-weight:bold;
+      border: 1px solid #000;
+      cursor: pointer;
+            text-align: center;
+            font-size: 2vh;
+
+    }
+    .rectangle.mismatched {
+      background-color: lightcoral;
+    }
+    #question-area {
+      text-align: center;
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+    #record-button {
+      margin-top: 10px;
+    }
+    #recognized-text {
+      visibility: hidden;
+      transition: opacity 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <div id="question-area"></div>
+  <div id="screen"></div>
+  <button id="record-button">Record</button>
+  <div id="recognized-text"></div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const screen = document.getElementById("screen");
+  const questionArea = document.getElementById("question-area");
+
+  let rectangles = [];
+  const pronouns = ["I", "YOU", "HE", "WE", "YOU GUYS", "THEY"];
+  const verbs = {
+    rest: { rootEn: "REST", rootEs: "DESCANS" },
+    work: { rootEn: "WORK", rootEs: "TRABAJ" },
+    walk: { rootEn: "WALK", rootEs: "CAMIN" },
+    study: { rootEn: "STUDY", rootEs: "ESTUDI" },
+    talk: { rootEn: "TALK", rootEs: "HABL" },
+    buy: { rootEn: "BUY", rootEs: "COMPR" },
+    help: { rootEn: "HELP", rootEs: "AYUD" },
+    visit: { rootEn: "VISIT", rootEs: "VISIT" },
+    wait: { rootEn: "WAIT", rootEs: "ESPER" },
+  };
+
+  let shuffledPronouns = shuffleArray([...pronouns]);
+  let shuffledVerbs = shuffleArray(Object.keys(verbs));
+  let pronounIndex = 0;
+  let verbIndex = 0;
+
+  let currentQuestion = {};
+  let currentTranslations = [];
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function getNextPronoun() {
+    if (pronounIndex >= shuffledPronouns.length) {
+      shuffledPronouns = shuffleArray([...pronouns]);
+      pronounIndex = 0;
+    }
+    return shuffledPronouns[pronounIndex++];
+  }
+
+  function getNextVerb() {
+    if (verbIndex >= shuffledVerbs.length) {
+      shuffledVerbs = shuffleArray(Object.keys(verbs));
+      verbIndex = 0;
+    }
+    return shuffledVerbs[verbIndex++];
+  }
+function restartActivity() {
+  // Clear the current activity state
+  currentQuestion = null;
+  currentTranslations = [];
+  screen.innerHTML = "";
+
+  // Generate a new random phrase
+  generateRandomPhrase();
+}
+
+// Add an event listener for screen resize (including zoom changes)
+window.addEventListener("resize", () => {
+  restartActivity();
+});
+  function generateQuestions(verb, pronoun) {
+    let rootEnPast = verb.rootEn.endsWith("E") ? verb.rootEn + "D" : verb.rootEn + "ED";
+    if (rootEnPast === "BUYED") {
+      rootEnPast = "BOUGHT";
+    }
+    const rootEs = verb.rootEs.toUpperCase();
+
+
+        if (pronoun === "I") {
+          return [
+            { question: `I HAD ${rootEnPast}`, translation: `HABÍA ${verb.rootEs}ADO` },
+            { question: `I ${rootEnPast}`, translation: `${rootEs}É` },
+            { question: `I USED TO ${verb.rootEn}`, translation: `${rootEs}ABA` },
+            { question: `I HAVE ${rootEnPast}`, translation: `HE ${verb.rootEs}ADO` },
+            { question: `I ${verb.rootEn}`, translation: `${rootEs}O` },
+            { question: `I WILL ${verb.rootEn}`, translation: `${rootEs}ARÉ` },
+            { question: `I WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍA` },
+            { question: `IF I ${rootEnPast}`, translation: `SI ${rootEs}ARA` },
+            { question: `I WOULD HAVE ${rootEnPast}`, translation: `HABRÍA ${verb.rootEs}ADO` },
+            { question: `IF I HAD ${rootEnPast}`, translation: `SI HUBIERA ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "YOU") {
+          return [
+            { question: `YOU HAD ${rootEnPast}`, translation: `HABÍAS ${verb.rootEs}ADO` },
+            { question: `YOU ${rootEnPast}`, translation: `${rootEs}ASTE` },
+            { question: `YOU USED TO ${verb.rootEn}`, translation: `${rootEs}ABAS` },
+            { question: `YOU HAVE ${rootEnPast}`, translation: `HAS ${verb.rootEs}ADO` },
+            { question: `YOU ${verb.rootEn}`, translation: `${rootEs}AS` },
+            { question: `YOU WILL ${verb.rootEn}`, translation: `${rootEs}ARÁS` },
+            { question: `YOU WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍAS` },
+            { question: `IF YOU ${rootEnPast}`, translation: `SI ${rootEs}ARAS` },
+            { question: `YOU WOULD HAVE ${rootEnPast}`, translation: `HABRÍAS ${verb.rootEs}ADO` },
+            { question: `IF YOU HAD ${rootEnPast}`, translation: `SI HUBIERAS ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "HE") {
+          return [
+            { question: `HE HAD ${rootEnPast}`, translation: `HABÍA ${verb.rootEs}ADO` },
+            { question: `HE ${rootEnPast}`, translation: `${rootEs}Ó` },
+            { question: `HE USED TO ${verb.rootEn}`, translation: `${rootEs}ABA` },
+            { question: `HE HAS ${rootEnPast}`, translation: `HA ${verb.rootEs}ADO` },
+            { question: `HE ${verb.rootEn}S`, translation: `${rootEs}A` },
+            { question: `HE WILL ${verb.rootEn}`, translation: `${rootEs}ARÁ` },
+            { question: `HE WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍA` },
+            { question: `IF HE ${rootEnPast}`, translation: `SI ${rootEs}ARA` },
+            { question: `HE WOULD HAVE ${rootEnPast}`, translation: `HABRÍA ${verb.rootEs}ADO` },
+            { question: `IF HE HAD ${rootEnPast}`, translation: `SI HUBIERA ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "WE") {
+          return [
+            { question: `WE HAD ${rootEnPast}`, translation: `HABÍAMOS ${verb.rootEs}ADO` },
+            { question: `WE ${rootEnPast}`, translation: `${rootEs}AMOS` },
+            { question: `WE USED TO ${verb.rootEn}`, translation: `${rootEs}ABAMOS` },
+            { question: `WE HAVE ${rootEnPast}`, translation: `HEMOS ${verb.rootEs}ADO` },
+            { question: `WE ${verb.rootEn}`, translation: `${rootEs}AMOS` },
+            { question: `WE WILL ${verb.rootEn}`, translation: `${rootEs}AREMOS` },
+            { question: `WE WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍAMOS` },
+            { question: `IF WE ${rootEnPast}`, translation: `SI ${rootEs}ARAMOS` },
+            { question: `WE WOULD HAVE ${rootEnPast}`, translation: `HABRÍAMOS ${verb.rootEs}ADO` },
+            { question: `IF WE HAD ${rootEnPast}`, translation: `SI HUBIERAMOS ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "YOU GUYS") {
+          return [
+            { question: `YOU GUYS HAD ${rootEnPast}`, translation: `HABÍAIS ${verb.rootEs}ADO` },
+            { question: `YOU GUYS ${rootEnPast}`, translation: `${rootEs}ASTEIS` },
+            { question: `YOU GUYS USED TO ${verb.rootEn}`, translation: `${rootEs}ABAIS` },
+            { question: `YOU GUYS HAVE ${rootEnPast}`, translation: `HABEIS ${verb.rootEs}ADO` },
+            { question: `YOU GUYS ${verb.rootEn}`, translation: `${rootEs}AIS` },
+            { question: `YOU GUYS WILL ${verb.rootEn}`, translation: `${rootEs}AREIS` },
+            { question: `YOU GUYS WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍAIS` },
+            { question: `IF YOU GUYS ${rootEnPast}`, translation: `SI ${rootEs}ARAIS` },
+            { question: `YOU GUYS WOULD HAVE ${rootEnPast}`, translation: `HABRÍAIS ${verb.rootEs}ADO` },
+            { question: `IF YOU GUYS HAD ${rootEnPast}`, translation: `SI HUBIERAIS ${verb.rootEs}ADO` }
+          ];
+        } else if (pronoun === "THEY") {
+          return [
+            { question: `THEY HAD ${rootEnPast}`, translation: `HABÍAN ${verb.rootEs}ADO` },
+            { question: `THEY ${rootEnPast}`, translation: `${rootEs}ARON` },
+            { question: `THEY USED TO ${verb.rootEn}`, translation: `${rootEs}ABAN` },
+            { question: `THEY HAVE ${rootEnPast}`, translation: `HAN ${verb.rootEs}ADO` },
+            { question: `THEY ${verb.rootEn}`, translation: `${rootEs}AN` },
+            { question: `THEY WILL ${verb.rootEn}`, translation: `${rootEs}ARÁN` },
+            { question: `THEY WOULD ${verb.rootEn}`, translation: `${rootEs}ARÍAN` },
+            { question: `IF THEY ${rootEnPast}`, translation: `SI ${rootEs}ARAN` },
+            { question: `THEY WOULD HAVE ${rootEnPast}`, translation: `HABRÍAN ${verb.rootEs}ADO` },
+            { question: `IF THEY HAD ${rootEnPast}`, translation: `SI HUBIERAN ${verb.rootEs}ADO` }
+          ];
+        }
+        
+        return [];
+      }
+
+   function generateRandomPhrase() {
+    const randomPronoun = getNextPronoun();
+    const randomVerbKey = getNextVerb();
+    const selectedVerb = verbs[randomVerbKey];
+    const questions = generateQuestions(selectedVerb, randomPronoun);
+    const randomIndex = Math.floor(Math.random() * questions.length);
+
+    currentQuestion = questions[randomIndex];
+    currentTranslations = questions.map((q) => q.translation);
+    questionArea.innerText = currentQuestion.question;
+    createTranslationButtons(currentTranslations);
+  }
+
+  function createTranslationButtons(translations) {
+    rectangles = [];
+    screen.innerHTML = ""; // Clear existing rectangles
+    translations.forEach((translation) => createRectangle(translation));
+  }
+
+  function createRectangle(text) {
+    const rectangle = document.createElement("div");
+    rectangle.classList.add("rectangle");
+    rectangle.innerText = text;
+    screen.appendChild(rectangle);
+    positionRectangle(rectangle);
+    rectangle.addEventListener("click", () => handleRectangleClick(rectangle));
+    moveRectangle(rectangle);
+  }
+
+  function positionRectangle(rectangle) {
+    let overlap;
+    do {
+      const x = Math.random() * (screen.offsetWidth - rectangle.offsetWidth);
+      const y = Math.random() * (screen.offsetHeight - rectangle.offsetHeight);
+      rectangle.style.left = `${x}px`;
+      rectangle.style.top = `${y}px`;
+      overlap = checkOverlap(rectangle);
+    } while (overlap);
+  }
+
+  function checkOverlap(rectangle) {
+    const rect1 = rectangle.getBoundingClientRect();
+    return Array.from(screen.children).some((other) => {
+      if (other === rectangle) return false;
+      const rect2 = other.getBoundingClientRect();
+      return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+    });
+  }
+
+  function moveRectangle(rectangle) {
+    const baseSpeed = 0.1; // Base speed factor in vh/vw
+    const speedX = baseSpeed * window.innerWidth / 100; // Adjust speed to vw (viewport width)
+    const speedY = baseSpeed * window.innerHeight / 100; // Adjust speed to vh (viewport height)
+
+    let dx = speedX;
+    let dy = speedY;
+
+    function move() {
+      let x = parseFloat(rectangle.style.left) || 0;
+      let y = parseFloat(rectangle.style.top) || 0;
+
+      // Bounce off screen edges
+      if (x + rectangle.offsetWidth >= screen.offsetWidth || x <= 0) dx *= -1;
+      if (y + rectangle.offsetHeight >= screen.offsetHeight || y <= 0) dy *= -1;
+
+      rectangle.style.left = `${x + dx}px`;
+      rectangle.style.top = `${y + dy}px`;
+
+      // Check for collisions with other rectangles
+      const collision = checkOverlap(rectangle);
+      if (collision) {
+        dx *= -1;
+        dy *= -1;
+      }
+
+      requestAnimationFrame(move);
+    }
+
+    move();
+  }
+
+      function handleRectangleClick(rectangle) {
+        if (rectangle.innerText === currentQuestion.translation)
+        {   const utterance = new SpeechSynthesisUtterance(rectangle.innerText);
+    utterance.lang = "es-ES";
+    window.speechSynthesis.speak(utterance);
+
+          rectangle.style.backgroundColor = "lightgreen";
+          setTimeout(() => generateRandomPhrase(), 500);
+        } else {
+          rectangle.classList.add("mismatched");
+          setTimeout(() => rectangle.classList.remove("mismatched"), 500);
+        }
+      }
+
+      generateRandomPhrase();
+    });
+  </script>
+</body>
+</html>

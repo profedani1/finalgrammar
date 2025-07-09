@@ -1,0 +1,883 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=.1.0" />
+    <title>HTML preview</title>
+    <style>
+      html,
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #000018;
+        width: 99.8%;
+        height: 100%;
+        margin: 0;
+        padding: 0%;
+        overflow: hidden;
+      }
+
+
+
+.title-button {
+    width: 100%;
+    font-weight: bold;
+    text-align: center; /* Changed from display: center; */
+    padding: 0vh 0vh;
+    height: 7vh; /* Adjusted height using vh */
+ background: linear-gradient(150deg, black, brown);
+            border-radius:10vh;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+border:0.3vh solid yellow; color: yellow;font-size:1.4vh;animation: press 0.5s infinite ease-in-out
+}
+@keyframes press {
+            0%, 100% {
+                transform: translateY(0);
+                box-shadow: 0 1px #1a1a1a, 0 5px #000;
+            }
+            50% {
+                transform: translateY(0.5vh);
+                box-shadow: 0 3px #1a1a1a, 0 5px #000;
+            }
+        }
+.title-button:hover {
+    transform: scale(1.05); /* Slightly scale up when hovered */
+}
+      
+      
+      #answers{
+        display: flex;
+
+        justify-content: space-between;
+      }
+
+      .column {
+        width: 20%;
+      }
+      .column:first-child {
+     }
+
+      .column:last-child {
+        /* Styles for the second column */
+      }
+      
+      
+      #answers{
+        display: flex;
+
+        justify-content: space-between;
+      }
+
+      .column {
+        width: 16.5%;
+      }
+      .column:first-child {
+     }
+
+      .column:last-child {
+        /* Styles for the second column */
+      }
+      .answer-btn {
+  width: 100%;
+  padding: 0% 0%; /* Adjusted vertical padding */
+  box-sizing: border-box;
+  height: 3.4vh;
+font-size: calc(0.7vh + 0.8vw);`
+  font-weight: bold;
+  background-color: #020205;
+  color: #ffffff;
+  border: 0.1px solid white;
+  cursor: pointer;
+ transition: background-color 0.2s ease; /* Smooth transition for background color */
+}
+.answer-btn:hover {
+  background-color: green !important; /* Changes background color to green on hover, overriding any inline styles */
+}
+
+
+    
+      @media (max-width: 2.64in) and (max-height: 5in) {
+      }
+ #top{
+   width:100%;
+   
+  height: 6.5%;
+
+      }
+
+
+ #erBtn{
+    background-color: black;
+    color: cyan;
+padding: 0.8vh 3vh;    text-decoration: none;
+    font-weight: bold;
+    font-size: 2vh; /* Using vh for font size */
+    cursor: pointer;
+    border: 2px solid cyan;
+    margin-bottom:1vh;
+    margin-top:1vh;
+}
+ #beBtn{
+    background-color: black;
+    color: orange;
+padding: 0.8vh 3vh;    text-decoration: none;
+    font-weight: bold;
+    font-size: 2vh; /* Using vh for font size */
+    cursor: pointer;
+    border: 2px solid orange;
+    margin-bottom:1vh;
+    margin-top:1vh;
+}
+#arBtn{
+    background-color: black;
+    color: lime;
+padding: 0.8vh 3vh;    text-decoration: none;
+    font-weight: bold;
+    font-size: 2vh; /* Using vh for font size */
+    cursor: pointer;
+    border: 2px solid lime;
+    margin-bottom:1vh;
+    margin-top:1vh;
+}
+     .allar{
+    background-color: black;
+    color: cyan;
+padding: 0.8vh 3vh;    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5vh; /* Using vh for font size */
+    cursor: pointer;
+    border: 2px solid cyan;
+    margin-top:1vh;
+} 
+ 
+#maingames {
+    position: fixed;
+    top: 48%;
+    left: 50%;
+  width:15rem; 
+    height:5em; 
+
+ display: grid;
+transform: translate(-50%, -50%);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  justify-content: center;
+    align-items: center;
+  justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+      text-align: center;
+    align-items: center;    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+.redirect-button {
+  font-weight:bold;
+height:100%;  
+  width:100%; font-size:1.7vh;
+  color: yellow;
+    border: 0.4vh solid yellow;
+  background-color:black; 
+  border-radius: 50%;
+    padding: 0;
+
+  justify-content: center;
+    align-items: center;
+    z-index: 1000;
+      text-align: center;
+    align-items: center;
+}
+.redirect-button:hover {
+     font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh black, 0 0 0.5vh orange, 0 0 0.7vh red;
+    box-shadow: 0 0 1vh yellow, 0 0 3vh orange, 0 0 5vh red;
+  box-sizing: border-box;
+  color:lightblue;
+}
+      
+     
+/* When active, the menu drops down */
+#gameMenu.active {
+    top: 0;
+}
+
+/* Style for buttons */
+.title-button0 {
+   
+    border: 2px solid cyan;
+     border-radius: 100%;
+height:7em;    transition: all 1s ease;
+  width:7em; font-size: 2vh;
+    text-align: center;
+    align-items: center;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+
+}
+
+
+.title-button0:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+  color:lightblue;
+}
+
+
+#games {
+    position: fixed;
+    top: 70%;
+    left: 50%;
+ display: grid;
+transform: translate(-50%, -50%);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+      
+  #gameMenu {
+    position: fixed;
+    top: -60%;
+    left: 50%;
+    width: 40%;
+    transform: translate(-50%, -50%);
+
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+
+/* When active, the menu drops down */
+#gameMenu.active {
+    top: 50%;
+}
+           
+     .verbsbar {
+    background-color:black;
+    color: lightgrey;
+  position: absolute;
+    top: 0em;
+    right: 0em;
+      width:8em;
+    font-size: 3vh;
+border:0vh solid transparent;
+    border-radius: 10px;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#verbSelect {
+  
+    appearance: none;
+    background-color:blue ;
+    color: WHITE;
+       text-transform: uppercase;
+border:none;
+      width:100%;
+  height:3vh;
+    border-radius: 2vh;
+    text-align: center; /* Center text horizontally */
+    font-weight:bold;
+
+    font-size: 3vh;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#verbSelect:hover {
+    background-color: #357EC7;
+    color:white;
+  width:100%;
+}
+
+#verbSelect:focus {
+    transform: scale(1.1);
+}
+
+#verbSelect option {
+    color: white;
+    background-color: black;
+    padding: 1vh;
+    font-size: 3.5vh;
+}
+
+/* Add a stylish arrow */
+#verbSelect::-ms-expand {
+    display: none;
+}
+
+#verbSelect::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+
+    right: 55px;
+    transform: translateY(-50%);
+    pointer-events: none;
+} 
+      
+      
+      
+      
+      
+      
+     /* Style for the "PLAY" button */
+#playButton {
+    position: absolute;
+    top: 1.55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 6em;
+padding:0vh 0vh ;   background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#playButton:hover {
+    background-color: transparent;
+    color: white;
+}
+     button.title-buttonX[onclick="toggleGameMenu(false)"] {
+    position: absolute;
+    top: 3.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20vh;
+padding:0vh 0vh ;   background-color: transparent;
+    color: CYAN;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+button.title-buttonX[onclick="toggleGameMenu(false)"]:hover {
+    background-color: transparent; /* Darker blue on hover */
+}
+
+
+
+ .title-button0a {
+    font-size: 2vh;
+    border: 2px solid cyan;
+    text-align: center;
+    align-items: center;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: all 1s ease;
+}
+
+.title-button0a:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+  color:lightblue;
+}
+
+      
+        #overall-score {
+    position: absolute;
+        right:0%;
+        bottom:0%;
+    height: 8%;
+        color:yellow;
+    background-color: transparent;
+    display: flex;
+            font-size: 3vh;
+
+    
+    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+       #tools{
+      position: absolute;
+    bottom: 7%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+ display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  justify-content: center;
+    align-items: center;
+  justify-content: center;
+    flex-direction: column;
+    z-index: 1000;
+      text-align: center;
+    align-items: center;    z-index: 1000;
+    transition: top 0.5s ease-in-out;
+}
+         .title-buttona {
+     
+    font-size: 0.9em;
+    border: 0.2vh solid white;
+    text-align: center;
+    align-items: center;
+        height:5em; 
+  width:8rem; 
+
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: all 1s ease;
+}
+      .title-buttonb {
+     
+    font-size: 0.9em;
+    border: 0.2vh solid white;
+    text-align: center;
+    align-items: center;
+        height:5em; 
+  width:8rem; 
+
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    transition: all 1s ease;
+}
+      
+      
+    </style>
+
+
+
+
+
+  </head>
+  <body>
+    <button id="arBtn" onclick="window.location.href='index.html';">AR</button>
+
+    <button id="erBtn" onclick="loadActivityER()">ER</button>
+   
+ 
+        <div style="margin-top: 0px"></div>
+
+<div id="answers">
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityHADBEEN.html')"
+          style=""
+        >
+          HAD BEEN
+        </button>
+
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+  HAB<span style="color: yellow">ÍA</span> 
+</button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">S</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK"></span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span> 
+        </button>
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWOULDHAVEBEEN.html')"
+          style="background-color: YELLOW"
+        >
+          WOULD HAVE BEEN
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">S</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #120c08;">
+          HAB<span style="color: cyan">R</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span> 
+        </button>
+    
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityIFHADBEEN.html')"
+          style="background-color: lightblue"
+        >
+          IF...HAD BEEN
+        </button>
+
+         <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+
+          <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+        <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+
+          <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">S</span> 
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+          <span style="color: #ccff15">si</span> HUB<span
+            style="color: lightblue"
+            >IER</span
+          ><span style="color: PINK">AN</span> 
+        </button>
+           <button class="answer-btn" onclick="playAudio(this)" style="background-color: white;color:black">
+      EST<span style="color:red"
+            >ADO</span
+          >
+        </button>
+    </div>
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityBUSY.html')"
+          style="background-color: red; color: yellow"
+        >
+          THEN / BUSY
+        </button>
+
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1c001c
+;">
+       <span style="color: #ee6f57">ESTUV</span><span style="color: lightgreen">E</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1c001c
+;">         <span style="color: #ee6f57"><span style="color: #ee6f57">ESTUV</span></span><span style="color: GOLD">ISTE</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1c001c
+;">         <span style="color: #ee6f57">ESTUV</span><span style="color: LIGHTBLUE">O</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1c001c
+;">        <span style="color: #ee6f57">ESTUV</span><span style="color: yellow">Í</span
+          ><span style="color: PINK">MOS</span>
+        </button>   
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1c001c
+;">          <span style="color: #ee6f57">ESTUV</span><span style="color: GOLD">ISTEIS</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1c001c
+;">         <span style="color: #ee6f57">ESTUV</span><span
+            style="color: lightblue"
+            >IER</span
+          ><span style="color: #ee6f57">ON</span>
+        </button>
+      </div>    
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWAS.html')"
+          style="background-color: ORANGE"
+        >
+WAS        </button>
+
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+EST<span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span>
+        </button>
+
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+          EST<span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span
+          ><span style="color: pink">S</span>
+        </button>
+
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+       EST<span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+        EST<span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+         EST<span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span
+          ><span style="color: PINK">IS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #37191f;">
+        EST<span style="color: ORANGE">A</span
+          ><span style="color: lightblue">B</span
+          ><span style="color: ORANGE">A</span
+          ><span style="color: PINK">N</span>
+        </button>
+      </div>
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityHAVEBEEN.html')"
+          style="background-color: lightgreen"
+        >
+HAVE BEEN
+        </button>
+
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+    H<span style="color: lime;">E</span>
+</button>
+          
+   <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        H<span style="color: PINK">AS</span>
+          
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         H<span style="color: PINK">A</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+       H<span style="color: lime">E</span
+          ><span style="color: PINK">MOS</span> 
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        HAB<span style="color: lime">É</span
+          ><span style="color: PINK">IS</span> 
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         H<span style="color: PINK">AN</span> 
+        </button>
+         <button class="answer-btn" onclick="playAudio(this)" style="background-color: white;color:black">
+      EST<span style="color:red"
+            >ADO</span
+          >
+        </button>
+      </div>
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityBE.html')"
+          style="background-color: WHITE"
+        >
+          BE
+        </button>
+
+  <button class="answer-btn" onclick="playAudio(this)">          EST<span style="color: lightblue">O</span>Y
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          EST<span style="color: PINK">ÁS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          EST<span style="color: PINK">Á</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          EST<span style="color: PINK">AMOS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          EST<span style="color: PINK">ÁIS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)">          EST<span style="color: PINK">ÁN</span>
+        </button>
+      </div>
+    <div style="margin-top: 1px"></div>
+
+   
+      <div class="column">
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWILLBE.html')"
+          style="background-color: lime"
+        >
+          WILL BE
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         <span style="color: white">ESTAR</span
+          ><span style="color: lime">É</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+          <span style="color: white">ESTAR</span
+          ><span style="color: PINK">ÁS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         <span style="color: white">ESTAR</span
+          ><span style="color: PINK">Á</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        <span style="color: white">ESTAR</span
+          ><span style="color: lime">E</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+        <span style="color: white">ESTAR</span
+          ><span style="color: lime">É</span><span style="color: PINK">IS</span>
+        </button>
+ <button class="answer-btn" onclick="playAudio(this)" style="background-color: #0d260d;">
+         <span style="color: white">ESTAR</span
+          ><span style="color: PINK">ÁN</span>
+        </button>
+    <div style="margin-top: 1px"></div>
+
+    
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityWOULDBE.html')"
+          style="background-color: YELLOW"
+        >
+          WOULD BE
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        <span style="color: white">ESTAR</span
+          ><span style="color: yellow">ÍA</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+        <span style="color: white">ESTAR</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">S</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+         <span style="color: white">ESTAR</span
+          ><span style="color: yellow">ÍA</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+         <span style="color: white">ESTAR</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+         <span style="color: white">ESTAR</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">IS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #29180d;">
+          <span style="color: white">ESTAR</span
+          ><span style="color: yellow">ÍA</span
+          ><span style="color: PINK">N</span>
+        </button>
+   
+    <div style="margin-top: 1px">
+
+
+        <button
+          class="title-button"
+          onclick="loadInnerActivity('activityIFWERE.html')"
+          style="background-color: lightblue"
+        >
+          IF... WAS</button
+        >
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> <span style="color: #ee6f57">ESTUV</span><span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> <span style="color: #ee6f57">ESTUV</span><span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">S</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> <span style="color: #ee6f57">ESTUV</span><span
+            style="color: lightblue"
+            >IERA</span
+          >
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> <span style="color: #ee6f57">ESTUV</span><span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">MOS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+        <span style="color: #ccff15">si</span> <span style="color: #ee6f57">ESTUV</span><span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">IS</span>
+        </button>
+  <button class="answer-btn" onclick="playAudio(this)" style="background-color: #1f1f4a;">
+       <span style="color: #ccff15">si</span> <span style="color: #ee6f57">ESTUV</span><span
+            style="color: lightblue"
+            >IERA</span
+          ><span style="color: PINK">N</span>
+        </button>
+      </div>
+
+<script>
+ var speechSynthesis = window.speechSynthesis;
+
+ function playAudio(button) {
+    const textContent = button.innerText; // Get the text content of the button
+    const utterance = new SpeechSynthesisUtterance(textContent);
+    utterance.lang = 'es-ES'; // Set the language to Spanish
+    speechSynthesis.speak(utterance); // Speak the text
+  }
+
+   
+      function loadActivityER() {
+        // Load activity3.html when the "ER" button is clicked
+        window.location.href = "activityER.html";
+      }
+      function loadActivityESTAR() {
+        // Load activity3.html when the "ER" button is clicked
+        window.location.href = "activityESTAR.html";
+      }
+      
+     function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+    </script>
+  </body>
+</html>

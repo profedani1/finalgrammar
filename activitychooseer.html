@@ -1,0 +1,1981 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Game</title>
+    <style>
+      @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+
+body {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+.question-container {
+    width: 96%;
+    display: flex;
+    justify-content: left; 
+      margin-top: 3vh;
+
+    margin-bottom: 0vh;
+    padding: 0.5vh 1vh;
+    background-color: black;
+    color: lightblue;
+    font-weight: bold;
+  font-size: clamp(6px, 4vw, 4rem);
+    border: 0.5vh solid lightblue;
+}
+
+.button-container {
+    display: flex; /* Show columns in a row */
+      width: 99.8%; /* Adjust width as needed, e.g., 20% of viewport width */
+margin-top:1vh;
+margin-left:0.1vh;
+    height: 60vh;
+    background-color: black;
+    align-items: center; 
+    box-sizing: border-box;
+}
+
+.column {
+    display: flex; /* Use flexbox to align buttons */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%; /* Adjust width as needed, e.g., 20% of viewport width */
+    min-width: 15vw; /* Ensure columns don’t get too narrow */
+    margin: 0.1vh 0.1vh; /* Margin between columns */
+    height: 100%; /* Ensure column takes full height */
+
+    box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+.column:active{
+    opacity: 1; /* Highlight active column */
+    transform: scale(1); 
+        border: 0.2vh solid yellow;
+
+}
+
+.translation-button {
+  font-size: clamp(3px, 3vw, 3rem);
+    color: #FFFFFF;
+  padding:0;
+    font-weight: bold;
+    background-color: black;
+    cursor: pointer;
+    width: 100%; /* Make buttons fill the column width */
+    border: 0.1vh solid white;
+    text-transform: uppercase;
+    flex: 1; /* Make buttons flexible */
+  
+}
+
+.translation-button:hover {
+    background-color: black;
+    color: yellow;
+border:0.5vh solid yellow;
+
+}
+.column:not(.active) {
+    pointer-events: none;
+    opacity: 0.5; /* Optional: visually indicate inactive columns */
+}
+.column:not(.active) {
+    pointer-events: none;
+    opacity: 0.5; /* Optional: visually indicate inactive columns */
+}
+
+.translation-button.correct {
+    background-color: black; /* Green background */
+    color: lime;
+    border: 0.5vh solid lime;
+}
+
+.translation-button.incorrect {
+    background-color: black; /* Red background */
+    color: red; /* White text */
+    border: 0.5vh solid red;
+}
+.translation-button:selected {
+    background-color: black;
+    color: cyan;
+    font-size: 2vh;
+      padding: 0;
+
+}
+   .title-button1 {
+background-color: black; /* Red background */
+color: white; /* White text */
+border: 0.5vh solid white;
+  width:12vh;
+  height:12vh;
+   border-radius: 50%;}
+.title-button1:hover {
+background-color: darkgrey; /* Red background */
+color: red; /* White text */
+border: 0.5vh solid red;
+  width:12vh;
+  height:12vh;
+   border-radius: 50%;} 
+      
+       button[onclick="navigateTomainRECOGNIZER()"] {
+   background-color:transparent;
+         color:pink;
+         font-weight:bold;
+     font-size: 2vh;
+ border:none;
+position:absolute;
+         bottom:5vh;
+         left:1%;
+         width:20%;
+         width:60%;
+         height:10%;
+}
+      .microphone-icon {
+    color: red;
+    font-size: 8vh;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 0.7vh solid #ff0000;
+    justify-content: space-between;
+    padding: 5% 25%;
+    transition: all 1s ease;
+       
+}
+
+.microphone-icon:hover {
+    background-color: transparent;
+    text-shadow: 0 0 0.5vh #F03200, 0 0 0.5vh #F00032, 0 0 0.7vh darkred;
+    box-shadow: 0 0 1vh #F03200, 0 0 3vh #F00032, 0 0 5vh red;
+}
+
+#voiceSelect{position:absolute;
+        top:95%;
+        right:40%;
+        font-size:2.5vh;
+        width:50%;  width:30%;
+
+}   
+
+@keyframes focusOutline {
+  0% {
+    outline-offset: 0;
+    outline-color: transparent;
+  }
+  25% {
+    outline-offset: 1vh;
+    outline-color: #4CAF50;
+  }
+  50% {
+    outline-offset: 2vh;
+    outline-color: #4CAF50;
+  }
+  75% {
+    outline-offset: 1vh;
+    outline-color: #4CAF50;
+  }
+  100% {
+    outline-offset: 0vh;
+    outline-color: #4CAF50;
+  }
+}
+ #end-game-content {
+   width:80%;
+   height:100%;
+margin-top:4vh;
+   transition: all 1s ease;
+
+      }
+     #try-again-button{
+   width:100%;
+   height:10vh;
+   background-color:#00080F;
+   color:cyan;
+   border:0.3vh solid cyan;     font-size: 3vh;
+   transition: all 1s ease;
+
+      }
+    #try-again-button:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+  color:lightblue;
+}
+  #score-display   {
+        justify-content: center;
+      margin-top:4vh;
+
+    display: flex;
+    justify-content: space-around;
+   align-items: center; 
+    box-sizing: border-box;
+  background-color: #0C0600;
+   width:100%;
+color: YELLOW;
+    border:0.3vh solid yellow;
+   width:100%;
+    padding:0% 0%;
+    height:10vh;
+    font-size: 3vh;
+  font-weight: bold;
+  border-radius: 1vh;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+} 
+
+
+
+.end-game-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+   transition: all 1s ease;
+
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Make sure it's on top of other content */
+}
+
+
+   
+  .save-score {
+  background-color:#0b150b;
+transition: all 2s ease;
+color: lime;
+ width:100%;
+    height:10vh;
+    font-size: 3vh;
+            border: 0.5vh solid lime;
+margin-top:4vh;
+
+  font-weight: bold;
+  border-radius: 1vh;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.save-score:hover {
+  background-color: #0b150b;
+   text-shadow: 0 0 0.5vh lime, 0 0 0.5vh green, 0 0 0.7vh darkgreen;
+    box-shadow: 0 0 1vh lightgreen, 0 0 3vh green, 0 0 5vh darkgreen;
+  box-sizing: border-box;
+  color:white;
+}
+
+.save-score:active {
+  background-color: yellow;
+  color:black;
+  transform: scale(0.98);
+}
+
+
+
+
+.save-score:focus {
+  outline: 0.5vh solid #4CAF50;
+
+  outline-offset: 2vh;
+  animation: focusOutline 2s ease-in-out forwards;
+}
+      #countdown-bar {
+    width: 100%;
+    height: 2vh; /* Fixed height */
+top:1%; 
+        position:absolute;
+}
+
+@keyframes countdownAnimation {
+    from {
+        width: 100%;
+        background-color: green;
+    }
+    50% {
+        background-color: yellow;
+    }
+    to {
+        width: 0%;
+        background-color: red;
+    }
+}
+
+
+
+.animate {
+    animation: countdownAnimation 60s linear forwards;
+}
+       #voiceSelect{position:absolute;
+   background-color:0C000CMardi  ;
+   color:magenta;
+        top:93%;
+        right:25%;
+        font-size:2.5vh;
+        width:50%;
+   border:0.3vh solid magenta;
+}  
+  </style>
+  </head>
+  <body>
+    <div id="question-container" class="question-container"></div>    <div id="countdown-container">
+        <progress id="countdown-bar" value="600" max="600"></progress>
+        <span id="countdown-time">60</span> 
+    <div class="button-container" id="button-container"></div>
+    
+ <button class="title-button" onclick="loadInnerActivity('onebyoneer.html')"
+style=" position: fixed;
+          left: 3vh;
+          bottom:8vh;
+          color: cyan;
+          border: 0.5vh solid cyan;
+          font-size: 2vh; /* Using vh for font size */
+          width: 10vh;
+          font-weight: bold;
+          text-align: center;
+          padding: 0vh 0vh;
+          height: 10vh; /* Adjusted height using vh */
+          background: #000039;
+          border-radius: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+           text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+  animation: vibrate 0.1s infinite linear;
+        
+}">QUICK MODE
+</button>
+       <select id="voiceSelect">
+    <option value="">Select a Spanish voice</option>
+</select>
+    
+
+seconds
+    </div>
+
+   <div id="end-game-screen" class="end-game-overlay" style="display:none;">
+    <div class="end-game-content">
+<button id="try-again-button" >TRY AGAIN</button>
+ 
+      <div id="score-display" style=""></div>
+<button class="save-score" id="save-score-button" onclick="saveScore('score-aller')" >SAVE SCORE</button>
+    </div>
+</div>
+    <script>
+const data1 = [
+    {
+        phrases: [
+"I USED TO EAT",
+"I USED TO DRINK",
+"I USED TO WRITE",
+"I USED TO READ",
+"I USED TO LIVE",
+"I USED TO RUN",
+"YOU USED TO EAT",
+"YOU USED TO DRINK",
+"YOU USED TO WRITE",
+"YOU USED TO READ",
+"YOU USED TO LIVE",
+"YOU USED TO RUN",
+"HE USED TO EAT",
+"HE USED TO DRINK",
+"HE USED TO WRITE",
+"HE USED TO READ",
+"HE USED TO LIVE",
+"HE USED TO RUN",
+"SHE USED TO EAT",
+"SHE USED TO DRINK",
+"SHE USED TO WRITE",
+"SHE USED TO READ",
+"SHE USED TO LIVE",
+"SHE USED TO RUN",
+"WE USED TO EAT",
+"WE USED TO DRINK",
+"WE USED TO WRITE",
+"WE USED TO READ",
+"WE USED TO LIVE",
+"WE USED TO RUN",
+"YOU ALL USED TO EAT",
+"YOU ALL USED TO DRINK",
+"YOU ALL USED TO WRITE",
+"YOU ALL USED TO READ",
+"YOU ALL USED TO LIVE",
+"YOU ALL USED TO RUN",
+"THEY USED TO EAT",
+"THEY USED TO DRINK",
+"THEY USED TO WRITE",
+"THEY USED TO READ",
+"THEY USED TO LIVE",
+"THEY USED TO RUN"
+        ],
+        translations: ["YO COMÍA",
+"YO BEBÍA",
+"YO ESCRIBÍA",
+"YO LEÍA",
+"YO VIVÍA",
+"YO CORRÍA",
+"TÚ COMÍAS",
+"TÚ BEBÍAS",
+"TÚ ESCRIBÍAS",
+"TÚ LEÍAS",
+"TÚ VIVÍAS",
+"TÚ CORRÍAS",
+"ÉL COMÍA",
+"ÉL BEBÍA",
+"ÉL ESCRIBÍA",
+"ÉL LEÍA",
+"ÉL VIVÍA",
+"ÉL CORRÍA",
+"ELLA COMÍA",
+"ELLA BEBÍA",
+"ELLA ESCRIBÍA",
+"ELLA LEÍA",
+"ELLA VIVÍA",
+"ELLA CORRÍA",
+"NOSOTROS COMÍAMOS",
+"NOSOTROS BEBÍAMOS",
+"NOSOTROS ESCRIBÍAMOS",
+"NOSOTROS LEÍAMOS",
+"NOSOTROS VIVÍAMOS",
+"NOSOTROS CORRÍAMOS",
+"VOSOTROS COMÍAIS",
+"VOSOTROS BEBÍAIS",
+"VOSOTROS ESCRIBÍAIS",
+"VOSOTROS LEÍAIS",
+"VOSOTROS VIVÍAIS",
+"VOSOTROS CORRÍAIS",
+"ELLOS COMÍAN",
+"ELLOS BEBÍAN",
+"ELLOS ESCRIBÍAN",
+"ELLOS LEÍAN",
+"ELLOS VIVÍAN",
+"ELLOS CORRÍAN"
+        ]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data2 = [
+    {
+        phrases: ["I HAVE EATEN",
+"YOU HAVE EATEN",
+"HE HAS EATEN",
+"WE HAVE EATEN",
+"YOU GUYS HAVE EATEN",
+"THEY HAVE EATEN",
+"I HAVE DRUNK",
+"YOU HAVE DRUNK",
+"HE HAS DRUNK",
+"WE HAVE DRUNK",
+"YOU GUYS HAVE DRUNK",
+"THEY HAVE DRUNK",
+"I HAVE WRITTEN",
+"YOU HAVE WRITTEN",
+"HE HAS WRITTEN",
+"WE HAVE WRITTEN",
+"YOU GUYS HAVE WRITTEN",
+"THEY HAVE WRITTEN",
+"I HAVE READ",
+"YOU HAVE READ",
+"HE HAS READ",
+"WE HAVE READ",
+"YOU GUYS HAVE READ",
+"THEY HAVE READ",
+"I HAVE LIVED",
+"YOU HAVE LIVED",
+"HE HAS LIVED",
+"WE HAVE LIVED",
+"YOU GUYS HAVE LIVED",
+"THEY HAVE LIVED",
+"I HAVE RUN",
+"YOU HAVE RUN",
+"HE HAS RUN",
+"WE HAVE RUN",
+"YOU GUYS HAVE RUN",
+"THEY HAVE RUN"
+        ],
+        translations: ["YO HE COMIDO",
+"TÚ HAS COMIDO",
+"ÉL HA COMIDO",
+"NOSOTROS HEMOS COMIDO",
+"VOSOTROS HABÉIS COMIDO",
+"ELLOS HAN COMIDO",
+"YO HE BEBIDO",
+"TÚ HAS BEBIDO",
+"ÉL HA BEBIDO",
+"NOSOTROS HEMOS BEBIDO",
+"VOSOTROS HABÉIS BEBIDO",
+"ELLOS HAN BEBIDO",
+"YO HE ESCRITO",
+"TÚ HAS ESCRITO",
+"ÉL HA ESCRITO",
+"NOSOTROS HEMOS ESCRITO",
+"VOSOTROS HABÉIS ESCRITO",
+"ELLOS HAN ESCRITO",
+"YO HE LEÍDO",
+"TÚ HAS LEÍDO",
+"ÉL HA LEÍDO",
+"NOSOTROS HEMOS LEÍDO",
+"VOSOTROS HABÉIS LEÍDO",
+"ELLOS HAN LEÍDO",
+"YO HE VIVIDO",
+"TÚ HAS VIVIDO",
+"ÉL HA VIVIDO",
+"NOSOTROS HEMOS VIVIDO",
+"VOSOTROS HABÉIS VIVIDO",
+"ELLOS HAN VIVIDO",
+"YO HE CORRIDO",
+"TÚ HAS CORRIDO",
+"ÉL HA CORRIDO",
+"NOSOTROS HEMOS CORRIDO",
+"VOSOTROS HABÉIS CORRIDO",
+"ELLOS HAN CORRIDO"
+        ]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+
+const data3 = [    {
+        phrases: ["I EAT",
+"I DRINK",
+"I WRITE",
+"I READ",
+"I LIVE",
+"I RUN",
+"YOU EAT",
+"YOU DRINK",
+"YOU WRITE",
+"YOU READ",
+"YOU LIVE",
+"YOU RUN",
+"HE EATS",
+"HE DRINKS",
+"HE WRITES",
+"HE READS",
+"HE LIVES",
+"HE RUNS",
+"SHE EATS",
+"SHE DRINKS",
+"SHE WRITES",
+"SHE READS",
+"SHE LIVES",
+"SHE RUNS",
+"WE EAT",
+"WE DRINK",
+"WE WRITE",
+"WE READ",
+"WE LIVE",
+"WE RUN",
+"YOU ALL EAT",
+"YOU ALL DRINK",
+"YOU ALL WRITE",
+"YOU ALL READ",
+"YOU ALL LIVE",
+"YOU ALL RUN",
+"THEY EAT",
+"THEY DRINK",
+"THEY WRITE",
+"THEY READ",
+"THEY LIVE",
+"THEY RUN"
+        ],
+        translations: ["YO COMO",
+"YO BEBO",
+"YO ESCRIBO",
+"YO LEO",
+"YO VIVO",
+"YO CORRO",
+"TÚ COMES",
+"TÚ BEBES",
+"TÚ ESCRIBES",
+"TÚ LEES",
+"TÚ VIVES",
+"TÚ CORRES",
+"ÉL COME",
+"ÉL BEBE",
+"ÉL ESCRIBE",
+"ÉL LEE",
+"ÉL VIVE",
+"ÉL CORRE",
+"ELLA COME",
+"ELLA BEBE",
+"ELLA ESCRIBE",
+"ELLA LEE",
+"ELLA VIVE",
+"ELLA CORRE",
+"NOSOTROS COMEMOS",
+"NOSOTROS BEBEMOS",
+"NOSOTROS ESCRIBIMOS",
+"NOSOTROS LEEMOS",
+"NOSOTROS VIVIMOS",
+"NOSOTROS CORREMOS",
+"VOSOTROS COMÉIS",
+"VOSOTROS BEBÉIS",
+"VOSOTROS ESCRIBÍS",
+"VOSOTROS LEÉIS",
+"VOSOTROS VIVÍS",
+"VOSOTROS CORRÉIS",
+"ELLOS COMEN",
+"ELLOS BEBEN",
+"ELLOS ESCRIBEN",
+"ELLOS LEEN",
+"ELLOS VIVEN",
+"ELLOS CORREN"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data4 = [
+    {
+        phrases: ["I WILL EAT",
+"I WILL DRINK",
+"I WILL WRITE",
+"I WILL READ",
+"I WILL LIVE",
+"I WILL RUN",
+"YOU WILL EAT",
+"YOU WILL DRINK",
+"YOU WILL WRITE",
+"YOU WILL READ",
+"YOU WILL LIVE",
+"YOU WILL RUN",
+"HE WILL EAT",
+"HE WILL DRINK",
+"HE WILL WRITE",
+"HE WILL READ",
+"HE WILL LIVE",
+"HE WILL RUN",
+"SHE WILL EAT",
+"SHE WILL DRINK",
+"SHE WILL WRITE",
+"SHE WILL READ",
+"SHE WILL LIVE",
+"SHE WILL RUN",
+"WE WILL EAT",
+"WE WILL DRINK",
+"WE WILL WRITE",
+"WE WILL READ",
+"WE WILL LIVE",
+"WE WILL RUN",
+"YOU ALL WILL EAT",
+"YOU ALL WILL DRINK",
+"YOU ALL WILL WRITE",
+"YOU ALL WILL READ",
+"YOU ALL WILL LIVE",
+"YOU ALL WILL RUN",
+"THEY WILL EAT",
+"THEY WILL DRINK",
+"THEY WILL WRITE",
+"THEY WILL READ",
+"THEY WILL LIVE",
+"THEY WILL RUN"
+        ],
+        translations: ["YO COMERÉ",
+"YO BEBERÉ",
+"YO ESCRIBIRÉ",
+"YO LEERÉ",
+"YO VIVIRÉ",
+"YO CORRERÉ",
+"TÚ COMERÁS",
+"TÚ BEBERÁS",
+"TÚ ESCRIBIRÁS",
+"TÚ LEERÁS",
+"TÚ VIVIRÁS",
+"TÚ CORRERÁS",
+"ÉL COMERÁ",
+"ÉL BEBERÁ",
+"ÉL ESCRIBIRÁ",
+"ÉL LEERÁ",
+"ÉL VIVIRÁ",
+"ÉL CORRERÁ",
+"ELLA COMERÁ",
+"ELLA BEBERÁ",
+"ELLA ESCRIBIRÁ",
+"ELLA LEERÁ",
+"ELLA VIVIRÁ",
+"ELLA CORRERÁ",
+"NOSOTROS COMEREMOS",
+"NOSOTROS BEBEREMOS",
+"NOSOTROS ESCRIBIREMOS",
+"NOSOTROS LEEREMOS",
+"NOSOTROS VIVIREMOS",
+"NOSOTROS CORREREMOS",
+"VOSOTROS COMERÉIS",
+"VOSOTROS BEBERÉIS",
+"VOSOTROS ESCRIBIRÉIS",
+"VOSOTROS LEERÉIS",
+"VOSOTROS VIVIRÉIS",
+"VOSOTROS CORRERÉIS",
+"ELLOS COMERÁN",
+"ELLOS BEBERÁN",
+"ELLOS ESCRIBIRÁN",
+"ELLOS LEERÁN",
+"ELLOS VIVIRÁN",
+"ELLOS CORRERÁN"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data5 = [
+    {
+        phrases: ["I WOULD EAT",
+"YOU WOULD EAT",
+"HE WOULD EAT",
+"SHE WOULD EAT",
+"WE WOULD EAT",
+"YOU ALL WOULD EAT",
+"THEY WOULD EAT",
+"I WOULD DRINK",
+"YOU WOULD DRINK",
+"HE WOULD DRINK",
+"SHE WOULD DRINK",
+"WE WOULD DRINK",
+"YOU ALL WOULD DRINK",
+"THEY WOULD DRINK",
+"I WOULD WRITE",
+"YOU WOULD WRITE",
+"HE WOULD WRITE",
+"SHE WOULD WRITE",
+"WE WOULD WRITE",
+"YOU ALL WOULD WRITE",
+"THEY WOULD WRITE",
+"I WOULD READ",
+"YOU WOULD READ",
+"HE WOULD READ",
+"SHE WOULD READ",
+"WE WOULD READ",
+"YOU ALL WOULD READ",
+"THEY WOULD READ",
+"I WOULD LIVE",
+"YOU WOULD LIVE",
+"HE WOULD LIVE",
+"SHE WOULD LIVE",
+"WE WOULD LIVE",
+"YOU ALL WOULD LIVE",
+"THEY WOULD LIVE",
+"I WOULD RUN",
+"YOU WOULD RUN",
+"HE WOULD RUN",
+"SHE WOULD RUN",
+"WE WOULD RUN",
+"YOU ALL WOULD RUN",
+"THEY WOULD RUN"
+        ],
+        translations: ["YO COMERÍA",
+"TÚ COMERÍAS",
+"ÉL COMERÍA",
+"ELLA COMERÍA",
+"NOSOTROS COMERÍAMOS",
+"VOSOTROS COMERÍAIS",
+"ELLOS COMERÍAN",
+"YO BEBERÍA",
+"TÚ BEBERÍAS",
+"ÉL BEBERÍA",
+"ELLA BEBERÍA",
+"NOSOTROS BEBERÍAMOS",
+"VOSOTROS BEBERÍAIS",
+"ELLOS BEBERÍAN",
+"YO ESCRIBIRÍA",
+"TÚ ESCRIBIRÍAS",
+"ÉL ESCRIBIRÍA",
+"ELLA ESCRIBIRÍA",
+"NOSOTROS ESCRIBIRÍAMOS",
+"VOSOTROS ESCRIBIRÍAIS",
+"ELLOS ESCRIBIRÍAN",
+"YO LEERÍA",
+"TÚ LEERÍAS",
+"ÉL LEERÍA",
+"ELLA LEERÍA",
+"NOSOTROS LEERÍAMOS",
+"VOSOTROS LEERÍAIS",
+"ELLOS LEERÍAN",
+"YO VIVIRÍA",
+"TÚ VIVIRÍAS",
+"ÉL VIVIRÍA",
+"ELLA VIVIRÍA",
+"NOSOTROS VIVIRÍAMOS",
+"VOSOTROS VIVIRÍAIS",
+"ELLOS VIVIRÍAN",
+"YO CORRERÍA",
+"TÚ CORRERÍAS",
+"ÉL CORRERÍA",
+"ELLA CORRERÍA",
+"NOSOTROS CORRERÍAMOS",
+"VOSOTROS CORRERÍAIS",
+"ELLOS CORRERÍAN"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data7 = [
+    {
+        phrases: ["IF I ATE",
+"IF YOU ATE",
+"IF HE ATE",
+"IF SHE ATE",
+"IF WE ATE",
+"IF YOU ALL ATE",
+"IF THEY ATE",
+"IF I DRANK",
+"IF YOU DRANK",
+"IF HE DRANK",
+"IF SHE DRANK",
+"IF WE DRANK",
+"IF YOU ALL DRANK",
+"IF THEY DRANK",
+"IF I WROTE",
+"IF YOU WROTE",
+"IF HE WROTE",
+"IF SHE WROTE",
+"IF WE WROTE",
+"IF YOU ALL WROTE",
+"IF THEY WROTE",
+"IF I READ",
+"IF YOU READ",
+"IF HE READ",
+"IF SHE READ",
+"IF WE READ",
+"IF YOU ALL READ",
+"IF THEY READ",
+"IF I LIVED",
+"IF YOU LIVED",
+"IF HE LIVED",
+"IF SHE LIVED",
+"IF WE LIVED",
+"IF YOU ALL LIVED",
+"IF THEY LIVED",
+"IF I RAN",
+"IF YOU RAN",
+"IF HE RAN",
+"IF SHE RAN",
+"IF WE RAN",
+"IF YOU ALL RAN",
+"IF THEY RAN"
+        ],
+        translations: ["SI YO COMIERA",
+"SI TÚ COMIERAS",
+"SI ÉL COMIERA",
+"SI ELLA COMIERA",
+"SI NOSOTROS COMIÉRAMOS",
+"SI VOSOTROS COMIERAIS",
+"SI ELLOS COMIERAN",
+"SI YO BEBIERA",
+"SI TÚ BEBIERAS",
+"SI ÉL BEBIERA",
+"SI ELLA BEBIERA",
+"SI NOSOTROS BEBIÉRAMOS",
+"SI VOSOTROS BEBIERAIS",
+"SI ELLOS BEBIERAN",
+"SI YO ESCRIBIERA",
+"SI TÚ ESCRIBIERAS",
+"SI ÉL ESCRIBIERA",
+"SI ELLA ESCRIBIERA",
+"SI NOSOTROS ESCRIBIÉRAMOS",
+"SI VOSOTROS ESCRIBIERAIS",
+"SI ELLOS ESCRIBIERAN",
+"SI YO LEYERA",
+"SI TÚ LEYERAS",
+"SI ÉL LEYERA",
+"SI ELLA LEYERA",
+"SI NOSOTROS LEYÉRAMOS",
+"SI VOSOTROS LEYERAIS",
+"SI ELLOS LEYERAN",
+"SI YO VIVIERA",
+"SI TÚ VIVIERAS",
+"SI ÉL VIVIERA",
+"SI ELLA VIVIERA",
+"SI NOSOTROS VIVIÉRAMOS",
+"SI VOSOTROS VIVIERAIS",
+"SI ELLOS VIVIERAN",
+"SI YO CORRIERA",
+"SI TÚ CORRIERAS",
+"SI ÉL CORRIERA",
+"SI ELLA CORRIERA",
+"SI NOSOTROS CORRIÉRAMOS",
+"SI VOSOTROS CORRIERAIS",
+"SI ELLOS CORRIERAN"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data6 = [
+    {
+        phrases: ["IF I HAD LIVED",
+"IF YOU HAD LIVED",
+"IF HE HAD LIVED",
+"IF SHE HAD LIVED",
+"IF WE HAD LIVED",
+"IF YOU ALL HAD LIVED",
+"IF THEY HAD LIVED",
+"IF I HAD RUN",
+"IF YOU HAD RUN",
+"IF HE HAD RUN",
+"IF SHE HAD RUN",
+"IF WE HAD RUN",
+"IF YOU ALL HAD RUN",
+"IF THEY HAD RUN",
+"IF I HAD EATEN",
+"IF YOU HAD EATEN",
+"IF HE HAD EATEN",
+"IF SHE HAD EATEN",
+"IF WE HAD EATEN",
+"IF YOU ALL HAD EATEN",
+"IF THEY HAD EATEN",
+"IF I HAD DRUNK",
+"IF YOU HAD DRUNK",
+"IF HE HAD DRUNK",
+"IF SHE HAD DRUNK",
+"IF WE HAD DRUNK",
+"IF YOU ALL HAD DRUNK",
+"IF THEY HAD DRUNK",
+"IF I HAD WRITTEN",
+"IF YOU HAD WRITTEN",
+"IF HE HAD WRITTEN",
+"IF SHE HAD WRITTEN",
+"IF WE HAD WRITTEN",
+"IF YOU ALL HAD WRITTEN",
+"IF THEY HAD WRITTEN",
+"IF I HAD READ",
+"IF YOU HAD READ",
+"IF HE HAD READ",
+"IF SHE HAD READ",
+"IF WE HAD READ",
+"IF YOU ALL HAD READ",
+"IF THEY HAD READ"
+        ],
+        translations: ["SI YO HUBIERA VIVIDO",
+"SI TÚ HUBIERAS VIVIDO",
+"SI ÉL HUBIERA VIVIDO",
+"SI ELLA HUBIERA VIVIDO",
+"SI NOSOTROS HUBIÉRAMOS VIVIDO",
+"SI VOSOTROS HUBIERAIS VIVIDO",
+"SI ELLOS HUBIERAN VIVIDO",
+"SI YO HUBIERA CORRIDO",
+"SI TÚ HUBIERAS CORRIDO",
+"SI ÉL HUBIERA CORRIDO",
+"SI ELLA HUBIERA CORRIDO",
+"SI NOSOTROS HUBIÉRAMOS CORRIDO",
+"SI VOSOTROS HUBIERAIS CORRIDO",
+"SI ELLOS HUBIERAN CORRIDO",
+"SI YO HUBIERA COMIDO",
+"SI TÚ HUBIERAS COMIDO",
+"SI ÉL HUBIERA COMIDO",
+"SI ELLA HUBIERA COMIDO",
+"SI NOSOTROS HUBIÉRAMOS COMIDO",
+"SI VOSOTROS HUBIERAIS COMIDO",
+"SI ELLOS HUBIERAN COMIDO",
+"SI YO HUBIERA BEBIDO",
+"SI TÚ HUBIERAS BEBIDO",
+"SI ÉL HUBIERA BEBIDO",
+"SI ELLA HUBIERA BEBIDO",
+"SI NOSOTROS HUBIÉRAMOS BEBIDO",
+"SI VOSOTROS HUBIERAIS BEBIDO",
+"SI ELLOS HUBIERAN BEBIDO",
+"SI YO HUBIERA ESCRITO",
+"SI TÚ HUBIERAS ESCRITO",
+"SI ÉL HUBIERA ESCRITO",
+"SI ELLA HUBIERA ESCRITO",
+"SI NOSOTROS HUBIÉRAMOS ESCRITO",
+"SI VOSOTROS HUBIERAIS ESCRITO",
+"SI ELLOS HUBIERAN ESCRITO",
+"SI YO HUBIERA LEÍDO",
+"SI TÚ HUBIERAS LEÍDO",
+"SI ÉL HUBIERA LEÍDO",
+"SI ELLA HUBIERA LEÍDO",
+"SI NOSOTROS HUBIÉRAMOS LEÍDO",
+"SI VOSOTROS HUBIERAIS LEÍDO",
+"SI ELLOS HUBIERAN LEÍDO"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data8 = [
+    {
+        phrases: ["I WROTE",
+"YOU WROTE",
+"SHE WROTE",
+"WE WROTE",
+"YOU GUYS WROTE",
+"THEY WROTE",
+"I READ",
+"YOU READ",
+"HE READ",
+"WE READ",
+"YOU GUYS READ",
+"THEY READ",
+"I LIVED",
+"YOU LIVED",
+"SHE LIVED",
+"WE LIVED",
+"YOU GUYS LIVED",
+"THEY LIVED",
+"I SOLD",
+"YOU SOLD",
+"HE SOLD",
+"WE SOLD",
+"YOU GUYS SOLD",
+"THEY SOLD",
+"I RAN",
+"YOU RAN",
+"SHE RAN",
+"WE RAN",
+"YOU GUYS RAN",
+"THEY RAN",
+"I ATE",
+"YOU ATE",
+"HE ATE",
+"WE ATE",
+"YOU GUYS ATE",
+"THEY ATE",
+"I DRANK",
+"YOU DRANK",
+"HE DRANK",
+"WE DRANK",
+"YOU GUYS DRANK",
+"THEY DRANK"
+        ],
+        translations: ["ESCRIBÍ",
+"ESCRIBISTE",
+"ESCRIBIÓ",
+"ESCRIBIMOS",
+"ESCRIBISTEIS",
+"ESCRIBIERON",
+"LEÍ",
+"LEÍSTE",
+"LEYÓ",
+"LEÍMOS",
+"LEÍSTEIS",
+"LEYERON",
+"VIVÍ",
+"VIVISTE",
+"VIVIÓ",
+"VIVIMOS",
+"VIVISTEIS",
+"VIVIERON",
+"VENDÍ",
+"VENDISTE",
+"VENDIÓ",
+"VENDIMOS",
+"VENDISTEIS",
+"VENDIERON",
+"CORRÍ",
+"CORRISTE",
+"CORRIÓ",
+"CORRIMOS",
+"CORRISTEIS",
+"CORRIERON",
+"COMÍ",
+"COMISTE",
+"COMIÓ",
+"COMIMOS",
+"COMISTEIS",
+"COMIERON",
+"BEBÍ",
+"BEBISTE",
+"BEBIÓ",
+"BEBIMOS",
+"BEBISTEIS",
+"BEBIERON"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data9 = [
+    {
+        phrases: ["I WOULD HAVE EATEN",
+"YOU WOULD HAVE EATEN",
+"HE WOULD HAVE EATEN",
+"SHE WOULD HAVE EATEN",
+"WE WOULD HAVE EATEN",
+"YOU ALL WOULD HAVE EATEN",
+"THEY WOULD HAVE EATEN",
+"I WOULD HAVE DRUNK",
+"YOU WOULD HAVE DRUNK",
+"HE WOULD HAVE DRUNK",
+"SHE WOULD HAVE DRUNK",
+"WE WOULD HAVE DRUNK",
+"YOU ALL WOULD HAVE DRUNK",
+"THEY WOULD HAVE DRUNK",
+"I WOULD HAVE WRITTEN",
+"YOU WOULD HAVE WRITTEN",
+"HE WOULD HAVE WRITTEN",
+"SHE WOULD HAVE WRITTEN",
+"WE WOULD HAVE WRITTEN",
+"YOU ALL WOULD HAVE WRITTEN",
+"THEY WOULD HAVE WRITTEN",
+"I WOULD HAVE READ",
+"YOU WOULD HAVE READ",
+"HE WOULD HAVE READ",
+"SHE WOULD HAVE READ",
+"WE WOULD HAVE READ",
+"YOU ALL WOULD HAVE READ",
+"THEY WOULD HAVE READ",
+"I WOULD HAVE LIVED",
+"YOU WOULD HAVE LIVED",
+"HE WOULD HAVE LIVED",
+"SHE WOULD HAVE LIVED",
+"WE WOULD HAVE LIVED",
+"YOU ALL WOULD HAVE LIVED",
+"THEY WOULD HAVE LIVED",
+"I WOULD HAVE RUN",
+"YOU WOULD HAVE RUN",
+"HE WOULD HAVE RUN",
+"SHE WOULD HAVE RUN",
+"WE WOULD HAVE RUN",
+"YOU ALL WOULD HAVE RUN",
+"THEY WOULD HAVE RUN"
+        ],
+        translations: ["YO HABRÍA COMIDO",
+"TÚ HABRÍAS COMIDO",
+"ÉL HABRÍA COMIDO",
+"ELLA HABRÍA COMIDO",
+"NOSOTROS HABRÍAMOS COMIDO",
+"VOSOTROS HABRÍAIS COMIDO",
+"ELLOS HABRÍAN COMIDO",
+"YO HABRÍA BEBIDO",
+"TÚ HABRÍAS BEBIDO",
+"ÉL HABRÍA BEBIDO",
+"ELLA HABRÍA BEBIDO",
+"NOSOTROS HABRÍAMOS BEBIDO",
+"VOSOTROS HABRÍAIS BEBIDO",
+"ELLOS HABRÍAN BEBIDO",
+"YO HABRÍA ESCRITO",
+"TÚ HABRÍAS ESCRITO",
+"ÉL HABRÍA ESCRITO",
+"ELLA HABRÍA ESCRITO",
+"NOSOTROS HABRÍAMOS ESCRITO",
+"VOSOTROS HABRÍAIS ESCRITO",
+"ELLOS HABRÍAN ESCRITO",
+"YO HABRÍA LEÍDO",
+"TÚ HABRÍAS LEÍDO",
+"ÉL HABRÍA LEÍDO",
+"ELLA HABRÍA LEÍDO",
+"NOSOTROS HABRÍAMOS LEÍDO",
+"VOSOTROS HABRÍAIS LEÍDO",
+"ELLOS HABRÍAN LEÍDO",
+"YO HABRÍA VIVIDO",
+"TÚ HABRÍAS VIVIDO",
+"ÉL HABRÍA VIVIDO",
+"ELLA HABRÍA VIVIDO",
+"NOSOTROS HABRÍAMOS VIVIDO",
+"VOSOTROS HABRÍAIS VIVIDO",
+"ELLOS HABRÍAN VIVIDO",
+"YO HABRÍA CORRIDO",
+"TÚ HABRÍAS CORRIDO",
+"ÉL HABRÍA CORRIDO",
+"ELLA HABRÍA CORRIDO",
+"NOSOTROS HABRÍAMOS CORRIDO",
+"VOSOTROS HABRÍAIS CORRIDO",
+"ELLOS HABRÍAN CORRIDO"
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const data10 = [
+    {
+        phrases: ["I HAD EATEN",
+"YOU HAD EATEN",
+"HE HAD EATEN",
+"SHE HAD EATEN",
+"WE HAD EATEN",
+"YOU ALL HAD EATEN",
+"THEY HAD EATEN",
+"I HAD DRUNK",
+"YOU HAD DRUNK",
+"HE HAD DRUNK",
+"SHE HAD DRUNK",
+"WE HAD DRUNK",
+"YOU ALL HAD DRUNK",
+"THEY HAD DRUNK",
+"I HAD WRITTEN",
+"YOU HAD WRITTEN",
+"HE HAD WRITTEN",
+"SHE HAD WRITTEN",
+"WE HAD WRITTEN",
+"YOU ALL HAD WRITTEN",
+"THEY HAD WRITTEN",
+"I HAD READ",
+"YOU HAD READ",
+"HE HAD READ",
+"SHE HAD READ",
+"WE HAD READ",
+"YOU ALL HAD READ",
+"THEY HAD READ",
+"I HAD LIVED",
+"YOU HAD LIVED",
+"HE HAD LIVED",
+"SHE HAD LIVED",
+"WE HAD LIVED",
+"YOU ALL HAD LIVED",
+"THEY HAD LIVED",
+"I HAD RUN",
+"YOU HAD RUN",
+"HE HAD RUN",
+"SHE HAD RUN",
+"WE HAD RUN",
+"YOU ALL HAD RUN",
+"THEY HAD RUN"
+        ],
+        translations: ["YO HABÍA COMIDO",
+"TÚ HABÍAS COMIDO",
+"ÉL HABÍA COMIDO",
+"ELLA HABÍA COMIDO",
+"NOSOTROS HABÍAMOS COMIDO",
+"VOSOTROS HABÍAIS COMIDO",
+"ELLOS HABÍAN COMIDO",
+"YO HABÍA BEBIDO",
+"TÚ HABÍAS BEBIDO",
+"ÉL HABÍA BEBIDO",
+"ELLA HABÍA BEBIDO",
+"NOSOTROS HABÍAMOS BEBIDO",
+"VOSOTROS HABÍAIS BEBIDO",
+"ELLOS HABÍAN BEBIDO",
+"YO HABÍA ESCRITO",
+"TÚ HABÍAS ESCRITO",
+"ÉL HABÍA ESCRITO",
+"ELLA HABÍA ESCRITO",
+"NOSOTROS HABÍAMOS ESCRITO",
+"VOSOTROS HABÍAIS ESCRITO",
+"ELLOS HABÍAN ESCRITO",
+"YO HABÍA LEÍDO",
+"TÚ HABÍAS LEÍDO",
+"ÉL HABÍA LEÍDO",
+"ELLA HABÍA LEÍDO",
+"NOSOTROS HABÍAMOS LEÍDO",
+"VOSOTROS HABÍAIS LEÍDO",
+"ELLOS HABÍAN LEÍDO",
+"YO HABÍA VIVIDO",
+"TÚ HABÍAS VIVIDO",
+"ÉL HABÍA VIVIDO",
+"ELLA HABÍA VIVIDO",
+"NOSOTROS HABÍAMOS VIVIDO",
+"VOSOTROS HABÍAIS VIVIDO",
+"ELLOS HABÍAN VIVIDO",
+"YO HABÍA CORRIDO",
+"TÚ HABÍAS CORRIDO",
+"ÉL HABÍA CORRIDO",
+"ELLA HABÍA CORRIDO",
+"NOSOTROS HABÍAMOS CORRIDO",
+"VOSOTROS HABÍAIS CORRIDO",
+"ELLOS HABÍAN CORRIDO"
+
+]
+    },
+    {
+        phrases: [
+            "IN THE HOUSE",
+            "IN THE OFFICE",
+            "IN THE AVENUE",
+            "IN THE MARKET",
+            "IN THE LIBRARY",
+            "IN THE PHARMACY",
+            "AT THE HOSPITAL",
+            "IN THE MUSEUM",
+            "IN THE RESTAURANT",
+            "IN THE BANK",
+            "IN THE PARK",
+            "IN THE STREET",
+            "IN THE SHOP",
+            "IN THE SCHOOL"
+        ],
+        translations: [
+            "en la casa",
+            "en la oficina",
+            "en la avenida",
+            "en el mercado",
+            "en la biblioteca",
+            "en la farmacia",
+            "en el hospital",
+            "en el museo",
+            "en el restaurante",
+            "en el banco",
+            "en el parque",
+            "en la calle",
+            "en la tienda",
+            "en la escuela"
+        ]
+    }
+];
+const exceptions = [
+"en la casa",
+"SI TÚ",
+"SI ÉL",
+"SI ELLA",
+"SI NOSOTROS",
+"SI VOSOTROS",
+"SI YO",
+"SI ELLOS",
+"en la oficina",
+"en la avenida",
+"en el mercado",
+"en la biblioteca",
+"en la farmacia",
+"en el hospital",
+"en el museo",
+"en el restaurante",
+"en el banco",
+"en el parque",
+"en la calle",
+"en la tienda",
+"en la escuela"];
+const dataSets = [data1, data2, data3, data4, data5, data7, data8, data10, data9, data6]; 
+let usedSets = [];
+function shuffleSetPhrasesAndTranslations(set) {
+    const length = set.phrases.length;
+
+    // Pair up phrases and translations, shuffle them, and then split them back
+    const paired = set.phrases.map((phrase, index) => ({
+        phrase,
+        translation: set.translations[index]
+    }));
+
+    shuffleArray(paired);
+
+    // Reassign shuffled phrases and translations
+    set.phrases = paired.map(pair => pair.phrase);
+    set.translations = paired.map(pair => pair.translation);
+}
+
+function generateCombinations(sections, index = 0, currentPhrase = "", currentTranslation = "", combinations = []) {
+    if (index === sections.length) {
+        combinations.push({
+            phrase: currentPhrase.trim(),
+            translation: currentTranslation.trim()
+        });
+        return;
+    }
+
+    sections[index].phrases.forEach((phrase, i) => {
+        generateCombinations(
+            sections,
+            index + 1,
+            currentPhrase + " " + phrase,
+            currentTranslation + " " + sections[index].translations[i],
+            combinations
+        );
+    });
+
+    return combinations;
+}
+
+function createColumnsByWordPosition(translations) {
+    const wordPositions = [];
+
+    translations.forEach(translation => {
+        let words = splitTranslation(translation);
+        words.forEach((word, index) => {
+            if (!wordPositions[index]) {
+                wordPositions[index] = new Set();
+            }
+            wordPositions[index].add(word);
+        });
+    });
+
+    return wordPositions.map(positionSet => Array.from(positionSet));
+}
+
+function splitTranslation(translation) {
+    let words = [];
+    let remainingText = translation;
+
+    while (remainingText) {
+        let matchedException = exceptions.find(exception => remainingText.startsWith(exception));
+        if (matchedException) {
+            words.push(matchedException);
+            remainingText = remainingText.slice(matchedException.length).trim();
+        } else {
+            let firstSpaceIndex = remainingText.indexOf(' ');
+            if (firstSpaceIndex === -1) {
+                words.push(remainingText);
+                remainingText = "";
+            } else {
+                words.push(remainingText.slice(0, firstSpaceIndex));
+                remainingText = remainingText.slice(firstSpaceIndex + 1).trim();
+            }
+        }
+    }
+
+    return words;
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function getRandomDataSet() {
+    if (usedSets.length === dataSets.length) {
+        usedSets = [];
+        shuffleArray(dataSets);
+    }
+
+    let randomIndex;
+    do {
+        randomIndex = Math.floor(Math.random() * dataSets.length);
+    } while (usedSets.includes(randomIndex));
+
+    usedSets.push(randomIndex);
+    return dataSets[randomIndex];
+}
+let currentColumnIndex = 0;
+let totalPlayed = 0;
+let correctAnswerCount = 0;
+let incorrectAnswerCount = 0;
+
+function loadQuestion(index) {
+    const selectedData = getRandomDataSet();
+    selectedData.forEach(shuffleSetPhrasesAndTranslations);
+
+    const combinations = generateCombinations(selectedData);
+    const { phrase, translation } = combinations[index];
+    const currentTranslationWords = splitTranslation(translation);
+
+    document.getElementById('question-container').innerText = `${phrase}`;
+    const buttonContainer = document.getElementById('button-container');
+    buttonContainer.innerHTML = '';
+
+    const columnsData = createColumnsByWordPosition(combinations.map(({ translation }) => translation));
+
+    answeredCorrectly = new Array(columnsData.length).fill(false);
+    currentColumnIndex = 0;
+
+    columnsData.forEach((words, colIndex) => {
+        const columnContainer = document.createElement('div');
+        columnContainer.classList.add('column');
+        columnContainer.classList.toggle('active', colIndex === currentColumnIndex);
+
+        shuffleArray(words);
+
+        let displayedWords = words.includes(currentTranslationWords[colIndex])
+            ? [currentTranslationWords[colIndex], ...words.filter(word => word !== currentTranslationWords[colIndex])]
+            : [currentTranslationWords[colIndex], ...words];
+
+        displayedWords = displayedWords.slice(0, 7);
+        shuffleArray(displayedWords);
+
+        displayedWords.forEach(word => {
+            const button = document.createElement('button');
+            button.innerText = word;
+            button.classList.add('translation-button');
+
+            button.onclick = function() {
+                if (answeredCorrectly[colIndex]) return;
+
+                totalPlayed++;
+
+                if (currentTranslationWords[colIndex] === word) {
+                    correctAnswerCount++;
+                    button.classList.add('correct');
+                    speakText(word);
+                    answeredCorrectly[colIndex] = true;
+
+                    if (answeredCorrectly.every(status => status)) {
+                        speakText(translation);
+                        setTimeout(() => {
+                            loadQuestion(getRandomQuestionIndex());
+                        }, 2500);
+                    } else {
+                        currentColumnIndex++;
+                        showColumns();
+                    }
+                } else {
+                    incorrectAnswerCount++;
+                    button.classList.add('incorrect');
+                    setTimeout(() => {
+                        button.classList.remove('incorrect');
+                    }, 1000);
+                }
+            };
+
+            columnContainer.appendChild(button);
+        });
+
+        buttonContainer.appendChild(columnContainer);
+    });
+
+    showColumns();
+    startCountdown(); // Starts the countdown timer
+}
+
+function showColumns() {
+    const columns = document.querySelectorAll('.column');
+    columns.forEach((col, index) => {
+        col.classList.toggle('active', index === currentColumnIndex);
+    });
+}
+
+function getRandomQuestionIndex() {
+    return Math.floor(Math.random() * 4);
+}
+
+
+let countdownTime = 60; // Countdown time in seconds
+let countdownInterval;
+let countdownRunning = false; // Track if the countdown is already running
+
+function startCountdown() {
+    if (countdownRunning) return; // Prevent restarting countdown
+    countdownRunning = true; // Set countdown as running
+
+    const countdownBar = document.getElementById('countdown-bar');
+    const countdownTimeDisplay = document.getElementById('countdown-time');
+    countdownTimeDisplay.innerText = countdownTime; // Display initial time
+
+    countdownBar.classList.remove('animate'); // Reset animation
+    void countdownBar.offsetWidth; // Force reflow to restart animation
+    countdownBar.classList.add('animate'); // Start animation
+
+    countdownInterval = setInterval(() => {
+        countdownTime--;
+        countdownTimeDisplay.innerText = countdownTime; // Update display
+
+        if (countdownTime <= 0) {
+            clearInterval(countdownInterval);
+            endGame(); // End the game when countdown reaches 0
+        }
+    }, 1000);
+}
+
+// Call startCountdown() only once at the beginning of the game
+document.addEventListener("DOMContentLoaded", function () {
+    startCountdown(); // Start countdown once when the game loads
+});
+
+
+
+let totalAnswers = 0; // Track the total number of answers (questions)
+let correctAnswers = 0; // Track the number of correct answers
+function updateScoreDisplay() {
+    totalAnswers = totalPlayed; // The total number of played questions
+    correctAnswers = correctAnswerCount; // The number of correct answers
+    let percentageScore = (correctAnswers / totalAnswers) * 100;
+
+    // Display the score in percentage format
+    document.getElementById('score-display').innerText = `SCORE: ${percentageScore.toFixed(2)}%`;
+}
+
+
+// Function to end the game and calculate score
+function endGame() {
+    // Calculate the final score and accuracy
+    let accuracy = totalPlayed > 0 ? (correctAnswerCount / totalPlayed) * 100 : 0;
+
+    // Show the final result in the end game screen
+    document.getElementById('end-game-screen').style.display = 'flex';
+    document.getElementById('score-display').innerText = `SCORE: ${Math.round(accuracy)}%`;
+    document.getElementById('correct-answers').innerText = `Correct Answers: ${correctAnswerCount}`;
+    document.getElementById("save-score-button").style.display = "block";
+
+
+
+}
+
+// Try again button logic
+document.getElementById('try-again-button').onclick = function() {
+    location.reload(); // Restart the game
+};
+function saveScore(activityKey) {
+    const scoreElement = document.getElementById("score-display");
+    const scoreText = scoreElement.innerText.trim();  // Get the score text
+
+    // Extract numeric percentage (e.g., "75%") → "75"
+    const score = scoreText.replace(" ", "").replace("%", "").trim();
+
+    // Save the score to localStorage
+    localStorage.setItem(activityKey, score);
+    
+
+}
+
+let selectedVoice = null;
+
+// Function to speak the text
+function speakText(text) {
+    if (!text || !selectedVoice) return; // Prevent empty speech
+
+    // Cancel any ongoing speech to avoid overlap
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = selectedVoice;
+    window.speechSynthesis.speak(utterance);
+}
+
+// Populate the voice dropdown list
+function populateVoiceList() {
+    const voiceSelect = document.getElementById("voiceSelect");
+    const voices = speechSynthesis.getVoices();
+
+    voiceSelect.innerHTML = '';  // Clear existing options
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = '';
+    defaultOption.innerText = 'Select a Spanish voice';
+    voiceSelect.appendChild(defaultOption);
+
+    const spanishVoices = voices.filter(voice => voice.lang.startsWith('es'));
+
+    if (spanishVoices.length === 0) {
+        const noVoicesOption = document.createElement("option");
+        noVoicesOption.value = '';
+        noVoicesOption.innerText = 'No Spanish voices available';
+        voiceSelect.appendChild(noVoicesOption);
+    }
+
+    spanishVoices.forEach(voice => {
+        const option = document.createElement("option");
+        option.value = voice.name;
+        // Remove the word "Microsoft" from the display name
+option.innerText = `${voice.name.replace(/Microsoft|Spanish|Google/gi, '').trim()} (${voice.lang})`;
+
+      
+        voiceSelect.appendChild(option);
+    });
+
+
+    // Set the default voice to es-ES
+    const esVoice = spanishVoices.find(voice => voice.lang === 'es-ES');
+    selectedVoice = esVoice || spanishVoices[0] || voices[0];
+    voiceSelect.value = selectedVoice.name;
+}
+
+// Check if voices are loaded and populate the dropdown
+function checkVoices() {
+    const voices = speechSynthesis.getVoices();
+    if (voices.length !== 0) {
+        populateVoiceList();
+    } else {
+        speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+}
+
+// Change the selected voice when a new one is chosen from the dropdown
+document.getElementById("voiceSelect").addEventListener("change", function() {
+    const voices = speechSynthesis.getVoices();
+    selectedVoice = voices.find(voice => voice.name === this.value);
+});
+
+// Initialize
+checkVoices();
+loadQuestion(getRandomQuestionIndex());
+
+    
+  function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+body {
+background: black;
+width: 97%;
+font-family: Arial, sans-serif;
+}
+#question {
+color: white;
+font-size: 2.2vh;
+font-weight: bold;
+text-align: center;
+height: 7vh;
+border: 0.1vh solid darkgrey;
+padding: 1vh;
+width: 97%;
+}
+#question:hover {
+cursor: default;
+}
+#interim-text {
+    display: none; /* Initially hide */
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    width: 97.9%;
+    height: 9vh;
+    margin: 2.5vh 0;
+    border: 0.1vh solid darkgrey;
+    border-radius: 0.5vh;
+    resize: none;
+}
+
+#interim-text.show {
+    display: block; /* Show when there's content */
+}
+
+#interim-text:hover {
+cursor: default;
+}
+#askButton {
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 0 auto;
+background-color: black;
+padding: 1vh 3vh;
+border: 1vh solid red;
+border-radius: 50%;
+cursor: pointer;
+margin-bottom:3vh;
+transition: box-shadow 0.3s ease, font-size 0.3s ease;
+}
+#askButton:hover {
+box-shadow: 0 0 5vh red;
+font-size: 10.5vh;
+}
+#askButton.recording {
+background-color: darkred;
+border-color: #640b0b;
+text-shadow: 0vh 0vh 1vh black;
+
+}
+#nextButton {
+display: inline-block;
+background-color: black;
+color: white;
+border: 0.1vh solid darkgrey;
+width: 100%;
+cursor: pointer;
+font-size: 3vh;
+transition: background-color 0.3s ease, border 0.3s ease;
+text-align: center;
+padding: 4vh;
+margin-bottom:2vh;
+}
+#prevButton:hover, #nextButton:hover {
+background-color: #191919;
+border-color: white;
+}
+#answer {
+color: #ff0000;
+font-weight: bold;
+text-align: center;
+margin: 2vh 0;
+}
+.microphone-icon {
+color: red;
+font-size: 10vh;
+}
+.microphone-icon:hover {
+color: red;
+font-size: 10.2vh;
+}
+#expected-phrase {
+background-color: #0a0a0a;
+color: white;
+font-size: 2.7vh;
+border: 0.1vh solid darkgrey;
+text-align: center;
+
+width: 100%;
+height: 4vh;}
+}
+#audio-container {
+margin: 2vh 0;
+text-align: center;
+}
+#checkButton{
+background-color: #0a0a0a;
+color: white;
+font-size: 2.7vh;
+border: 0.1vh solid darkgrey;
+margin-bottom:2vh;
+width: 100%;
+height: 10vh;}
+#listenButton{
+background-color: #0a0a0a;
+color: white;
+font-size: 2.7vh;
+width: 100%;
+height: 4vh;
+;}
+audio {
+width: 95%;
+background-color: #191919;
+padding: 1vh;
+}
+  .code-container {
+            width: 95.5%;
+             margin-top:1vh;
+        }
+        #toggleActivitiesBtn {
+  padding: 10px 20px;
+  background-color: green;
+  color: lime;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+#activitiesContainer {
+  display: none;
+}
+
+        .activity-btn {
+   margin-right: 0.1vh;
+  background-color:black;
+  color:lime;
+  font-weight:bold;
+  padding:0vw;
+}
+
+.activity-img {
+  width: 15vw;
+  height: 15vh;
+          border: 0.4vh solid lime;
+
+}
+   
+
+.button.choose {   width: 33.3%;
+}
+
+.button.catch {   width: 33.3%;
+}
+
+.button.listen {  width: 33.3%;
+}
+ .act-container {
+  display: flex; /* Use flexbox to align buttons horizontally */
+   width: 100%;
+height:10vh;
+}
+   </style>
+</head>
+<body>
+    <h1 id="question">Question will appear here</h1>
+
+    <button id="askButton"><i class="fas fa-microphone microphone-icon"></i></button>
+   <button id="checkButton">CHECK</button>
+    <p id="expected-phrase" style="display: none;width: 98.5%;
+padding: 1vh;
+height: 8vh;}
+">Expected phrase will appear here</p>
+
+    <button id="nextButton">Next</button>
+    <p id="answer">Answer will appear here</p>
+    
+    <p id="interim-text">Interim text will appear here</p>
+   
+
+
+   
+
+
+
+
+
+<script>
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognition = new SpeechRecognition();
+recognition.lang = 'es-ES'; // Set language to Spanish
+
+let currentPhrase = {};
+let phrases = [];
+
+// Retrieve the mistakes JSON from localStorage
+document.addEventListener('DOMContentLoaded', function () {
+    const mistakeDataJSON = localStorage.getItem('mistakeData');
+    let mistakeData = [];
+
+    if (mistakeDataJSON) {
+        try {
+            mistakeData = JSON.parse(mistakeDataJSON);
+            phrases = mistakeData; // Assign the parsed data to the phrases array
+        } catch (error) {
+            console.error('Error parsing JSON from localStorage', error);
+        }
+    } else {
+        console.error('No mistakeData found in localStorage.');
+    }
+
+    if (phrases.length > 0) {
+        createRandomPhrase(); // Initialize with a random phrase if data is available
+    } else {
+        console.error('No phrases available to display.');
+    }
+});
+
+// Function to parse the `questions` parameter from URL
+function getQuestionsFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    const questionsJSON = params.get('questions');
+    if (questionsJSON) {
+        return JSON.parse(decodeURIComponent(questionsJSON));
+    } else {
+        console.error('No questions parameter found in the URL.');
+        return [];
+    }
+}
+
+// Retrieve `questions` from the URL when the page loads
+phrases = getQuestionsFromURL();
+
+function getRandomElement(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function createRandomPhrase() {
+    if (phrases.length === 0) {
+        console.error('No phrases available to display.');
+        return;
+    }
+
+    // Clear the current content
+    document.getElementById('interim-text').textContent = "";
+    document.getElementById('askButton').innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
+    document.getElementById('answer').textContent = "";
+    document.getElementById('expected-phrase').textContent = "";
+
+    const randomPhrase = getRandomElement(phrases);
+
+    currentPhrase = randomPhrase;
+
+    document.getElementById('question').textContent = randomPhrase.question;
+    document.getElementById('expected-phrase').textContent = randomPhrase.translation;
+}
+
+function normalizeString(str) {
+    const accentsMap = {
+        'á': 'a',
+        'é': 'e',
+        'í': 'i',
+        'ó': 'o',
+        'ú': 'u',
+        'ñ': 'n'
+    };
+
+    return str.toLowerCase()
+        .split('') 
+        .map(char => accentsMap[char] || char)
+        .join('')
+        .replace(/[,\.\...]/g, '')
+        .trim();
+}
+
+function highlightText(transcript, translation) {
+    const transcriptWords = normalizeString(transcript).split(' ');
+    const translationWords = normalizeString(translation).split(' ');
+
+    const highlightedText = transcriptWords.map((word, index) => {
+        if (translationWords[index] && word === translationWords[index]) {
+            return `<span style="color: lime;">${word}</span>`;
+        } else {
+            return `<span style="color: red;">${word}</span>`;
+        }
+    }).join(' ');
+
+    const interimTextArea = document.getElementById('interim-text');
+    interimTextArea.innerHTML = highlightedText;
+
+    if (highlightedText.trim() !== '') {
+        interimTextArea.classList.add('show');
+    } else {
+        interimTextArea.classList.remove('show');
+    }
+
+    document.getElementById('expected-phrase').innerHTML = translation;
+}
+
+function askQuestion() {
+    // Clear interim text
+    document.getElementById('interim-text').textContent = "";
+
+    // Hide interim text area
+    document.getElementById('interim-text').classList.remove('show');
+
+    // Clear text area
+    document.getElementById('answer').textContent = "";
+
+    // Start speech recognition
+    recognition.start();
+}
+
+recognition.onresult = function (event) {
+    const transcript = event.results[0][0].transcript.toLowerCase();
+    const interimTranscript = event.results[0][0].transcript;
+    const answer = document.getElementById('answer');
+    const expectedTranslation = normalizeString(currentPhrase.translation);
+
+    const normalizedTranscript = normalizeString(transcript);
+
+    if (normalizedTranscript === expectedTranslation) {
+        answer.textContent = interimTranscript;
+        answer.style.color = "lime";
+        answer.style.fontWeight = "bold";
+        answer.style.backgroundColor = "#011A11";
+    } else {
+        // Show expected translation and what the user said
+        answer.innerHTML = `Expected: <strong>${currentPhrase.translation}</strong><br>You said: <strong>${interimTranscript}</strong>`;
+        answer.style.color = "white";
+        answer.style.fontWeight = "bold";
+        answer.style.backgroundColor = "darkred";
+        highlightText(interimTranscript, currentPhrase.translation);
+    }
+};
+
+recognition.onstart = function () {
+    // Optionally handle start of recording
+};
+
+recognition.onend = function () {
+    // Optionally handle end of recording
+};
+
+function playExpectedPhraseAudio() {
+    const expectedPhrase = document.getElementById('expected-phrase').textContent.trim();
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(expectedPhrase);
+    utterance.lang = 'es-ES';
+
+    // Play audio
+    synth.speak(utterance);
+
+    // After audio ends, toggle back to "CHECK"
+    utterance.onend = function () {
+        const checkButton = document.getElementById('checkButton');
+        const expectedPhraseElement = document.getElementById('expected-phrase');
+        expectedPhraseElement.style.display = 'none';
+        checkButton.style.display = 'inline-block';
+        checkButton.textContent = 'CHECK';
+    };
+}
+
+// Event listener for the "CHECK" button
+document.getElementById('checkButton').addEventListener('click', function () {
+    const checkButton = document.getElementById('checkButton');
+    const expectedPhraseElement = document.getElementById('expected-phrase');
+
+    if (checkButton.textContent === 'CHECK') {
+        expectedPhraseElement.style.display = 'block';
+        checkButton.style.display = 'none'; // Hide the "CHECK" button
+        playExpectedPhraseAudio();
+    }
+});
+
+function nextPhrase() {
+    createRandomPhrase();
+    document.getElementById('answer').textContent = "";
+    document.getElementById('interim-text').textContent = "";
+}
+
+document.getElementById('askButton').addEventListener('click', askQuestion);
+document.getElementById('nextButton').addEventListener('click', nextPhrase);
+
+function loadInnerActivity(activityUrl) {
+    window.location.href = activityUrl;
+}
+
+function navigateToVoiceRecognition() {
+    const questionsJSON = JSON.stringify(phrases);
+    const url = `voicerecognition.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+}
+
+function navigateTolisten() {
+    const questionsJSON = JSON.stringify(phrases);
+    const url = `listen.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+}
+
+function navigateTochoose() {
+    const questionsJSON = JSON.stringify(phrases);
+    const url = `choose.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+}
+
+function navigateTomainCATCH() {
+    const questionsJSON = JSON.stringify(phrases);
+    const url = `catch.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+}
+</script>
+
+       <div class="act-container">
+
+<button class="button choose" onclick="navigateTochoose()">CHOOSE</button>
+
+<button class="button catch" onclick="navigateTomainCATCH()">CATCH</button>
+
+<button class="button listen" onclick="navigateTolisten()">LISTEN</button>
+
+</div>
+
+</body>
+</html>

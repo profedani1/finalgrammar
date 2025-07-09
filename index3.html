@@ -1,0 +1,3191 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Game</title>
+    <style>
+      @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
+
+body {
+    width: 100%;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+          overflow: hidden;
+
+}
+        
+.containerscreen  {
+            
+}
+
+.section {
+display:none;
+border:none;
+}
+
+#output {
+position:absolute;
+bottom:1vh;
+display:none;
+cursor: pointer;
+color: lime !important;
+}
+
+.selected {
+background-color: #0c1c0c  !important; 
+color: lime !important;
+border: 0.3vh solid lime !important; 
+}
+button .text {
+  position: relative;
+  z-index: 9999; 
+  background-color: BLACK  !important; 
+
+}
+.pastconddir{
+position:absolute;
+top:1.4vh;
+width:50%;
+height:8vh;
+display:flex;
+      }
+.pastconddir button {
+width:100%;
+border:0.3vh solid white;
+font-weight: bold;
+background-color: black;
+color:white;
+font-size:1.6vh;
+
+      }  
+
+
+
+      
+.direct {
+position:absolute;
+top:10vh;
+width:99%;
+display:flex;height:8vh;
+
+      }
+.direct button {
+width:99%;
+border:0.3vh solid white;
+font-size:1.6vh;
+
+font-weight: bold;
+background-color: black;
+color:white;
+      }
+
+ .pastcondcont{
+position:absolute;
+top:28vh;
+width:50%;
+height:8vh;
+display:flex;height:8vh;
+
+      }
+.pastcondcont button {
+width:99%;
+border:0.3vh solid white;
+font-weight: bold;
+background-color: black;
+color:white;
+font-size:1.6vh;
+left:1vh;
+      }  
+      .conddir{
+position:absolute;
+top:18.6vh;
+width:50%;
+right:0.5vh;
+display:flex;height:8vh;
+
+      }
+.conddir button {
+width:100%;
+border:0.3vh solid white;
+font-weight: bold;
+background-color: black;
+color:white;
+font-size:1.6vh;
+
+      }  
+      
+
+
+
+     
+         
+      .cont {
+position:absolute;
+top:36.5vh;
+width:99%;
+display:flex;height:8vh;
+font-weight: bold;
+background-color: black;
+color:white;
+      }
+.cont button {
+width:99%;
+border:0.3vh solid white;
+
+font-weight: bold;
+background-color: black;
+color:white;
+font-size:1.6vh;
+      }
+      
+      .futcondcont {
+position:absolute;
+top:44.9vh;
+width:50%;
+display:flex;
+right:0.5vh;height:8vh;
+      }
+      .futcondcont button {
+width:99%;
+border:0.3vh solid white;
+font-weight: bold;
+background-color: black;
+color:white;
+font-size:1.6vh;
+      }  
+      
+      
+  .time {
+position:absolute;
+bottom:30vh;
+width:99%;
+border:0.3vh solid white;
+display:flex;
+font-weight: bold;
+
+      }
+ .conectores{
+position:absolute;
+bottom:24vh;
+width:100%;
+border:0.3vh solid white;
+display:flex;
+font-weight: bold;
+ }
+  .places{
+position:absolute;
+bottom:36vh;
+width:100%;
+border:0.3vh solid white;
+display:flex;
+font-weight: bold;
+ }
+  .games{
+position:absolute;
+bottom:16vh;
+height:6vh;
+lefT:16vh;
+width:73%;
+display:flex;
+font-weight: bold;
+    border-radius: 100%;
+ }
+ 
+ .games button {
+height:12vh;
+margin:0.1vh;
+width:100%;
+       border-radius: 2vh;
+   border:0.3vh solid white;
+background-color: black !important; 
+color:white;
+   font-weight: bold;
+    transition: all 1s ease;
+
+  }   
+   .games button:hover {
+   text-shadow: 0 0 0.3vh white, 0 0 0.5vh lightgrey, 0 0 0.7vh darkgrey;
+    box-shadow: 0 0 1vh white, 0 0 3vh lightgrey, 0 0 5vh lightgrey;
+  box-sizing: border-box;
+}
+
+  }   
+.ready-button:hover {
+background-color: #45a049; 
+      }
+#playGameButton {
+display: none;
+}
+#playGame2Button {
+display: none; 
+}
+#playGameButton:hover {
+background-color: #0056b3;
+}
+#playGame3Button {
+display: none; 
+}
+      #playGameButton:hover {
+          background-color: #0056b3; /* Darker blue on hover */
+      }
+        #playGame2Button:hover {
+          background-color: #0056b3; /* Darker blue on hover */
+      }
+       #playGame3Button:hover {
+          background-color: #0056b3; /* Darker blue on hover */
+      }
+    
+    
+    
+    #connectionCanvas {
+  position: absolute; /* Ensure it overlays correctly */
+  top: 0;
+  left: 0;
+  z-index: 8888; /* Place the canvas behind the buttons */
+  pointer-events: none; /* Prevent the canvas from blocking button interactions */
+}
+
+/* Define the line color, style, and width */
+.canvas-line {
+  stroke: lime; /* Default color, you can change this in JavaScript */
+  line-width: 1; /* Default width, you can modify in JS */
+  line-style: solid; /* Default solid style */
+}
+       
+    </style>
+  </head>
+  <body>
+<div class="containerscreen">
+<div class="pastconddir">
+
+
+<button
+onclick="addContentSet(ifhadworkedButton, this, 'container1')">
+<span class="text">
+IF I HAD WORKED
+</span>
+</button>
+<button
+onclick="addContentSet(wouldhaveworkedButton, this, 'container3')">
+<span class="text">
+I WOULD HAVE WORKED
+</span>
+</button>
+</div>
+
+<div class="direct">
+
+<button
+onclick="addContentSet(hadworkedButton, this, 'container5')"
+style="
+background-color: #373737;
+border:0.3vh solid grey;
+color: lightgrey;">
+<span class="text">
+I HAD WORKED
+</span>
+</button>
+
+<button
+onclick="addContentSet(workedButton, this, 'container7')"
+style="
+">
+<span class="text">
+I WORKED
+</span>
+</button>
+
+<button
+onclick="addContentSet(usedtoworkButton, this, 'container9')">
+<span class="text">
+I USED TO WORK
+</span>
+</button>
+<button
+onclick="addContentSet(haveworkedButton, this, 'container11')">
+<span class="text">
+I HAVE WORKED
+</span>
+</button>
+
+<button
+onclick="addContentSet(workButton, this, 'container13')">
+<span class="text">
+I WORK
+</span>
+</button>
+
+<button
+onclick="addContentSet(willworkButton, this, 'container15')"  style=" font-size:1.8vh;width:80%">
+<span class="text">
+I WILL WORK
+</span>
+</button>
+</div>
+<div class="conddir">
+<button
+onclick="addContentSet(wouldworkButton, this, 'container17')">
+<span class="text">
+I WOULD WORK
+</span>
+</button>
+<button
+onclick="addContentSet(ifworkedButton, this, 'container19')">
+<span class="text">
+IF I WORKED
+</span>
+</button>
+</div>
+<div class="pastcondcont">
+
+
+<button
+onclick="addContentSet(ifhadbeenworkingButton, this, 'container2')">
+<span class="text">
+IF I HAD BEEN WORKING
+</span>
+</button>
+
+
+
+<button
+onclick="addContentSet(wouldhavebeenworkingButton, this, 'container4')"
+>
+<span class="text">
+I WOULD HAVE BEEN WORKING
+</span>
+</button>
+</div>
+<div class="cont">
+
+
+<button
+onclick="addContentSet(hadbeenworkingButton, this, 'container6')"
+        style="
+background-color: #373737;
+border:0.3vh solid grey;
+color: lightgrey;">
+
+<span class="text">
+I HAD BEEN WORKING
+</span>
+</button>
+
+<button
+onclick="addContentSet(thenwasButton, this, 'container8')" style="
+background-color:black;
+border:0.4vh solid #373737;
+color: darkgrey;">
+
+<span class="text">
+I WAS BUSY WORKING
+</span>
+</button>
+
+
+
+
+
+
+
+
+<button
+onclick="addContentSet(wasworkingButton, this, 'container10')"
+>
+<span class="text">
+I WAS WORKING
+</span>
+</button>
+<button
+onclick="addContentSet(havebeenworkingButton, this, 'container12')"
+>
+<span class="text">
+I HAVE BEEN WORKING
+</span>
+</button>
+
+<button
+onclick="addContentSet(isworkingButton, this, 'container14')"
+>
+<span class="text">
+I AM WORKING
+</span>
+</button>
+
+
+<button
+onclick="addContentSet(willbeworkingButton, this, 'container16')"
+>
+<span class="text">
+I WILL BE WORKING
+</span>
+</button>
+</div>
+
+<div class="futcondcont">
+
+
+
+<button
+onclick="addContentSet(wouldbeworkingButton, this, 'container18')">
+<span class="text">
+I WOULD BE WORKING
+</span>
+</button>
+
+
+<button
+onclick="addContentSet(ifwasworkingButton, this, 'container20')">
+<span class="text">
+IF I WAS WORKING
+</span>
+</button>
+</div>
+
+          
+
+
+<div class="time">
+ 
+ <button
+onclick="addContentSet(beforeButton, this, 'containerpast')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+ padding:0vh 2vh;
+font-weight: bold;
+height:5vh;           
+">
+<span class="text">
+BEFORE
+</span>
+</button>
+
+     
+<button
+onclick="addContentSet(nowButton, this,'containernow')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+padding:0vh 2vh;
+font-weight: bold;
+height:5vh;           
+">
+<span class="text">
+NOW
+</span>
+</button>
+
+<button
+onclick="addContentSet(futureButton, this,'containerfuture')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+padding:0vh 2vh;
+font-weight: bold;
+height:5vh;           
+">
+<span class="text">
+IN THE FUTURE
+</span>
+</button>
+</div>
+<div class="conectores">
+
+<button
+onclick="addContentSet(soButton, this, 'containerso')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+padding:0vh 2vh;
+font-weight: bold;
+height:5vh;           
+">
+<span class="text">
+SO
+</span>
+</button>
+  
+<button
+onclick="addContentSet(andButton, this, 'containerand')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+padding:0vh 2vh;
+font-weight: bold;
+height:5vh;            "
+>
+<span class="text">
+AND
+</span>
+</button>
+<button
+onclick="addContentSet(butButton, this, 'containerbut')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+padding:0vh 2vh;
+font-weight: bold;
+height:5vh;
+"
+>
+<span class="text">
+BUT
+</span>
+</button>
+
+
+<button
+onclick="addContentSet(alotButton, this, 'containeralot')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+padding:0vh 2vh;
+font-weight: bold;
+height:5vh;
+">
+<span class="text">
+A LOT
+</span>
+</button>
+</div>
+
+<div class="places">
+
+<button
+onclick="addContentSet(places1Button, this, 'containerplaces1')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+padding:0vh 2vh;
+font-weight: bold;
+height:5vh;
+"
+>
+<span class="text">
+IN THE OFFICE
+</span>
+</button>
+
+<button
+onclick="addContentSet(places2Button, this, 'containerplaces2')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+padding:0vh 2vh;
+font-weight: bold;
+height:5vh;
+"
+>
+<span class="text">
+IN THE HOUSE
+</span>
+</button>
+<button
+onclick="addContentSet(places2Button, this, 'containerplaces3')"
+style="
+background-color: black;
+color: white;
+width: 100%;
+padding:0vh 2vh;
+font-weight: bold;
+height:5vh;
+"
+>
+<span class="text">
+IN THE PARK
+</span>
+</button>
+</div>
+
+<button class="ready-button" onclick="produceTemplate()"
+style="
+background-color: black;
+color: white;
+height:4vh;
+width:14vh;
+border:0.3vh solid white;
+font-weight: bold;
+position:absolute;
+bottom:10vh;
+"
+>READY</button>
+<div class="games">
+
+<button id="playGame3Button" onclick="playGame3()"
+style="
+
+
+"
+>LEARNING</button>
+
+
+
+<!-- New Play Game 2 Button -->
+<button id="playGame2Button" onclick="playGame2()"
+ style="
+"
+>BUTTON SELECTION</button>
+        
+         <button id="playGameButton" onclick="playGame()"
+          style="
+"
+>VOICE RECOGNITION</button>
+                </div>
+
+        <div id="phraseModelContent"
+        
+        style="
+position:absolute;
+bottom:5vh;
+left:0%;
+          font-size: 2vh;
+          background-color: black;
+          color: white;
+        "
+      >
+        </div>
+    
+
+    <div id="sections-container"></div>
+
+    <pre id="output"></pre>
+
+  <canvas id="connectionCanvas"></canvas>
+
+
+    <script>
+      const alotButton = {
+        phrases: ["a lot", "a little,"],
+        translations: ["mucho", "un poco,"],
+      };
+
+      const beforeButton = {
+        phrases: ["before"],
+        translations: ["antes"],
+      };
+
+      const butButton = {
+        phrases: ["but"],
+        translations: ["pero"],
+      };
+
+      const nowButton = {
+        phrases: ["now"],
+        translations: ["ahora"],
+      };
+
+      const soButton = {
+        phrases: ["so"],
+        translations: ["así que"],
+      };
+
+      const andButton = {
+        phrases: ["and"],
+        translations: ["y"],
+      };
+
+      const futureButton = {
+        phrases: ["in the future"],
+        translations: ["en el futuro"],
+      };
+      const places1Button = {
+        phrases: [
+          "IN THE HOUSE",
+          "IN THE OFFICE",
+          "IN  THE AVENUE",
+          "IN THE MARKET",
+          "IN  THE LIBRARY",
+          "IN  THE PHARMACY",
+          "AT THE HOSPITAL",
+          "IN THE MUSEUM",
+          "IN THE RESTAURANT",
+          "IN THE BANK",
+          "IN THE PARK",
+          "IN  THE STREET",
+          "IN  THE SHOP",
+          "IN  THE SCHOOL",
+        ],
+        translations: [
+          "en la casa",
+          "en la oficina",
+          "en la avenida",
+          "en el mercado",
+          "en la biblioteca",
+          "en la farmacia",
+          "en el hospital",
+          "en el museo",
+          "en el restaurante",
+          "en el banco",
+          "en el parque",
+          "en la calle",
+          "en la tienda",
+          "en la escuela",
+        ],
+      };
+
+      const places2Button = {
+        phrases: [
+          "IN THE HOUSE",
+          "IN THE OFFICE",
+          "IN  THE AVENUE",
+          "IN THE MARKET",
+          "IN  THE LIBRARY",
+          "IN  THE PHARMACY",
+          "AT THE HOSPITAL",
+          "IN THE MUSEUM",
+          "IN THE RESTAURANT",
+          "IN THE BANK",
+          "IN THE PARK",
+          "IN  THE STREET",
+          "IN  THE SHOP",
+          "IN  THE SCHOOL",
+        ],
+        translations: [
+          "en la casa",
+          "en la oficina",
+          "en la avenida",
+          "en el mercado",
+          "en la biblioteca",
+          "en la farmacia",
+          "en el hospital",
+          "en el museo",
+          "en el restaurante",
+          "en el banco",
+          "en el parque",
+          "en la calle",
+          "en la tienda",
+          "en la escuela",
+        ],
+      };
+  const places3Button = {
+        phrases: [
+          "IN THE HOUSE",
+          "IN THE OFFICE",
+          "IN  THE AVENUE",
+          "IN THE MARKET",
+          "IN  THE LIBRARY",
+          "IN  THE PHARMACY",
+          "AT THE HOSPITAL",
+          "IN THE MUSEUM",
+          "IN THE RESTAURANT",
+          "IN THE BANK",
+          "IN THE PARK",
+          "IN  THE STREET",
+          "IN  THE SHOP",
+          "IN  THE SCHOOL",
+        ],
+        translations: [
+          "en la casa",
+          "en la oficina",
+          "en la avenida",
+          "en el mercado",
+          "en la biblioteca",
+          "en la farmacia",
+          "en el hospital",
+          "en el museo",
+          "en el restaurante",
+          "en el banco",
+          "en el parque",
+          "en la calle",
+          "en la tienda",
+          "en la escuela",
+        ],
+      };
+      const ifwasworkingButton = {
+        phrases: [
+          "IF I WAS WORKING",
+          "IF I WAS RESTING",
+          "IF I WAS WALKING",
+          "IF I WAS WAITING",
+          "IF I WAS BUYING",
+          "IF I WAS VISITING",
+          "IF I WAS HELPING",
+          "IF I WAS SPEAKING",
+          "IF YOU WERE WORKING",
+          "IF YOU WERE RESTING",
+          "IF YOU WERE WALKING",
+          "IF YOU WERE WAITING",
+          "IF YOU WERE BUYING",
+          "IF YOU WERE VISITING",
+          "IF YOU WERE HELPING",
+          "IF YOU WERE SPEAKING",
+          "IF HE WAS WORKING",
+          "IF HE WAS RESTING",
+          "IF HE WAS WALKING",
+          "IF HE WAS WAITING",
+          "IF HE WAS BUYING",
+          "IF HE WAS VISITING",
+          "IF HE WAS HELPING",
+          "IF HE WAS SPEAKING",
+          "IF WE WERE WORKING",
+          "IF WE WERE RESTING",
+          "IF WE WERE WALKING",
+          "IF WE WERE WAITING",
+          "IF WE WERE BUYING",
+          "IF WE WERE VISITING",
+          "IF WE WERE HELPING",
+          "IF WE WERE SPEAKING",
+          "IF YOU ALL WERE WORKING",
+          "IF YOU ALL WERE RESTING",
+          "IF YOU ALL WERE WALKING",
+          "IF YOU ALL WERE WAITING",
+          "IF YOU ALL WERE BUYING",
+          "IF YOU ALL WERE VISITING",
+          "IF YOU ALL WERE HELPING",
+          "IF YOU ALL WERE SPEAKING",
+          "IF THEY WERE WORKING",
+          "IF THEY WERE RESTING",
+          "IF THEY WERE WALKING",
+          "IF THEY WERE WAITING",
+          "IF THEY WERE BUYING",
+          "IF THEY WERE VISITING",
+          "IF THEY WERE HELPING",
+          "IF THEY WERE SPEAKING",
+        ],
+        translations: [
+          "si yo estuviera trabajando",
+          "si yo estuviera descansando",
+          "si yo estuviera caminando",
+          "si yo estuviera esperando",
+          "si yo estuviera comprando",
+          "si yo estuviera visitando",
+          "si yo estuviera ayudando",
+          "si yo estuviera hablando",
+          "si tú estuvieras trabajando",
+          "si tú estuvieras descansando",
+          "si tú estuvieras caminando",
+          "si tú estuvieras esperando",
+          "si tú estuvieras comprando",
+          "si tú estuvieras visitando",
+          "si tú estuvieras ayudando",
+          "si tú estuvieras hablando",
+          "si él estuviera trabajando",
+          "si él estuviera descansando",
+          "si él estuviera caminando",
+          "si él estuviera esperando",
+          "si él estuviera comprando",
+          "si él estuviera visitando",
+          "si él estuviera ayudando",
+          "si él estuviera hablando",
+          "si nosotros estuviéramos trabajando",
+          "si nosotros estuviéramos descansando",
+          "si nosotros estuviéramos caminando",
+          "si nosotros estuviéramos esperando",
+          "si nosotros estuviéramos comprando",
+          "si nosotros estuviéramos visitando",
+          "si nosotros estuviéramos ayudando",
+          "si nosotros estuviéramos hablando",
+          "si vosotros estuvierais trabajando",
+          "si vosotros estuvierais descansando",
+          "si vosotros estuvierais caminando",
+          "si vosotros estuvierais esperando",
+          "si vosotros estuvierais comprando",
+          "si vosotros estuvierais visitando",
+          "si vosotros estuvierais ayudando",
+          "si vosotros estuvierais hablando",
+          "si ellos estuvieran trabajando",
+          "si ellos estuvieran descansando",
+          "si ellos estuvieran caminando",
+          "si ellos estuvieran esperando",
+          "si ellos estuvieran comprando",
+          "si ellos estuvieran visitando",
+          "si ellos estuvieran ayudando",
+          "si ellos estuvieran hablando",
+        ],
+      };
+
+      const ifworkedButton = {
+        phrases: [
+          "IF I WORKED",
+          "IF YOU WORKED",
+          "IF HE WORKED",
+          "IF SHE WORKED",
+          "IF WE WORKED",
+          "IF YOU ALL WORKED",
+          "IF THEY WORKED",
+          "IF I RESTED",
+          "IF YOU RESTED",
+          "IF HE RESTED",
+          "IF SHE RESTED",
+          "IF WE RESTED",
+          "IF YOU ALL RESTED",
+          "IF THEY RESTED",
+          "IF I WALKED",
+          "IF YOU WALKED",
+          "IF HE WALKED",
+          "IF SHE WALKED",
+          "IF WE WALKED",
+          "IF YOU ALL WALKED",
+          "IF THEY WALKED",
+          "IF I STUDIED",
+          "IF YOU STUDIED",
+          "IF HE STUDIED",
+          "IF SHE STUDIED",
+          "IF WE STUDIED",
+          "IF YOU ALL STUDIED",
+          "IF THEY STUDIED",
+          "IF I SPOKE",
+          "IF YOU SPOKE",
+          "IF HE SPOKE",
+          "IF SHE SPOKE",
+          "IF WE SPOKE",
+          "IF YOU ALL SPOKE",
+          "IF THEY SPOKE",
+          "IF I WAITED",
+          "IF YOU WAITED",
+          "IF HE WAITED",
+          "IF SHE WAITED",
+          "IF WE WAITED",
+          "IF YOU ALL WAITED",
+          "IF THEY WAITED",
+          "IF I BOUGHT",
+          "IF YOU BOUGHT",
+          "IF HE BOUGHT",
+          "IF SHE BOUGHT",
+          "IF WE BOUGHT",
+          "IF YOU ALL BOUGHT",
+          "IF THEY BOUGHT",
+        ],
+        translations: [
+          "si yo trabajara",
+          "si tú trabajaras",
+          "si él trabajara",
+          "si ella trabajara",
+          "si nosotros trabajáramos",
+          "si vosotros trabajarais",
+          "si ellos trabajaran",
+          "si yo descansara",
+          "si tú descansaras",
+          "si él descansara",
+          "si ella descansara",
+          "si nosotros descansáramos",
+          "si vosotros descansarais",
+          "si ellos descansaran",
+          "si yo caminara",
+          "si tú caminaras",
+          "si él caminara",
+          "si ella caminara",
+          "si nosotros camináramos",
+          "si vosotros caminarais",
+          "si ellos caminaran",
+          "si yo estudiara",
+          "si tú estudiaras",
+          "si él estudiara",
+          "si ella estudiara",
+          "si nosotros estudiáramos",
+          "si vosotros estudiarais",
+          "si ellos estudiaran",
+          "si yo hablara",
+          "si tú hablaras",
+          "si él hablara",
+          "si ella hablara",
+          "si nosotros habláramos",
+          "si vosotros hablarais",
+          "si ellos hablaran",
+          "si yo esperara",
+          "si tú esperaras",
+          "si él esperara",
+          "si ella esperara",
+          "si nosotros esperáramos",
+          "si vosotros esperarais",
+          "si ellos esperaran",
+          "si yo comprara",
+          "si tú compraras",
+          "si él comprara",
+          "si ella comprara",
+          "si nosotros compráramos",
+          "si vosotros comprarais",
+          "si ellos compraran",
+        ],
+      };
+
+      const ifhadworkedButton = {
+        phrases: [
+          "IF I HAD SPOKEN",
+          "IF YOU HAD SPOKEN",
+          "IF HE HAD SPOKEN",
+          "IF SHE HAD SPOKEN",
+          "IF WE HAD SPOKEN",
+          "IF YOU ALL HAD SPOKEN",
+          "IF THEY HAD SPOKEN",
+          "IF I HAD STUDIED",
+          "IF YOU HAD STUDIED",
+          "IF HE HAD STUDIED",
+          "IF SHE HAD STUDIED",
+          "IF WE HAD STUDIED",
+          "IF YOU ALL HAD STUDIED",
+          "IF THEY HAD STUDIED",
+          "IF I HAD WALKED",
+          "IF YOU HAD WALKED",
+          "IF HE HAD WALKED",
+          "IF SHE HAD WALKED",
+          "IF WE HAD WALKED",
+          "IF YOU ALL HAD WALKED",
+          "IF THEY HAD WALKED",
+          "IF I HAD WAITED",
+          "IF YOU HAD WAITED",
+          "IF HE HAD WAITED",
+          "IF SHE HAD WAITED",
+          "IF WE HAD WAITED",
+          "IF YOU ALL HAD WAITED",
+          "IF THEY HAD WAITED",
+          "IF I HAD BOUGHT",
+          "IF YOU HAD BOUGHT",
+          "IF HE HAD BOUGHT",
+          "IF SHE HAD BOUGHT",
+          "IF WE HAD BOUGHT",
+          "IF YOU ALL HAD BOUGHT",
+          "IF THEY HAD BOUGHT",
+          "IF I HAD RESTED",
+          "IF YOU HAD RESTED",
+          "IF HE HAD RESTED",
+          "IF SHE HAD RESTED",
+          "IF WE HAD RESTED",
+          "IF YOU ALL HAD RESTED",
+          "IF THEY HAD RESTED",
+          "IF I HAD WORKED",
+          "IF YOU HAD WORKED",
+          "IF HE HAD WORKED",
+          "IF SHE HAD WORKED",
+          "IF WE HAD WORKED",
+          "IF YOU ALL HAD WORKED",
+          "IF THEY HAD WORKED",
+        ],
+        translations: [
+          "si yo hubiera hablado",
+          "si tú hubieras hablado",
+          "si él hubiera hablado",
+          "si ella hubiera hablado",
+          "si nosotros hubiéramos hablado",
+          "si vosotros hubierais hablado",
+          "si ellos hubieran hablado",
+          "si yo hubiera estudiado",
+          "si tú hubieras estudiado",
+          "si él hubiera estudiado",
+          "si ella hubiera estudiado",
+          "si nosotros hubiéramos estudiado",
+          "si vosotros hubierais estudiado",
+          "si ellos hubieran estudiado",
+          "si yo hubiera caminado",
+          "si tú hubieras caminado",
+          "si él hubiera caminado",
+          "si ella hubiera caminado",
+          "si nosotros hubiéramos caminado",
+          "si vosotros hubierais caminado",
+          "si ellos hubieran caminado",
+          "si yo hubiera esperado",
+          "si tú hubieras esperado",
+          "si él hubiera esperado",
+          "si ella hubiera esperado",
+          "si nosotros hubiéramos esperado",
+          "si vosotros hubierais esperado",
+          "si ellos hubieran esperado",
+          "si yo hubiera comprado",
+          "si tú hubieras comprado",
+          "si él hubiera comprado",
+          "si ella hubiera comprado",
+          "si nosotros hubiéramos comprado",
+          "si vosotros hubierais comprado",
+          "si ellos hubieran comprado",
+          "si yo hubiera descansado",
+          "si tú hubieras descansado",
+          "si él hubiera descansado",
+          "si ella hubiera descansado",
+          "si nosotros hubiéramos descansado",
+          "si vosotros hubierais descansado",
+          "si ellos hubieran descansado",
+          "si yo hubiera trabajado",
+          "si tú hubieras trabajado",
+          "si él hubiera trabajado",
+          "si ella hubiera trabajado",
+          "si nosotros hubiéramos trabajado",
+          "si vosotros hubierais trabajado",
+          "si ellos hubieran trabajado",
+        ],
+      };
+      const ifhadbeenworkingButton = {
+        phrases: [
+          "IF I HAD BEEN SPEAKING",
+          "IF YOU HAD BEEN SPEAKING",
+          "IF HE HAD BEEN SPEAKING",
+          "IF SHE HAD BEEN SPEAKING",
+          "IF WE HAD BEEN SPEAKING",
+          "IF YOU ALL HAD BEEN SPEAKING",
+          "IF THEY HAD BEEN SPEAKING",
+          "IF I HAD BEEN STUDYING",
+          "IF YOU HAD BEEN STUDYING",
+          "IF HE HAD BEEN STUDYING",
+          "IF SHE HAD BEEN STUDYING",
+          "IF WE HAD BEEN STUDYING",
+          "IF YOU ALL HAD BEEN STUDYING",
+          "IF THEY HAD BEEN STUDYING",
+          "IF I HAD BEEN WALKING",
+          "IF YOU HAD BEEN WALKING",
+          "IF HE HAD BEEN WALKING",
+          "IF SHE HAD BEEN WALKING",
+          "IF WE HAD BEEN WALKING",
+          "IF YOU ALL HAD BEEN WALKING",
+          "IF THEY HAD BEEN WALKING",
+          "IF I HAD BEEN WAITING",
+          "IF YOU HAD BEEN WAITING",
+          "IF HE HAD BEEN WAITING",
+          "IF SHE HAD BEEN WAITING",
+          "IF WE HAD BEEN WAITING",
+          "IF YOU ALL HAD BEEN WAITING",
+          "IF THEY HAD BEEN WAITING",
+          "IF I HAD BEEN BUYING",
+          "IF YOU HAD BEEN BUYING",
+          "IF HE HAD BEEN BUYING",
+          "IF SHE HAD BEEN BUYING",
+          "IF WE HAD BEEN BUYING",
+          "IF YOU ALL HAD BEEN BUYING",
+          "IF THEY HAD BEEN BUYING",
+          "IF I HAD BEEN RESTING",
+          "IF YOU HAD BEEN RESTING",
+          "IF HE HAD BEEN RESTING",
+          "IF SHE HAD BEEN RESTING",
+          "IF WE HAD BEEN RESTING",
+          "IF YOU ALL HAD BEEN RESTING",
+          "IF THEY HAD BEEN RESTING",
+          "IF I HAD BEEN WORKING",
+          "IF YOU HAD BEEN WORKING",
+          "IF HE HAD BEEN WORKING",
+          "IF SHE HAD BEEN WORKING",
+          "IF WE HAD BEEN WORKING",
+          "IF YOU ALL HAD BEEN WORKING",
+          "IF THEY HAD BEEN WORKING",
+        ],
+        translations: [
+          "si yo hubiera estado hablando",
+          "si tú hubieras estado hablando",
+          "si él hubiera estado hablando",
+          "si ella hubiera estado hablando",
+          "si nosotros hubiéramos estado hablando",
+          "si vosotros hubierais estado hablando",
+          "si ellos hubieran estado hablando",
+          "si yo hubiera estado estudiando",
+          "si tú hubieras estado estudiando",
+          "si él hubiera estado estudiando",
+          "si ella hubiera estado estudiando",
+          "si nosotros hubiéramos estado estudiando",
+          "si vosotros hubierais estado estudiando",
+          "si ellos hubieran estado estudiando",
+          "si yo hubiera estado caminando",
+          "si tú hubieras estado caminando",
+          "si él hubiera estado caminando",
+          "si ella hubiera estado caminando",
+          "si nosotros hubiéramos estado caminando",
+          "si vosotros hubierais estado caminando",
+          "si ellos hubieran estado caminando",
+          "si yo hubiera estado esperando",
+          "si tú hubieras estado esperando",
+          "si él hubiera estado esperando",
+          "si ella hubiera estado esperando",
+          "si nosotros hubiéramos estado esperando",
+          "si vosotros hubierais estado esperando",
+          "si ellos hubieran estado esperando",
+          "si yo hubiera estado comprando",
+          "si tú hubieras estado comprando",
+          "si él hubiera estado comprando",
+          "si ella hubiera estado comprando",
+          "si nosotros hubiéramos estado comprando",
+          "si vosotros hubierais estado comprando",
+          "si ellos hubieran estado comprando",
+          "si yo hubiera estado descansando",
+          "si tú hubieras estado descansando",
+          "si él hubiera estado descansando",
+          "si ella hubiera estado descansando",
+          "si nosotros hubiéramos estado descansando",
+          "si vosotros hubierais estado descansando",
+          "si ellos hubieran estado descansando",
+          "si yo hubiera estado trabajando",
+          "si tú hubieras estado trabajando",
+          "si él hubiera estado trabajando",
+          "si ella hubiera estado trabajando",
+          "si nosotros hubiéramos estado trabajando",
+          "si vosotros hubierais estado trabajando",
+          "si ellos hubieran estado trabajando",
+        ],
+      };
+      const wouldhaveworkedButton = {
+        phrases: [
+          "I WOULD HAVE SPOKEN",
+          "YOU WOULD HAVE SPOKEN",
+          "HE WOULD HAVE SPOKEN",
+          "SHE WOULD HAVE SPOKEN",
+          "WE WOULD HAVE SPOKEN",
+          "YOU ALL WOULD HAVE SPOKEN",
+          "THEY WOULD HAVE SPOKEN",
+          "I WOULD HAVE STUDIED",
+          "YOU WOULD HAVE STUDIED",
+          "HE WOULD HAVE STUDIED",
+          "SHE WOULD HAVE STUDIED",
+          "WE WOULD HAVE STUDIED",
+          "YOU ALL WOULD HAVE STUDIED",
+          "THEY WOULD HAVE STUDIED",
+          "I WOULD HAVE WALKED",
+          "YOU WOULD HAVE WALKED",
+          "HE WOULD HAVE WALKED",
+          "SHE WOULD HAVE WALKED",
+          "WE WOULD HAVE WALKED",
+          "YOU ALL WOULD HAVE WALKED",
+          "THEY WOULD HAVE WALKED",
+          "I WOULD HAVE WAITED",
+          "YOU WOULD HAVE WAITED",
+          "HE WOULD HAVE WAITED",
+          "SHE WOULD HAVE WAITED",
+          "WE WOULD HAVE WAITED",
+          "YOU ALL WOULD HAVE WAITED",
+          "THEY WOULD HAVE WAITED",
+          "I WOULD HAVE BOUGHT",
+          "YOU WOULD HAVE BOUGHT",
+          "HE WOULD HAVE BOUGHT",
+          "SHE WOULD HAVE BOUGHT",
+          "WE WOULD HAVE BOUGHT",
+          "YOU ALL WOULD HAVE BOUGHT",
+          "THEY WOULD HAVE BOUGHT",
+          "I WOULD HAVE RESTED",
+          "YOU WOULD HAVE RESTED",
+          "HE WOULD HAVE RESTED",
+          "SHE WOULD HAVE RESTED",
+          "WE WOULD HAVE RESTED",
+          "YOU ALL WOULD HAVE RESTED",
+          "THEY WOULD HAVE RESTED",
+          "I WOULD HAVE WORKED",
+          "YOU WOULD HAVE WORKED",
+          "HE WOULD HAVE WORKED",
+          "SHE WOULD HAVE WORKED",
+          "WE WOULD HAVE WORKED",
+          "YOU ALL WOULD HAVE WORKED",
+          "THEY WOULD HAVE WORKED",
+        ],
+        translations: [
+          "yo habría hablado",
+          "tú habrías hablado",
+          "él habría hablado",
+          "ella habría hablado",
+          "nosotros habríamos hablado",
+          "vosotros habríais hablado",
+          "ellos habrían hablado",
+          "yo habría estudiado",
+          "tú habrías estudiado",
+          "él habría estudiado",
+          "ella habría estudiado",
+          "nosotros habríamos estudiado",
+          "vosotros habríais estudiado",
+          "ellos habrían estudiado",
+          "yo habría caminado",
+          "tú habrías caminado",
+          "él habría caminado",
+          "ella habría caminado",
+          "nosotros habríamos caminado",
+          "vosotros habríais caminado",
+          "ellos habrían caminado",
+          "yo habría esperado",
+          "tú habrías esperado",
+          "él habría esperado",
+          "ella habría esperado",
+          "nosotros habríamos esperado",
+          "vosotros habríais esperado",
+          "ellos habrían esperado",
+          "yo habría comprado",
+          "tú habrías comprado",
+          "él habría comprado",
+          "ella habría comprado",
+          "nosotros habríamos comprado",
+          "vosotros habríais comprado",
+          "ellos habrían comprado",
+          "yo habría descansado",
+          "tú habrías descansado",
+          "él habría descansado",
+          "ella habría descansado",
+          "nosotros habríamos descansado",
+          "vosotros habríais descansado",
+          "ellos habrían descansado",
+          "yo habría trabajado",
+          "tú habrías trabajado",
+          "él habría trabajado",
+          "ella habría trabajado",
+          "nosotros habríamos trabajado",
+          "vosotros habríais trabajado",
+          "ellos habrían trabajado",
+        ],
+      };
+      const wouldhavebeenworkingButton = {
+        phrases: [
+          "I WOULD HAVE BEEN SPEAKING",
+          "YOU WOULD HAVE BEEN SPEAKING",
+          "HE WOULD HAVE BEEN SPEAKING",
+          "SHE WOULD HAVE BEEN SPEAKING",
+          "WE WOULD HAVE BEEN SPEAKING",
+          "YOU ALL WOULD HAVE BEEN SPEAKING",
+          "THEY WOULD HAVE BEEN SPEAKING",
+          "I WOULD HAVE BEEN STUDYING",
+          "YOU WOULD HAVE BEEN STUDYING",
+          "HE WOULD HAVE BEEN STUDYING",
+          "SHE WOULD HAVE BEEN STUDYING",
+          "WE WOULD HAVE BEEN STUDYING",
+          "YOU ALL WOULD HAVE BEEN STUDYING",
+          "THEY WOULD HAVE BEEN STUDYING",
+          "I WOULD HAVE BEEN WALKING",
+          "YOU WOULD HAVE BEEN WALKING",
+          "HE WOULD HAVE BEEN WALKING",
+          "SHE WOULD HAVE BEEN WALKING",
+          "WE WOULD HAVE BEEN WALKING",
+          "YOU ALL WOULD HAVE BEEN WALKING",
+          "THEY WOULD HAVE BEEN WALKING",
+          "I WOULD HAVE BEEN WAITING",
+          "YOU WOULD HAVE BEEN WAITING",
+          "HE WOULD HAVE BEEN WAITING",
+          "SHE WOULD HAVE BEEN WAITING",
+          "WE WOULD HAVE BEEN WAITING",
+          "YOU ALL WOULD HAVE BEEN WAITING",
+          "THEY WOULD HAVE BEEN WAITING",
+          "I WOULD HAVE BEEN BUYING",
+          "YOU WOULD HAVE BEEN BUYING",
+          "HE WOULD HAVE BEEN BUYING",
+          "SHE WOULD HAVE BEEN BUYING",
+          "WE WOULD HAVE BEEN BUYING",
+          "YOU ALL WOULD HAVE BEEN BUYING",
+          "THEY WOULD HAVE BEEN BUYING",
+          "I WOULD HAVE BEEN RESTING",
+          "YOU WOULD HAVE BEEN RESTING",
+          "HE WOULD HAVE BEEN RESTING",
+          "SHE WOULD HAVE BEEN RESTING",
+          "WE WOULD HAVE BEEN RESTING",
+          "YOU ALL WOULD HAVE BEEN RESTING",
+          "THEY WOULD HAVE BEEN RESTING",
+          "I WOULD HAVE BEEN WORKING",
+          "YOU WOULD HAVE BEEN WORKING",
+          "HE WOULD HAVE BEEN WORKING",
+          "SHE WOULD HAVE BEEN WORKING",
+          "WE WOULD HAVE BEEN WORKING",
+          "YOU ALL WOULD HAVE BEEN WORKING",
+          "THEY WOULD HAVE BEEN WORKING",
+        ],
+        translations: [
+          "yo habría estado hablando",
+          "tú habrías estado hablando",
+          "él habría estado hablando",
+          "ella habría estado hablando",
+          "nosotros habríamos estado hablando",
+          "vosotros habríais estado hablando",
+          "ellos habrían estado hablando",
+          "yo habría estado estudiando",
+          "tú habrías estado estudiando",
+          "él habría estado estudiando",
+          "ella habría estado estudiando",
+          "nosotros habríamos estado estudiando",
+          "vosotros habríais estado estudiando",
+          "ellos habrían estado estudiando",
+          "yo habría estado caminando",
+          "tú habrías estado caminando",
+          "él habría estado caminando",
+          "ella habría estado caminando",
+          "nosotros habríamos estado caminando",
+          "vosotros habríais estado caminando",
+          "ellos habrían estado caminando",
+          "yo habría estado esperando",
+          "tú habrías estado esperando",
+          "él habría estado esperando",
+          "ella habría estado esperando",
+          "nosotros habríamos estado esperando",
+          "vosotros habríais estado esperando",
+          "ellos habrían estado esperando",
+          "yo habría estado comprando",
+          "tú habrías estado comprando",
+          "él habría estado comprando",
+          "ella habría estado comprando",
+          "nosotros habríamos estado comprando",
+          "vosotros habríais estado comprando",
+          "ellos habrían estado comprando",
+          "yo habría estado descansando",
+          "tú habrías estado descansando",
+          "él habría estado descansando",
+          "ella habría estado descansando",
+          "nosotros habríamos estado descansando",
+          "vosotros habríais estado descansando",
+          "ellos habrían estado descansando",
+          "yo habría estado trabajando",
+          "tú habrías estado trabajando",
+          "él habría estado trabajando",
+          "ella habría estado trabajando",
+          "nosotros habríamos estado trabajando",
+          "vosotros habríais estado trabajando",
+          "ellos habrían estado trabajando",
+        ],
+      };
+      const hadworkedButton = {
+        phrases: [
+          "I HAD SPOKEN",
+          "YOU HAD SPOKEN",
+          "HE HAD SPOKEN",
+          "SHE HAD SPOKEN",
+          "WE HAD SPOKEN",
+          "YOU ALL HAD SPOKEN",
+          "THEY HAD SPOKEN",
+          "I HAD STUDIED",
+          "YOU HAD STUDIED",
+          "HE HAD STUDIED",
+          "SHE HAD STUDIED",
+          "WE HAD STUDIED",
+          "YOU ALL HAD STUDIED",
+          "THEY HAD STUDIED",
+          "I HAD WALKED",
+          "YOU HAD WALKED",
+          "HE HAD WALKED",
+          "SHE HAD WALKED",
+          "WE HAD WALKED",
+          "YOU ALL HAD WALKED",
+          "THEY HAD WALKED",
+          "I HAD WAITED",
+          "YOU HAD WAITED",
+          "HE HAD WAITED",
+          "SHE HAD WAITED",
+          "WE HAD WAITED",
+          "YOU ALL HAD WAITED",
+          "THEY HAD WAITED",
+          "I HAD BOUGHT",
+          "YOU HAD BOUGHT",
+          "HE HAD BOUGHT",
+          "SHE HAD BOUGHT",
+          "WE HAD BOUGHT",
+          "YOU ALL HAD BOUGHT",
+          "THEY HAD BOUGHT",
+          "I HAD RESTED",
+          "YOU HAD RESTED",
+          "HE HAD RESTED",
+          "SHE HAD RESTED",
+          "WE HAD RESTED",
+          "YOU ALL HAD RESTED",
+          "THEY HAD RESTED",
+          "I HAD WORKED",
+          "YOU HAD WORKED",
+          "HE HAD WORKED",
+          "SHE HAD WORKED",
+          "WE HAD WORKED",
+          "YOU ALL HAD WORKED",
+          "THEY HAD WORKED",
+        ],
+        translations: [
+          "yo había hablado",
+          "tú habías hablado",
+          "él había hablado",
+          "ella había hablado",
+          "nosotros habíamos hablado",
+          "vosotros habíais hablado",
+          "ellos habían hablado",
+          "yo había estudiado",
+          "tú habías estudiado",
+          "él había estudiado",
+          "ella había estudiado",
+          "nosotros habíamos estudiado",
+          "vosotros habíais estudiado",
+          "ellos habían estudiado",
+          "yo había caminado",
+          "tú habías caminado",
+          "él había caminado",
+          "ella había caminado",
+          "nosotros habíamos caminado",
+          "vosotros habíais caminado",
+          "ellos habían caminado",
+          "yo había esperado",
+          "tú habías esperado",
+          "él había esperado",
+          "ella había esperado",
+          "nosotros habíamos esperado",
+          "vosotros habíais esperado",
+          "ellos habían esperado",
+          "yo había comprado",
+          "tú habías comprado",
+          "él había comprado",
+          "ella había comprado",
+          "nosotros habíamos comprado",
+          "vosotros habíais comprado",
+          "ellos habían comprado",
+          "yo había descansado",
+          "tú habías descansado",
+          "él había descansado",
+          "ella había descansado",
+          "nosotros habíamos descansado",
+          "vosotros habíais descansado",
+          "ellos habían descansado",
+          "yo había trabajado",
+          "tú habías trabajado",
+          "él había trabajado",
+          "ella había trabajado",
+          "nosotros habíamos trabajado",
+          "vosotros habíais trabajado",
+          "ellos habían trabajado",
+        ],
+      };
+      const hadbeenworkingButton = {
+        phrases: [
+          "I HAD BEEN SPEAKING",
+          "YOU HAD BEEN SPEAKING",
+          "HE HAD BEEN SPEAKING",
+          "SHE HAD BEEN SPEAKING",
+          "WE HAD BEEN SPEAKING",
+          "YOU ALL HAD BEEN SPEAKING",
+          "THEY HAD BEEN SPEAKING",
+          "I HAD BEEN STUDYING",
+          "YOU HAD BEEN STUDYING",
+          "HE HAD BEEN STUDYING",
+          "SHE HAD BEEN STUDYING",
+          "WE HAD BEEN STUDYING",
+          "YOU ALL HAD BEEN STUDYING",
+          "THEY HAD BEEN STUDYING",
+          "I HAD BEEN WALKING",
+          "YOU HAD BEEN WALKING",
+          "HE HAD BEEN WALKING",
+          "SHE HAD BEEN WALKING",
+          "WE HAD BEEN WALKING",
+          "YOU ALL HAD BEEN WALKING",
+          "THEY HAD BEEN WALKING",
+          "I HAD BEEN WAITING",
+          "YOU HAD BEEN WAITING",
+          "HE HAD BEEN WAITING",
+          "SHE HAD BEEN WAITING",
+          "WE HAD BEEN WAITING",
+          "YOU ALL HAD BEEN WAITING",
+          "THEY HAD BEEN WAITING",
+          "I HAD BEEN BUYING",
+          "YOU HAD BEEN BUYING",
+          "HE HAD BEEN BUYING",
+          "SHE HAD BEEN BUYING",
+          "WE HAD BEEN BUYING",
+          "YOU ALL HAD BEEN BUYING",
+          "THEY HAD BEEN BUYING",
+          "I HAD BEEN RESTING",
+          "YOU HAD BEEN RESTING",
+          "HE HAD BEEN RESTING",
+          "SHE HAD BEEN RESTING",
+          "WE HAD BEEN RESTING",
+          "YOU ALL HAD BEEN RESTING",
+          "THEY HAD BEEN RESTING",
+          "I HAD BEEN WORKING",
+          "YOU HAD BEEN WORKING",
+          "HE HAD BEEN WORKING",
+          "SHE HAD BEEN WORKING",
+          "WE HAD BEEN WORKING",
+          "YOU ALL HAD BEEN WORKING",
+          "THEY HAD BEEN WORKING",
+        ],
+        translations: [
+          "yo había estado hablando",
+          "tú habías estado hablando",
+          "él había estado hablando",
+          "ella había estado hablando",
+          "nosotros habíamos estado hablando",
+          "vosotros habíais estado hablando",
+          "ellos habían estado hablando",
+          "yo había estado estudiando",
+          "tú habías estado estudiando",
+          "él había estado estudiando",
+          "ella había estado estudiando",
+          "nosotros habíamos estado estudiando",
+          "vosotros habíais estado estudiando",
+          "ellos habían estado estudiando",
+          "yo había estado caminando",
+          "tú habías estado caminando",
+          "él había estado caminando",
+          "ella había estado caminando",
+          "nosotros habíamos estado caminando",
+          "vosotros habíais estado caminando",
+          "ellos habían estado caminando",
+          "yo había estado esperando",
+          "tú habías estado esperando",
+          "él había estado esperando",
+          "ella había estado esperando",
+          "nosotros habíamos estado esperando",
+          "vosotros habíais estado esperando",
+          "ellos habían estado esperando",
+          "yo había estado comprando",
+          "tú habías estado comprando",
+          "él había estado comprando",
+          "ella había estado comprando",
+          "nosotros habíamos estado comprando",
+          "vosotros habíais estado comprando",
+          "ellos habían estado comprando",
+          "yo había estado descansando",
+          "tú habías estado descansando",
+          "él había estado descansando",
+          "ella había estado descansando",
+          "nosotros habíamos estado descansando",
+          "vosotros habíais estado descansando",
+          "ellos habían estado descansando",
+          "yo había estado trabajando",
+          "tú habías estado trabajando",
+          "él había estado trabajando",
+          "ella había estado trabajando",
+          "nosotros habíamos estado trabajando",
+          "vosotros habíais estado trabajando",
+          "ellos habían estado trabajando",
+        ],
+      };
+
+      const workedButton = {
+        phrases: [
+          "I WORKED",
+          "I RESTED",
+          "I WALKED",
+          "I WAITED",
+          "I BOUGHT",
+          "I VISITED",
+          "I HELPED",
+          "I SPOKE",
+          "YOU WORKED",
+          "YOU RESTED",
+          "YOU WALKED",
+          "YOU WAITED",
+          "YOU BOUGHT",
+          "YOU VISITED",
+          "YOU HELPED",
+          "YOU SPOKE",
+          "HE WORKED",
+          "HE RESTED",
+          "HE WALKED",
+          "HE WAITED",
+          "HE BOUGHT",
+          "HE VISITED",
+          "HE HELPED",
+          "HE SPOKE",
+          "SHE WORKED",
+          "SHE RESTED",
+          "SHE WALKED",
+          "SHE WAITED",
+          "SHE BOUGHT",
+          "SHE VISITED",
+          "SHE HELPED",
+          "SHE SPOKE",
+          "WE WORKED",
+          "WE RESTED",
+          "WE WALKED",
+          "WE WAITED",
+          "WE BOUGHT",
+          "WE VISITED",
+          "WE HELPED",
+          "WE SPOKE",
+          "YOU ALL WORKED",
+          "YOU ALL RESTED",
+          "YOU ALL WALKED",
+          "YOU ALL WAITED",
+          "YOU ALL BOUGHT",
+          "YOU ALL VISITED",
+          "YOU ALL HELPED",
+          "YOU ALL SPOKE",
+          "THEY WORKED",
+          "THEY RESTED",
+          "THEY WALKED",
+          "THEY WAITED",
+          "THEY BOUGHT",
+          "THEY VISITED",
+          "THEY HELPED",
+          "THEY SPOKE",
+        ],
+        translations: [
+          "yo trabajé",
+          "yo descansé",
+          "yo caminé",
+          "yo esperé",
+          "yo compré",
+          "yo visité",
+          "yo ayudé",
+          "yo hablé",
+          "tú trabajaste",
+          "tú descansaste",
+          "tú caminaste",
+          "tú esperaste",
+          "tú compraste",
+          "tú visitaste",
+          "tú ayudaste",
+          "tú hablaste",
+          "él trabajó",
+          "él descansó",
+          "él caminó",
+          "él esperó",
+          "él compró",
+          "él visitó",
+          "él ayudó",
+          "él habló",
+          "ella trabajó",
+          "ella descansó",
+          "ella caminó",
+          "ella esperó",
+          "ella compró",
+          "ella visitó",
+          "ella ayudó",
+          "ella habló",
+          "nosotros trabajamos",
+          "nosotros descansamos",
+          "nosotros caminamos",
+          "nosotros esperamos",
+          "nosotros compramos",
+          "nosotros visitamos",
+          "nosotros ayudamos",
+          "nosotros hablamos",
+          "vosotros trabajasteis",
+          "vosotros descansasteis",
+          "vosotros caminasteis",
+          "vosotros esperasteis",
+          "vosotros comprasteis",
+          "vosotros visitasteis",
+          "vosotros ayudasteis",
+          "vosotros hablasteis",
+          "ellos trabajaron",
+          "ellos descansaron",
+          "ellos caminaron",
+          "ellos esperaron",
+          "ellos compraron",
+          "ellos visitaron",
+          "ellos ayudaron",
+          "ellos hablaron",
+        ],
+      };
+      const thenwasButton = {
+        phrases: [
+          "I WAS BUSY SPEAKING",
+          "I WAS BUSY STUDYING",
+          "I WAS BUSY WALKING",
+          "I WAS BUSY WAITING",
+          "I WAS BUSY BUYING",
+          "I WAS BUSY RESTING",
+          "I WAS BUSY WORKING",
+          "YOU WERE BUSY SPEAKING",
+          "YOU WERE BUSY STUDYING",
+          "YOU WERE BUSY WALKING",
+          "YOU WERE BUSY WAITING",
+          "YOU WERE BUSY BUYING",
+          "YOU WERE BUSY RESTING",
+          "YOU WERE BUSY WORKING",
+          "HE WAS BUSY SPEAKING",
+          "HE WAS BUSY STUDYING",
+          "HE WAS BUSY WALKING",
+          "HE WAS BUSY WAITING",
+          "HE WAS BUSY BUYING",
+          "HE WAS BUSY RESTING",
+          "HE WAS BUSY WORKING",
+          "SHE WAS BUSY SPEAKING",
+          "SHE WAS BUSY STUDYING",
+          "SHE WAS BUSY WALKING",
+          "SHE WAS BUSY WAITING",
+          "SHE WAS BUSY BUYING",
+          "SHE WAS BUSY RESTING",
+          "SHE WAS BUSY WORKING",
+          "WE WERE BUSY SPEAKING",
+          "WE WERE BUSY STUDYING",
+          "WE WERE BUSY WALKING",
+          "WE WERE BUSY WAITING",
+          "WE WERE BUSY BUYING",
+          "WE WERE BUSY RESTING",
+          "WE WERE BUSY WORKING",
+          "YOU ALL WERE BUSY SPEAKING",
+          "YOU ALL WERE BUSY STUDYING",
+          "YOU ALL WERE BUSY WALKING",
+          "YOU ALL WERE BUSY WAITING",
+          "YOU ALL WERE BUSY BUYING",
+          "YOU ALL WERE BUSY RESTING",
+          "YOU ALL WERE BUSY WORKING",
+          "THEY WERE BUSY SPEAKING",
+          "THEY WERE BUSY STUDYING",
+          "THEY WERE BUSY WALKING",
+          "THEY WERE BUSY WAITING",
+          "THEY WERE BUSY BUYING",
+          "THEY WERE BUSY RESTING",
+          "THEY WERE BUSY WORKING",
+        ],
+        translations: [
+          "yo estuve trabajando",
+          "yo estuve ayudando",
+          "yo estuve descansando",
+          "yo estuve caminando",
+          "yo estuve estudiando",
+          "yo estuve hablando",
+          "yo estuve esperando",
+          "yo estuve caminando",
+          "yo estuve comprando",
+          "tu estuviste trabajando",
+          "tu estuviste ayudando",
+          "tu estuviste descansando",
+          "tu estuviste caminando",
+          "tu estuviste estudiando",
+          "tu estuviste hablando",
+          "tu estuviste esperando",
+          "tu estuviste caminando",
+          "tu estuviste comprando",
+          "él estuvo trabajando",
+          "él estuvo ayudando",
+          "él estuvo descansando",
+          "él estuvo caminando",
+          "él estuvo estudiando",
+          "él estuvo hablando",
+          "él estuvo esperando",
+          "él estuvo caminando",
+          "él estuvo comprando",
+          "ella estuvo trabajando",
+          "ella estuvo ayudando",
+          "ella estuvo descansando",
+          "ella estuvo caminando",
+          "ella estuvo estudiando",
+          "ella estuvo hablando",
+          "ella estuvo esperando",
+          "ella estuvo caminando",
+          "ella estuvo comprando",
+          "nosotros estuvimos trabajando",
+          "nosotros estuvimos ayudando",
+          "nosotros estuvimos descansando",
+          "nosotros estuvimos caminando",
+          "nosotros estuvimos estudiando",
+          "nosotros estuvimos hablando",
+          "nosotros estuvimos esperando",
+          "nosotros estuvimos caminando",
+          "nosotros estuvimos comprando",
+          "vosotros estuvisteis trabajando",
+          "vosotros estuvisteis ayudando",
+          "vosotros estuvisteis descansando",
+          "vosotros estuvisteis caminando",
+          "vosotros estuvisteis estudiando",
+          "vosotros estuvisteis hablando",
+          "vosotros estuvisteis esperando",
+          "vosotros estuvisteis caminando",
+          "vosotros estuvisteis comprando",
+          "ellos estuvieron trabajando",
+          "ellos estuvieron ayudando",
+          "ellos estuvieron descansando",
+          "ellos estuvieron caminando",
+          "ellos estuvieron estudiando",
+          "ellos estuvieron hablando",
+          "ellos estuvieron esperando",
+          "ellos estuvieron caminando",
+          "ellos estuvieron comprando",
+        ],
+      };
+
+      const usedtoworkButton = {
+        phrases: [
+          "I USED TO WORK",
+          "I USED TO REST",
+          "I USED TO WALK",
+          "I USED TO STUDY",
+          "I USED TO SPEAK",
+          "I USED TO WAIT",
+          "I USED TO BUY",
+          "YOU USED TO WORK",
+          "YOU USED TO REST",
+          "YOU USED TO WALK",
+          "YOU USED TO STUDY",
+          "YOU USED TO SPEAK",
+          "YOU USED TO WAIT",
+          "YOU USED TO BUY",
+          "HE USED TO WORK",
+          "HE USED TO REST",
+          "HE USED TO WALK",
+          "HE USED TO STUDY",
+          "HE USED TO SPEAK",
+          "HE USED TO WAIT",
+          "HE USED TO BUY",
+          "SHE USED TO WORK",
+          "SHE USED TO REST",
+          "SHE USED TO WALK",
+          "SHE USED TO STUDY",
+          "SHE USED TO SPEAK",
+          "SHE USED TO WAIT",
+          "SHE USED TO BUY",
+          "WE USED TO WORK",
+          "WE USED TO REST",
+          "WE USED TO WALK",
+          "WE USED TO STUDY",
+          "WE USED TO SPEAK",
+          "WE USED TO WAIT",
+          "WE USED TO BUY",
+          "YOU ALL USED TO WORK",
+          "YOU ALL USED TO REST",
+          "YOU ALL USED TO WALK",
+          "YOU ALL USED TO STUDY",
+          "YOU ALL USED TO SPEAK",
+          "YOU ALL USED TO WAIT",
+          "YOU ALL USED TO BUY",
+          "THEY USED TO WORK",
+          "THEY USED TO REST",
+          "THEY USED TO WALK",
+          "THEY USED TO STUDY",
+          "THEY USED TO SPEAK",
+          "THEY USED TO WAIT",
+          "THEY USED TO BUY",
+        ],
+        translations: [
+          "yo trabajaba",
+          "yo descansaba",
+          "yo caminaba",
+          "yo estudiaba",
+          "yo hablaba",
+          "yo esperaba",
+          "yo compraba",
+          "tú trabajabas",
+          "tú descansabas",
+          "tú caminabas",
+          "tú estudiabas",
+          "tú hablabas",
+          "tú esperabas",
+          "tú comprabas",
+          "él trabajaba",
+          "él descansaba",
+          "él caminaba",
+          "él estudiaba",
+          "él hablaba",
+          "él esperaba",
+          "él compraba",
+          "ella trabajaba",
+          "ella descansaba",
+          "ella caminaba",
+          "ella estudiaba",
+          "ella hablaba",
+          "ella esperaba",
+          "ella compraba",
+          "nosotros trabajábamos",
+          "nosotros descansábamos",
+          "nosotros caminábamos",
+          "nosotros estudiábamos",
+          "nosotros hablábamos",
+          "nosotros esperábamos",
+          "nosotros comprábamos",
+          "vosotros trabajabais",
+          "vosotros descansabais",
+          "vosotros caminabais",
+          "vosotros estudiabais",
+          "vosotros hablabais",
+          "vosotros esperabais",
+          "vosotros comprabais",
+          "ellos trabajaban",
+          "ellos descansaban",
+          "ellos caminaban",
+          "ellos estudiaban",
+          "ellos hablaban",
+          "ellos esperaban",
+          "ellos compraban",
+        ],
+      };
+      const wasworkingButton = {
+        phrases: [
+          "I WAS SPEAKING",
+          "I WAS STUDYING",
+          "I WAS WALKING",
+          "I WAS WAITING",
+          "I WAS BUYING",
+          "I WAS RESTING",
+          "I WAS WORKING",
+          "YOU WERE SPEAKING",
+          "YOU WERE STUDYING",
+          "YOU WERE WALKING",
+          "YOU WERE WAITING",
+          "YOU WERE BUYING",
+          "YOU WERE RESTING",
+          "YOU WERE WORKING",
+          "HE WAS SPEAKING",
+          "HE WAS STUDYING",
+          "HE WAS WALKING",
+          "HE WAS WAITING",
+          "HE WAS BUYING",
+          "HE WAS RESTING",
+          "HE WAS WORKING",
+          "SHE WAS SPEAKING",
+          "SHE WAS STUDYING",
+          "SHE WAS WALKING",
+          "SHE WAS WAITING",
+          "SHE WAS BUYING",
+          "SHE WAS RESTING",
+          "SHE WAS WORKING",
+          "WE WERE SPEAKING",
+          "WE WERE STUDYING",
+          "WE WERE WALKING",
+          "WE WERE WAITING",
+          "WE WERE BUYING",
+          "WE WERE RESTING",
+          "WE WERE WORKING",
+          "YOU ALL WERE SPEAKING",
+          "YOU ALL WERE STUDYING",
+          "YOU ALL WERE WALKING",
+          "YOU ALL WERE WAITING",
+          "YOU ALL WERE BUYING",
+          "YOU ALL WERE RESTING",
+          "YOU ALL WERE WORKING",
+          "THEY WERE SPEAKING",
+          "THEY WERE STUDYING",
+          "THEY WERE WALKING",
+          "THEY WERE WAITING",
+          "THEY WERE BUYING",
+          "THEY WERE RESTING",
+          "THEY WERE WORKING",
+        ],
+        translations: [
+          "yo estaba hablando",
+          "yo estaba estudiando",
+          "yo estaba caminando",
+          "yo estaba esperando",
+          "yo estaba comprando",
+          "yo estaba descansando",
+          "yo estaba trabajando",
+          "tú estabas hablando",
+          "tú estabas estudiando",
+          "tú estabas caminando",
+          "tú estabas esperando",
+          "tú estabas comprando",
+          "tú estabas descansando",
+          "tú estabas trabajando",
+          "él estaba hablando",
+          "él estaba estudiando",
+          "él estaba caminando",
+          "él estaba esperando",
+          "él estaba comprando",
+          "él estaba descansando",
+          "él estaba trabajando",
+          "ella estaba hablando",
+          "ella estaba estudiando",
+          "ella estaba caminando",
+          "ella estaba esperando",
+          "ella estaba comprando",
+          "ella estaba descansando",
+          "ella estaba trabajando",
+          "nosotros estábamos hablando",
+          "nosotros estábamos estudiando",
+          "nosotros estábamos caminando",
+          "nosotros estábamos esperando",
+          "nosotros estábamos comprando",
+          "nosotros estábamos descansando",
+          "nosotros estábamos trabajando",
+          "vosotros estabais hablando",
+          "vosotros estabais estudiando",
+          "vosotros estabais caminando",
+          "vosotros estabais esperando",
+          "vosotros estabais comprando",
+          "vosotros estabais descansando",
+          "vosotros estabais trabajando",
+          "ellos estaban hablando",
+          "ellos estaban estudiando",
+          "ellos estaban caminando",
+          "ellos estaban esperando",
+          "ellos estaban comprando",
+          "ellos estaban descansando",
+          "ellos estaban trabajando",
+        ],
+      };
+      const haveworkedButton = {
+        phrases: [
+          "I HAVE WALKED",
+          "YOU HAVE WALKED",
+          "HE HAS WALKED",
+          "WE HAVE WALKED",
+          "YOU GUYS HAVE WALKED",
+          "THEY HAVE WALKED",
+          "I HAVE WORKED",
+          "YOU HAVE WORKED",
+          "HE HAS WORKED",
+          "WE HAVE WORKED",
+          "YOU GUYS HAVE WORKED",
+          "THEY HAVE WORKED",
+          "I HAVE WAITED",
+          "YOU HAVE WAITED",
+          "HE HAS WAITED",
+          "WE HAVE WAITED",
+          "YOU GUYS HAVE WAITED",
+          "THEY HAVE WAITED",
+          "I HAVE RESTED",
+          "YOU HAVE RESTED",
+          "HE HAS RESTED",
+          "WE HAVE RESTED",
+          "YOU GUYS HAVE RESTED",
+          "THEY HAVE RESTED",
+          "I HAVE STUDIED",
+          "YOU HAVE STUDIED",
+          "HE HAS STUDIED",
+          "WE HAVE STUDIED",
+          "YOU GUYS HAVE STUDIED",
+          "THEY HAVE STUDIED",
+          "I HAVE BOUGHT",
+          "YOU HAVE BOUGHT",
+          "HE HAS BOUGHT",
+          "WE HAVE BOUGHT",
+          "YOU GUYS BOUGHT",
+          "THEY HAVE BOUGHT",
+          "I HAVE SPOKEN",
+          "YOU HAVE SPOKEN",
+          "HE HAS SPOKEN",
+          "WE HAVE SPOKEN",
+          "YOU GUYS HAVE SPOKEN",
+          "THEY HAVE SPOKEN",
+        ],
+        translations: [
+          "yo he caminado",
+          "tú has caminado",
+          "él ha caminado",
+          "nosotros hemos caminado",
+          "vosotros habéis caminado",
+          "ellos han caminado",
+          "yo he trabajado",
+          "tú has trabajado",
+          "él ha trabajado",
+          "nosotros hemos trabajado",
+          "vosotros habéis trabajado",
+          "ellos han trabajado",
+          "yo he  esperado",
+          "tú has esperado",
+          "él ha esperado",
+          "nosotros hemos esperado",
+          "vosotros habéis esperado",
+          "ellos han esperado",
+          "yo he descansado",
+          "tú has descansado",
+          "él ha descansado",
+          "nosotros hemos descansado",
+          "vosotros habéis descansado",
+          "ellos han descansado",
+          "yo he estudiado",
+          "tú has estudiado",
+          "él ha estudiado",
+          "nosotros hemos estudiado",
+          "vosotros habéis estudiado",
+          "ellos han estudiado",
+          "yo he comprado",
+          "tú has comprado",
+          "él ha comprado",
+          "nosotros hemos comprado",
+          "vosotros habéis comprado",
+          "ellos han comprado",
+          "yo he hablado",
+          "tú has hablado",
+          "él ha hablado",
+          "nosotros hemos hablado",
+          "vosotros habéis hablado",
+          "ellos han hablado",
+        ],
+      };
+      const havebeenworkingButton = {
+        phrases: [
+          "I HAVE BEEN WALKING",
+          "YOU HAVE BEEN WALKING",
+          "HE HAS BEEN WALKING",
+          "WE HAVE BEEN WALKING",
+          "YOU GUYS HAVE BEEN WALKING",
+          "THEY HAVE BEEN WALKING",
+          "I HAVE BEEN WORKING",
+          "YOU HAVE BEEN WORKING",
+          "HE HAS BEEN WORKING",
+          "WE HAVE BEEN WORKING",
+          "YOU GUYS HAVE BEEN WORKING",
+          "THEY HAVE BEEN WORKING",
+          "I HAVE BEEN WAITING",
+          "YOU HAVE BEEN WAITING",
+          "HE HAS BEEN WAITING",
+          "WE HAVE BEEN WAITING",
+          "YOU GUYS HAVE BEEN WAITING",
+          "THEY HAVE BEEN WAITING",
+          "I HAVE BEEN RESTING",
+          "YOU HAVE BEEN RESTING",
+          "HE HAS BEEN RESTING",
+          "WE HAVE BEEN RESTING",
+          "YOU GUYS HAVE BEEN RESTING",
+          "THEY HAVE BEEN RESTING",
+          "I HAVE BEEN STUDING",
+          "YOU HAVE BEEN STUDING",
+          "HE HAS BEEN STUDING",
+          "WE HAVE BEEN STUDING",
+          "YOU GUYS HAVE BEEN STUDING",
+          "THEY HAVE BEEN STUDING",
+          "I HAVE BEEN BUYING",
+          "YOU HAVE BEEN BUYING",
+          "HE HAS BEEN BUYING",
+          "WE HAVE BEEN BUYING",
+          "YOU GUYS HAVE BEEN BUYING",
+          "THEY HAVE BEEN BUYING",
+          "I HAVE BEEN SPEAKING",
+          "YOU HAVE BEEN SPEAKING",
+          "HE HAS BEEN SPEAKING",
+          "WE HAVE BEEN SPEAKING",
+          "YOU GUYS BEEN SPEAKING",
+          "THEY HAVE BEEN SPEAKING",
+        ],
+        translations: [
+          "yo he estado caminando",
+          "tú has estado caminando",
+          "él ha estado caminando",
+          "nosotros hemos estado caminando",
+          "vosotros habéis estado caminando",
+          "ellos han estado caminando",
+          "yo he estado trabajando",
+          "tú has estado trabajando",
+          "él ha estado trabajando",
+          "nosotros hemos estado trabajando",
+          "vosotros habéis estado trabajando",
+          "ellos han estado trabajando",
+          "yo he estado esperando",
+          "tú has estado esperando",
+          "él ha estado esperando",
+          "nosotros hemos estado esperando",
+          "vosotros habéis estado esperando",
+          "ellos han estado esperando",
+          "yo he estado descansando",
+          "tú has estado descansando",
+          "él ha estado descansando",
+          "nosotros hemos estado descansando",
+          "vosotros habéis estado descansando",
+          "ellos han estado descansando",
+          "yo he estado estudiando",
+          "tú has estado estudiando",
+          "él ha estado estudiando",
+          "nosotros hemos estado estudiando",
+          "vosotros habéis estado estudiando",
+          "ellos han estado estudiando",
+          "yo he estado comprando",
+          "tú has estado comprando",
+          "él ha estado comprando",
+          "nosotros hemos estado comprando",
+          "vosotros habéis estado comprando",
+          "ellos han estado comprando",
+          "yo he estado hablando",
+          "tú has estado hablando",
+          "él ha estado hablando",
+          "nosotros hemos estado hablando",
+          "vosotros habéis estado hablando",
+          "ellos han estado hablando",
+        ],
+      };
+
+      const workButton = {
+        phrases: [
+          "I WORK",
+          "I REST",
+          "I WALK",
+          "I STUDY",
+          "I SPEAK",
+          "I WAIT",
+          "I BUY",
+          "YOU WORK",
+          "YOU REST",
+          "YOU WALK",
+          "YOU STUDY",
+          "YOU SPEAK",
+          "YOU WAIT",
+          "YOU BUY",
+          "HE WORKS",
+          "HE RESTS",
+          "HE WALKS",
+          "HE STUDIES",
+          "HE SPEAKS",
+          "HE WAITS",
+          "HE BUYS",
+          "SHE WORKS",
+          "SHE RESTS",
+          "SHE WALKS",
+          "SHE STUDIES",
+          "SHE SPEAKS",
+          "SHE WAITS",
+          "SHE BUYS",
+          "WE WORK",
+          "WE REST",
+          "WE WALK",
+          "WE STUDY",
+          "WE SPEAK",
+          "WE WAIT",
+          "WE BUY",
+          "YOU GUYS WORK",
+          "YOU GUYS REST",
+          "YOU GUYS WALK",
+          "YOU GUYS STUDY",
+          "YOU GUYS SPEAK",
+          "YOU GUYS WAIT",
+          "YOU GUYS BUY",
+          "THEY WORK",
+          "THEY REST",
+          "THEY WALK",
+          "THEY STUDY",
+          "THEY SPEAK",
+          "THEY WAIT",
+          "THEY BUY",
+        ],
+        translations: [
+          "yo trabajo",
+          "yo descanso",
+          "yo camino",
+          "yo estudio",
+          "yo hablo",
+          "yo espero",
+          "yo compro",
+          "tú trabajas",
+          "tú descansas",
+          "tú caminas",
+          "tú estudias",
+          "tú hablas",
+          "tú esperas",
+          "tú compras",
+          "él trabaja",
+          "él descansa",
+          "él camina",
+          "él estudia",
+          "él habla",
+          "él  espera",
+          "él compra",
+          "ella trabaja",
+          "ella descansa",
+          "ella camina",
+          "ella estudia",
+          "ella habla",
+          "ella espera",
+          "ella compra",
+          "nosotros trabajamos",
+          "nosotros descansamos",
+          "nosotros caminamos",
+          "nosotros estudiamos",
+          "nosotros hablamos",
+          "nosotros esperamos",
+          "nosotros compramos",
+          "vosotros trabajáis",
+          "vosotros descansáis",
+          "vosotros camináis",
+          "vosotros estudiáis",
+          "vosotros habláis",
+          "vosotros esperáis",
+          "vosotros compráis",
+          "ellos trabajan",
+          "ellos descansan",
+          "ellos caminan",
+          "ellos estudian",
+          "ellos hablan",
+          "ellos esperan",
+          "ellos compran",
+        ],
+      };
+      const isworkingButton = {
+        phrases: [
+          "I AM SPEAKING",
+          "I AM STUDYING",
+          "I AM WALKING",
+          "I AM WAITING",
+          "I AM BUYING",
+          "I AM RESTING",
+          "I AM WORKING",
+          "YOU ARE SPEAKING",
+          "YOU ARE STUDYING",
+          "YOU ARE WALKING",
+          "YOU ARE WAITING",
+          "YOU ARE BUYING",
+          "YOU ARE RESTING",
+          "YOU ARE WORKING",
+          "HE IS SPEAKING",
+          "HE IS STUDYING",
+          "HE IS WALKING",
+          "HE IS WAITING",
+          "HE IS BUYING",
+          "HE IS RESTING",
+          "HE IS WORKING",
+          "SHE IS SPEAKING",
+          "SHE IS STUDYING",
+          "SHE IS WALKING",
+          "SHE IS WAITING",
+          "SHE IS BUYING",
+          "SHE IS RESTING",
+          "SHE IS WORKING",
+          "WE ARE SPEAKING",
+          "WE ARE STUDYING",
+          "WE ARE WALKING",
+          "WE ARE WAITING",
+          "WE ARE BUYING",
+          "WE ARE RESTING",
+          "WE ARE WORKING",
+          "YOU ALL ARE SPEAKING",
+          "YOU ALL ARE STUDYING",
+          "YOU ALL ARE WALKING",
+          "YOU ALL ARE WAITING",
+          "YOU ALL ARE BUYING",
+          "YOU ALL ARE RESTING",
+          "YOU ALL ARE WORKING",
+          "THEY ARE SPEAKING",
+          "THEY ARE STUDYING",
+          "THEY ARE WALKING",
+          "THEY ARE WAITING",
+          "THEY ARE BUYING",
+          "THEY ARE RESTING",
+          "THEY ARE WORKING",
+        ],
+        translations: [
+          "yo estoy hablando",
+          "yo estoy estudiando",
+          "yo estoy caminando",
+          "yo estoy esperando",
+          "yo estoy comprando",
+          "yo estoy descansando",
+          "yo estoy trabajando",
+          "tú estás hablando",
+          "tú estás estudiando",
+          "tú estás caminando",
+          "tú estás esperando",
+          "tú estás comprando",
+          "tú estás descansando",
+          "tú estás trabajando",
+          "él está hablando",
+          "él está estudiando",
+          "él está caminando",
+          "él está esperando",
+          "él está comprando",
+          "él está descansando",
+          "él está trabajando",
+          "ella está hablando",
+          "ella está estudiando",
+          "ella está caminando",
+          "ella está esperando",
+          "ella está comprando",
+          "ella está descansando",
+          "ella está trabajando",
+          "nosotros estamos hablando",
+          "nosotros estamos estudiando",
+          "nosotros estamos caminando",
+          "nosotros estamos esperando",
+          "nosotros estamos comprando",
+          "nosotros estamos descansando",
+          "nosotros estamos trabajando",
+          "vosotros estáis hablando",
+          "vosotros estáis estudiando",
+          "vosotros estáis caminando",
+          "vosotros estáis esperando",
+          "vosotros estáis comprando",
+          "vosotros estáis descansando",
+          "vosotros estáis trabajando",
+          "ellos están hablando",
+          "ellos están estudiando",
+          "ellos están caminando",
+          "ellos están esperando",
+          "ellos están comprando",
+          "ellos están descansando",
+          "ellos están trabajando",
+        ],
+      };
+      const willworkButton = {
+        phrases: [
+          "I WILL WORK",
+          "I WILL REST",
+          "I WILL WALK",
+          "I WILL STUDY",
+          "I WILL SPEAK",
+          "I WILL WAIT",
+          "I WILL BUY",
+          "YOU WILL WORK",
+          "YOU WILL REST",
+          "YOU WILL WALK",
+          "YOU WILL STUDY",
+          "YOU WILL SPEAK",
+          "YOU WILL WAIT",
+          "YOU WILL BUY",
+          "HE WILL WORK",
+          "HE WILL REST",
+          "HE WILL WALK",
+          "HE WILL STUDY",
+          "HE WILL SPEAK",
+          "HE WILL WAIT",
+          "HE WILL BUY",
+          "SHE WILL WORK",
+          "SHE WILL REST",
+          "SHE WILL WALK",
+          "SHE WILL STUDY",
+          "SHE WILL SPEAK",
+          "SHE WILL WAIT",
+          "SHE WILL BUY",
+          "WE WILL WORK",
+          "WE WILL REST",
+          "WE WILL WALK",
+          "WE WILL STUDY",
+          "WE WILL SPEAK",
+          "WE WILL WAIT",
+          "WE WILL BUY",
+          "YOU GUYS WILL WORK",
+          "YOU GUYS WILL REST",
+          "YOU GUYS WILL WALK",
+          "YOU GUYS WILL STUDY",
+          "YOU GUYS WILL SPEAK",
+          "YOU GUYS WILL WAIT",
+          "YOU GUYS WILL BUY",
+          "THEY WILL WORK",
+          "THEY WILL REST",
+          "THEY WILL WALK",
+          "THEY WILL STUDY",
+          "THEY WILL SPEAK",
+          "THEY WILL WAIT",
+          "THEY WILL BUY",
+        ],
+        translations: [
+          "yo trabajaré",
+          "yo descansaré",
+          "yo caminaré",
+          "yo estudiaré",
+          "yo hablaré",
+          "yo esperaré",
+          "yo compraré",
+          "tú trabajarás",
+          "tú descansarás",
+          "tú caminarás",
+          "tú estudiarás",
+          "tú hablarás",
+          "tú esperarás",
+          "tú comprarás",
+          "él trabajará",
+          "él descansará",
+          "él caminará",
+          "él estudiará",
+          "él hablará",
+          "él  esperará",
+          "él comprará",
+          "ella trabajará",
+          "ella descansará",
+          "ella caminará",
+          "ella estudiará",
+          "ella hablará",
+          "ella esperará",
+          "ella comprará",
+          "nosotros trabajaremos",
+          "nosotros descansaremos",
+          "nosotros caminaremos",
+          "nosotros estudiaremos",
+          "nosotros hablaremos",
+          "nosotros esperaremos",
+          "nosotros compraremos",
+          "vosotros trabajaréis",
+          "vosotros descansaréis",
+          "vosotros caminaréis",
+          "vosotros estudiaréis",
+          "vosotros hablaréis",
+          "vosotros esperaréis",
+          "vosotros compraréis",
+          "ellos trabajarán",
+          "ellos descansarán",
+          "ellos caminarán",
+          "ellos estudiarán",
+          "ellos hablarán",
+          "ellos esperarán",
+          "ellos comprarán",
+        ],
+      };
+      const willbeworkingButton = {
+        phrases: [
+          "I WILL BE WORKING",
+          "I WILL BE RESTING",
+          "I WILL BE WALKING",
+          "I WILL BE STUDYING",
+          "I WILL BE SPEAKING",
+          "I WILL BE WAITING",
+          "I WILL BE BUYING",
+          "YOU WILL BE WORKING",
+          "YOU WILL BE RESTING",
+          "YOU WILL BE WALKING",
+          "YOU WILL BE STUDYING",
+          "YOU WILL BE SPEAKING",
+          "YOU WILL BE WAITING",
+          "YOU WILL BE BUYING",
+          "HE WILL BE WORKING",
+          "HE WILL BE RESTING",
+          "HE WILL BE WALKING",
+          "HE WILL BE STUDYING",
+          "HE WILL BE SPEAKING",
+          "HE WILL BE WAITING",
+          "HE WILL BE BUYING",
+          "SHE WILL BE WORKING",
+          "SHE WILL BE RESTING",
+          "SHE WILL BE WALKING",
+          "SHE WILL BE STUDYING",
+          "SHE WILL BE SPEAKING",
+          "SHE WILL BE WAITING",
+          "SHE WILL BE BUYING",
+          "WE WILL BE WORKING",
+          "WE WILL BE RESTING",
+          "WE WILL BE WALKING",
+          "WE WILL BE STUDYING",
+          "WE WILL BE SPEAKING",
+          "WE WILL BE WAITING",
+          "WE WILL BE BUYING",
+          "YOU ALL WILL BE WORKING",
+          "YOU ALL WILL BE RESTING",
+          "YOU ALL WILL BE WALKING",
+          "YOU ALL WILL BE STUDYING",
+          "YOU ALL WILL BE SPEAKING",
+          "YOU ALL WILL BE WAITING",
+          "YOU ALL WILL BE BUYING",
+          "THEY WILL BE WORKING",
+          "THEY WILL BE RESTING",
+          "THEY WILL BE WALKING",
+          "THEY WILL BE STUDYING",
+          "THEY WILL BE SPEAKING",
+          "THEY WILL BE WAITING",
+          "THEY WILL BE BUYING",
+        ],
+        translations: [
+          "yo estaré trabajando",
+          "yo estaré descansando",
+          "yo estaré caminando",
+          "yo estaré estudiando",
+          "yo estaré hablando",
+          "yo estaré esperando",
+          "yo estaré comprando",
+          "tú estarás trabajando",
+          "tú estarás descansando",
+          "tú estarás caminando",
+          "tú estarás estudiando",
+          "tú estarás hablando",
+          "tú estarás esperando",
+          "tú estarás comprando",
+          "él estará trabajando",
+          "él estará descansando",
+          "él estará caminando",
+          "él estará estudiando",
+          "él estará hablando",
+          "él estará esperando",
+          "él estará comprando",
+          "ella estará trabajando",
+          "ella estará descansando",
+          "ella estará caminando",
+          "ella estará estudiando",
+          "ella estará hablando",
+          "ella estará esperando",
+          "ella estará comprando",
+          "nosotros estaremos trabajando",
+          "nosotros estaremos descansando",
+          "nosotros estaremos caminando",
+          "nosotros estaremos estudiando",
+          "nosotros estaremos hablando",
+          "nosotros estaremos esperando",
+          "nosotros estaremos comprando",
+          "vosotros estaréis trabajando",
+          "vosotros estaréis descansando",
+          "vosotros estaréis caminando",
+          "vosotros estaréis estudiando",
+          "vosotros estaréis hablando",
+          "vosotros estaréis esperando",
+          "vosotros estaréis comprando",
+          "ellos estarán trabajando",
+          "ellos estarán descansando",
+          "ellos estarán caminando",
+          "ellos estarán estudiando",
+          "ellos estarán hablando",
+          "ellos estarán esperando",
+          "ellos estarán comprando",
+        ],
+      };
+      const wouldworkButton = {
+        phrases: [
+          "I WOULD SPEAK",
+          "YOU WOULD SPEAK",
+          "HE WOULD SPEAK",
+          "SHE WOULD SPEAK",
+          "WE WOULD SPEAK",
+          "YOU ALL WOULD SPEAK",
+          "THEY WOULD SPEAK",
+          "I WOULD STUDY",
+          "YOU WOULD STUDY",
+          "HE WOULD STUDY",
+          "SHE WOULD STUDY",
+          "WE WOULD STUDY",
+          "YOU ALL WOULD STUDY",
+          "THEY WOULD STUDY",
+          "I WOULD WALK",
+          "YOU WOULD WALK",
+          "HE WOULD WALK",
+          "SHE WOULD WALK",
+          "WE WOULD WALK",
+          "YOU ALL WOULD WALK",
+          "THEY WOULD WALK",
+          "I WOULD WAIT",
+          "YOU WOULD WAIT",
+          "HE WOULD WAIT",
+          "SHE WOULD WAIT",
+          "WE WOULD WAIT",
+          "YOU ALL WOULD WAIT",
+          "THEY WOULD WAIT",
+          "I WOULD BUY",
+          "YOU WOULD BUY",
+          "HE WOULD BUY",
+          "SHE WOULD BUY",
+          "WE WOULD BUY",
+          "YOU ALL WOULD BUY",
+          "THEY WOULD BUY",
+          "I WOULD REST",
+          "YOU WOULD REST",
+          "HE WOULD REST",
+          "SHE WOULD REST",
+          "WE WOULD REST",
+          "YOU ALL WOULD REST",
+          "THEY WOULD REST",
+          "I WOULD WORK",
+          "YOU WOULD WORK",
+          "HE WOULD WORK",
+          "SHE WOULD WORK",
+          "WE WOULD WORK",
+          "YOU ALL WOULD WORK",
+          "THEY WOULD WORK",
+        ],
+        translations: [
+          "yo hablaría",
+          "tú hablarías",
+          "él hablaría",
+          "ella hablaría",
+          "nosotros hablaríamos",
+          "vosotros hablaríais",
+          "ellos hablarían",
+          "yo estudiaría",
+          "tú estudiarías",
+          "él estudiaría",
+          "ella estudiaría",
+          "nosotros estudiaríamos",
+          "vosotros estudiaríais",
+          "ellos estudiarían",
+          "yo caminaría",
+          "tú caminarías",
+          "él caminaría",
+          "ella caminaría",
+          "nosotros caminaríamos",
+          "vosotros caminaríais",
+          "ellos caminarían",
+          "yo esperaría",
+          "tú esperarías",
+          "él esperaría",
+          "ella esperaría",
+          "nosotros esperaríamos",
+          "vosotros esperaríais",
+          "ellos esperarían",
+          "yo compraría",
+          "tú comprarías",
+          "él compraría",
+          "ella compraría",
+          "nosotros compraríamos",
+          "vosotros compraríais",
+          "ellos comprarían",
+          "yo descansaría",
+          "tú descansarías",
+          "él descansaría",
+          "ella descansaría",
+          "nosotros descansaríamos",
+          "vosotros descansaríais",
+          "ellos descansarían",
+          "yo trabajaría",
+          "tú trabajarías",
+          "él trabajaría",
+          "ella trabajaría",
+          "nosotros trabajaríamos",
+          "vosotros trabajaríais",
+          "ellos trabajarían",
+        ],
+      };
+      const wouldbeworkingButton = {
+        phrases: [
+          "I WOULD BE SPEAKING",
+          "YOU WOULD BE SPEAKING",
+          "HE WOULD BE SPEAKING",
+          "SHE WOULD BE SPEAKING",
+          "WE WOULD BE SPEAKING",
+          "YOU ALL WOULD BE SPEAKING",
+          "THEY WOULD BE SPEAKING",
+          "I WOULD BE STUDYING",
+          "YOU WOULD BE STUDYING",
+          "HE WOULD BE STUDYING",
+          "SHE WOULD BE STUDYING",
+          "WE WOULD BE STUDYING",
+          "YOU ALL WOULD BE STUDYING",
+          "THEY WOULD BE STUDYING",
+          "I WOULD BE WALKING",
+          "YOU WOULD BE WALKING",
+          "HE WOULD BE WALKING",
+          "SHE WOULD BE WALKING",
+          "WE WOULD BE WALKING",
+          "YOU ALL WOULD BE WALKING",
+          "THEY WOULD BE WALKING",
+          "I WOULD BE WAITING",
+          "YOU WOULD BE WAITING",
+          "HE WOULD BE WAITING",
+          "SHE WOULD BE WAITING",
+          "WE WOULD BE WAITING",
+          "YOU ALL WOULD BE WAITING",
+          "THEY WOULD BE WAITING",
+          "I WOULD BE BUYING",
+          "YOU WOULD BE BUYING",
+          "HE WOULD BE BUYING",
+          "SHE WOULD BE BUYING",
+          "WE WOULD BE BUYING",
+          "YOU ALL WOULD BE BUYING",
+          "THEY WOULD BE BUYING",
+          "I WOULD BE RESTING",
+          "YOU WOULD BE RESTING",
+          "HE WOULD BE RESTING",
+          "SHE WOULD BE RESTING",
+          "WE WOULD BE RESTING",
+          "YOU ALL WOULD BE RESTING",
+          "THEY WOULD BE RESTING",
+          "I WOULD BE WORKING",
+          "YOU WOULD BE WORKING",
+          "HE WOULD BE WORKING",
+          "SHE WOULD BE WORKING",
+          "WE WOULD BE WORKING",
+          "YOU ALL WOULD BE WORKING",
+          "THEY WOULD BE WORKING",
+        ],
+        translations: [
+          "yo estaría hablando",
+          "tú estarías hablando",
+          "él estaría hablando",
+          "ella estaría hablando",
+          "nosotros estaríamos hablando",
+          "vosotros estaríais hablando",
+          "ellos estarían hablando",
+          "yo estaría estudiando",
+          "tú estarías estudiando",
+          "él estaría estudiando",
+          "ella estaría estudiando",
+          "nosotros estaríamos estudiando",
+          "vosotros estaríais estudiando",
+          "ellos estarían estudiando",
+          "yo estaría caminando",
+          "tú estarías caminando",
+          "él estaría caminando",
+          "ella estaría caminando",
+          "nosotros estaríamos caminando",
+          "vosotros estaríais caminando",
+          "ellos estarían caminando",
+          "yo estaría esperando",
+          "tú estarías esperando",
+          "él estaría esperando",
+          "ella estaría esperando",
+          "nosotros estaríamos esperando",
+          "vosotros estaríais esperando",
+          "ellos estarían esperando",
+          "yo estaría comprando",
+          "tú estarías comprando",
+          "él estaría comprando",
+          "ella estaría comprando",
+          "nosotros estaríamos comprando",
+          "vosotros estaríais comprando",
+          "ellos estarían comprando",
+          "yo estaría descansando",
+          "tú estarías descansando",
+          "él estaría descansando",
+          "ella estaría descansando",
+          "nosotros estaríamos descansando",
+          "vosotros estaríais descansando",
+          "ellos estarían descansando",
+          "yo estaría trabajando",
+          "tú estarías trabajando",
+          "él estaría trabajando",
+          "ella estaría trabajando",
+          "nosotros estaríamos trabajando",
+          "vosotros estaríais trabajando",
+          "ellos estarían trabajando",
+        ],
+      };
+
+     let lastContainer = null;
+let sections = {};
+let selectedButtons = {};
+
+function addSection(contentSet, containerId) {
+  const sectionsContainer = document.getElementById("sections-container");
+
+  const newSection = document.createElement("div");
+  newSection.classList.add("section");
+  newSection.innerHTML = `
+    <h2>Section for ${containerId}</h2>
+    <div>
+      <h3>Phrases</h3>
+      <textarea placeholder="Enter phrases, one per line">${contentSet.phrases.join("\n")}</textarea>
+    </div>
+    <div>
+      <h3>Translations</h3>
+      <textarea placeholder="Enter translations, one per line">${contentSet.translations.join("\n")}</textarea>
+    </div>
+  `;
+  newSection.onclick = function () {
+    selectSection(newSection);
+  };
+  sectionsContainer.appendChild(newSection);
+  sections[containerId] = newSection;
+}
+
+function updatePhraseModelDisplay() {
+  const phraseModelContent = document.getElementById("phraseModelContent");
+  phraseModelContent.innerHTML = ""; // Clear current content
+
+  const phrases = Object.keys(selectedButtons)
+    .map((containerId) => {
+      const button = selectedButtons[containerId];
+      return button ? button.innerText : "";
+    })
+    .filter((phrase) => phrase)
+    .join(" "); // Concatenate phrases with a space separator
+
+  phraseModelContent.textContent = phrases;
+}
+
+function addContentSet(contentSet, buttonElement, containerId) {
+  const existingSection = sections[containerId];
+
+  if (buttonElement.classList.contains("selected")) {
+    removeContentSet(contentSet, containerId);
+    buttonElement.classList.remove("selected");
+    delete selectedButtons[containerId];
+  } else {
+    if (!existingSection) {
+      addSection(contentSet, containerId);
+    } else {
+      const phrasesTextarea = existingSection.querySelector(
+        'textarea[placeholder="Enter phrases, one per line"]'
+      );
+      const translationsTextarea = existingSection.querySelector(
+        'textarea[placeholder="Enter translations, one per line"]'
+      );
+
+      const existingPhrases = phrasesTextarea.value
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line);
+      const existingTranslations = translationsTextarea.value
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line);
+
+      phrasesTextarea.value = [
+        ...existingPhrases,
+        ...contentSet.phrases,
+      ].join("\n");
+      translationsTextarea.value = [
+        ...existingTranslations,
+        ...contentSet.translations,
+      ].join("\n");
+    }
+
+    buttonElement.classList.add("selected");
+    selectedButtons[containerId] = buttonElement;
+    lastContainer = containerId;
+  }
+
+  updatePhraseModelDisplay(); // Update display with the current selection
+}
+
+function removeContentSet(contentSet, containerId) {
+  const section = sections[containerId];
+  if (section) {
+    const phrasesTextarea = section.querySelector(
+      'textarea[placeholder="Enter phrases, one per line"]'
+    );
+    const translationsTextarea = section.querySelector(
+      'textarea[placeholder="Enter translations, one per line"]'
+    );
+
+    const existingPhrases = phrasesTextarea.value
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line);
+    const existingTranslations = translationsTextarea.value
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line);
+
+    phrasesTextarea.value = existingPhrases
+      .filter((phrase) => !contentSet.phrases.includes(phrase))
+      .join("\n");
+    translationsTextarea.value = existingTranslations
+      .filter(
+        (translation) => !contentSet.translations.includes(translation)
+      )
+      .join("\n");
+  }
+
+  updatePhraseModelDisplay(); // Update display with the current selection
+}
+const canvas = document.getElementById("connectionCanvas");
+const ctx = canvas.getContext("2d");
+
+// Resize the canvas to fit the document
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+// Keep track of button order
+let buttonOrder = [];
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+// Get CSS properties dynamically from the root (CSS variables)
+const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--line-color') || "lime";
+const lineWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--line-width')) || 1;
+
+function drawConnections() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous lines
+
+  if (buttonOrder.length < 2) return; // Need at least two buttons to draw a line
+
+  ctx.strokeStyle = lineColor; // Use line color from CSS variable
+  ctx.lineWidth = lineWidth; // Use line width from CSS variable
+
+  ctx.beginPath();
+
+  for (let i = 0; i < buttonOrder.length; i++) {
+    const button = buttonOrder[i];
+    const rect = button.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    if (i === 0) {
+      ctx.moveTo(x, y); // Start the path
+    } else {
+      ctx.lineTo(x, y); // Draw line to the next button
+    }
+  }
+
+  ctx.stroke();
+}
+
+function addContentSet(contentSet, buttonElement, containerId) {
+  const existingSection = sections[containerId];
+
+  // Toggle button selection and button order
+  if (buttonElement.classList.contains("selected")) {
+    buttonElement.classList.remove("selected");
+    delete selectedButtons[containerId];
+
+    // Remove from button order and redraw
+    buttonOrder = buttonOrder.filter(btn => btn !== buttonElement);
+  } else {
+    buttonElement.classList.add("selected");
+    selectedButtons[containerId] = buttonElement;
+    buttonOrder.push(buttonElement);
+  }
+
+  // Handle content set addition/removal
+  if (buttonElement.classList.contains("selected")) {
+    if (!existingSection) {
+      addSection(contentSet, containerId);
+    } else {
+      const phrasesTextarea = existingSection.querySelector(
+        'textarea[placeholder="Enter phrases, one per line"]'
+      );
+      const translationsTextarea = existingSection.querySelector(
+        'textarea[placeholder="Enter translations, one per line"]'
+      );
+
+      const existingPhrases = phrasesTextarea.value
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line);
+      const existingTranslations = translationsTextarea.value
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line);
+
+      phrasesTextarea.value = [
+        ...existingPhrases,
+        ...contentSet.phrases,
+      ].join("\n");
+      translationsTextarea.value = [
+        ...existingTranslations,
+        ...contentSet.translations,
+      ].join("\n");
+    }
+
+    lastContainer = containerId;
+  } else {
+    removeContentSet(contentSet, containerId);
+  }
+
+  // Update the display with the current selection
+  updatePhraseModelDisplay(); 
+  drawConnections(); // Update the canvas
+}
+function produceTemplate() {
+  const sections = document.querySelectorAll(".section");
+  const output = [];
+
+  sections.forEach((section) => {
+    const phrasesTextarea = section.querySelector(
+      'textarea[placeholder="Enter phrases, one per line"]'
+    );
+    const translationsTextarea = section.querySelector(
+      'textarea[placeholder="Enter translations, one per line"]'
+    );
+
+    const phrases = phrasesTextarea.value
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line);
+    const translations = translationsTextarea.value
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line);
+
+    if (phrases.length && translations.length) {
+      output.push({
+        phrases,
+        translations,
+      });
+    }
+  });
+
+  document.getElementById("playGameButton").style.display = "block";
+  document.getElementById("playGame2Button").style.display = "block"; // Show the new button
+  document.getElementById("playGame3Button").style.display = "block"; 
+  document.getElementById("output").textContent = JSON.stringify(
+    output,
+    null,
+    4
+  );
+}
+
+function selectSection(section) {
+  const sections = document.querySelectorAll(".section");
+  sections.forEach((sec) => sec.classList.remove("selected"));
+  section.classList.add("selected");
+}
+
+function playGame() {
+  const outputContent = document.getElementById("output").textContent;
+  if (outputContent) {
+    localStorage.setItem("phraseGroups", outputContent);
+    window.location.href = "recognition.html";
+  } else {
+    alert("Please produce content before starting the game.");
+  }
+}
+
+function playGame2() {
+  const outputContent = document.getElementById("output").textContent;
+  if (outputContent) {
+    localStorage.setItem("phraseGroups", outputContent);
+    window.location.href = "buttons.html"; // Redirect to buttons.html
+  } else {
+    alert("Please produce content before starting the game.");
+  }
+}
+function playGame3() {
+  const outputContent = document.getElementById("output").textContent;
+  if (outputContent) {
+    localStorage.setItem("phraseGroups", outputContent);
+    window.location.href = "learn.html"; // Redirect to buttons.html
+  } else {
+    alert("Please produce content before starting the game.");
+  }
+}
+      
+      function loadInnerActivity(url) {
+        window.location.href = url;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,478 @@
+
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            color: white;
+        }
+        .containerpr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 2vh; /* Adjust margin as needed */
+          
+        }
+     .pronoun-container {
+    display: flex;
+    gap: 0.2vh;
+    justify-content: center;
+    margin-bottom: 10px;
+margin-left:11vh;
+      }
+
+.pronoun-button {
+    padding: 3vh 1.35vh;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f1f1f1;
+    font-size: 1.5vh;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.pronoun-button.selected {
+    background-color: #0c1c0c;
+    color: lime;
+    border: 0.25vh solid lime;
+}
+
+/* Button Styles for Question and Translation Columns */
+.columns-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Adjust space between columns */
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.questions-column button,
+.translations-column button {
+    width: 99%;
+     height:6.5vh;    margin-top: 0vh;
+    font-size: 2.4vh;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    text-transform: uppercase;
+    border: 0.2vh solid white;
+}
+
+/* Specific Button States for Questions and Translations */
+.questions-column button.selected,
+.translations-column button.selected {
+    background-color: #0c1c0c;
+    color: lime;
+    border: 0.25vh solid lime;
+}
+
+.questions-column button.matched,
+.translations-column button.matched {
+    border: 0.3vh solid lime;
+    color: lime;
+}
+
+.questions-column button.wrong,
+.translations-column button.wrong {
+    background-color: darkred;
+    color: white;
+}
+
+.questions-column button:hover,
+.translations-column button:hover {
+    background-color: lime;
+    color: black;
+}
+
+.questions-column button:active,
+.translations-column button:active {
+    background-color: lime;
+    color: black;
+}
+
+/* Button Group for CATCH Button */
+.button {
+    background-color: darkblue;
+    border: 0.2vh solid gray;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition-duration: 0.4s;
+  margin-top:2vh;border-radius:50%;height:10vh;
+      font-size: 2vh;
+
+}
+
+      .title-button0a {
+       transition: all 1s ease;
+ background-color:black; color:white;   border: 0.3VH solid cyan;border-radius: 50%;font-size: 2vh;  text-align:center;align-items: center;weight:bold; height:10%;width:19%; font-size: 1.7vh;t
+}
+
+.title-button0a:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
+  box-sizing: border-box;
+  color:lightblue;
+}
+     
+      .title-button0b:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh red, 0 0 0.5vh orange, 0 0 0.7vh yellow;
+    box-shadow: 0 0 1vh red, 0 0 3vh orange, 0 0 5vh yellow;
+  box-sizing: border-box;
+  color:yellow;
+}
+    </style>
+</head>
+<body>
+   <div class="containerpr">
+  <div class="pronoun-container">
+            <button class="pronoun-button selected" data-pronoun="yo">yo</button>
+            <button class="pronoun-button" data-pronoun="tu">tú</button>
+            <button class="pronoun-button" data-pronoun="el">él</button>
+            <button class="pronoun-button" data-pronoun="nosotros">nosotros</button>
+            <button class="pronoun-button" data-pronoun="vosotros">vosotros</button>
+            <button class="pronoun-button" data-pronoun="ellos">ellos</button>
+    </div>
+    
+    <div class="columns-container">
+        <div class="column questions-column" id="questionsColumn">
+            <!-- Questions will be added here dynamically -->
+        </div>
+        <div class="column translations-column" id="translationsColumn">
+            <!-- Translations will be added here dynamically -->
+        </div>
+    </div>
+</div>
+     <button
+          class="title-button0a" onclick="navigateTomainCHOOSE()"
+          style="position:absolute; bottom:2%;left:21%;  ">CHOOSE</button>
+  
+      <button
+          class="title-button0a" onclick="navigateTomainCATCH()"
+          style="position:absolute; bottom:2%;left:41%;  ">CATCH</button>
+     <button
+          class="title-button0a" onclick="navigateTomainRECOGNIZER()"
+          style="position:absolute; bottom:2%;left:61%;font-size:1.6vh;">VOICE<br>RECOGNIZER</button>
+      <button
+          class="title-button0a" onclick="navigateTomainLISTEN()"
+          style="position:absolute;bottom:2%;left:1%;  ">LISTEN</button>
+  <button
+          class="title-button0b" onclick="navigateTomainMATCH2()"
+          style="position:absolute; top:1%;left:1%;font-size:1.6vh;font-weight:bold;height:10vh;width:14vh; border:0.3vh solid yellow; color:yellow;;border-radius: 50%;background-color:black;text-align:center;align-items: center; transition: all 1s ease;">COUNTDOWN CHALLENGE</button>
+ <script>
+    function toggleVerbsList() {
+    const container = document.getElementById('buttonContainer1');
+    container.classList.toggle('open');
+  }
+
+  const pronouns = [
+            'yo',
+            'tu',
+            'el',
+            'nosotros',
+            'vosotros',
+            'ellos'
+        ];
+
+
+
+const questions = new Map();
+
+questions.set('yo', [
+  { question: 'I had been', translation: 'HABÍA ESTADO' },
+  { question: 'I was', translation: 'ESTABA' },
+  { question: 'During that time I was', translation: 'ESTUVE' },
+  { question: 'I have been', translation: 'HE ESTADO' },
+  { question: 'I am (present)', translation: 'ESTOY' },
+  { question: 'I will be', translation: 'ESTARÉ' },
+  { question: 'I would be', translation: 'ESTARÍA' },
+  { question: 'If I were', translation: 'SI ESTUVIERA' },
+  { question: 'I would have been', translation: 'HABRÍA ESTADO' },
+  { question: 'If I had been', translation: 'SI HUBIERA ESTADO' }
+]);
+
+questions.set('tu', [
+  { question: 'You had been', translation: 'HABÍAS ESTADO' },
+  { question: 'During that time You were', translation: 'ESTUVISTE' },
+  { question: 'You were', translation: 'ESTABAS' },
+  { question: 'You have been', translation: 'HAS ESTADO' },
+  { question: 'You are (present)', translation: 'ESTÁS' },
+  { question: 'You will be', translation: 'ESTARÁS' },
+  { question: 'You would be', translation: 'ESTARÍAS' },
+  { question: 'If you were', translation: 'SI ESTUVIERAS' },
+  { question: 'You would have been', translation: 'HABRÍAS ESTADO' },
+  { question: 'If you had been', translation: 'SI HUBIERAS ESTADO' }
+]);
+
+questions.set('el', [
+  { question: 'He had been', translation: 'HABÍA ESTADO' },
+  { question: 'During that time He was', translation: 'ESTUVO' },
+  { question: 'He was', translation: 'ESTABA' },
+  { question: 'He has been', translation: 'HA ESTADO' },
+  { question: 'He is (present)', translation: 'ESTÁ' },
+  { question: 'He will be', translation: 'ESTARÁ' },
+  { question: 'He would be', translation: 'ESTARÍA' },
+  { question: 'If he were', translation: 'SI ESTUVIERA' },
+  { question: 'He would have been', translation: 'HABRÍA ESTADO' },
+  { question: 'If he had been', translation: 'SI HUBIERA ESTADO' }
+]);
+
+questions.set('nosotros', [
+  { question: 'We had been', translation: 'HABÍAMOS ESTADO' },
+  { question: 'During that time We were', translation: 'ESTUVIMOS' },
+  { question: 'We were', translation: 'ESTÁBAMOS' },
+  { question: 'We have been', translation: 'HEMOS ESTADO' },
+  { question: 'We are (present)', translation: 'ESTAMOS' },
+  { question: 'We will be', translation: 'ESTAREMOS' },
+  { question: 'We would be', translation: 'ESTARÍAMOS' },
+  { question: 'If we were', translation: 'SI ESTUVIÉRAMOS' },
+  { question: 'We would have been', translation: 'HABRÍAMOS ESTADO' },
+  { question: 'If we had been', translation: 'SI HUBIÉRAMOS ESTADO' }
+]);
+
+questions.set('vosotros', [
+  { question: 'You guys had been', translation: 'HABÍAIS ESTADO' },
+  { question: 'During that time You guys were', translation: 'ESTUVISTEIS' },
+  { question: 'You guys were', translation: 'ESTABAIS' },
+  { question: 'You guys have been', translation: 'HABÉIS ESTADO' },
+  { question: 'You guys are (present)', translation: 'ESTÁIS' },
+  { question: 'You guys will be', translation: 'ESTARÉIS' },
+  { question: 'You guys would be', translation: 'ESTARÍAIS' },
+  { question: 'If you guys were', translation: 'SI ESTUVIERAIS' },
+  { question: 'You guys would have been', translation: 'HABRÍAIS ESTADO' },
+  { question: 'If you guys had been', translation: 'SI HUBIERAIS ESTADO' }
+]);
+
+questions.set('ellos', [
+  { question: 'They had been', translation: 'HABÍAN ESTADO' },
+  { question: 'During that time They were', translation: 'ESTUVIERON' },
+  { question: 'They were', translation: 'ESTABAN' },
+  { question: 'They have been', translation: 'HAN ESTADO' },
+  { question: 'They are (present)', translation: 'ESTÁN' },
+  { question: 'They will be', translation: 'ESTARÁN' },
+  { question: 'They would be', translation: 'ESTARÍAN' },
+  { question: 'If they were', translation: 'SI ESTUVIERAN' },
+  { question: 'They would have been', translation: 'HABRÍAN ESTADO' },
+  { question: 'If they had been', translation: 'SI HUBIERAN ESTADO' }
+]);
+
+const pronounButtons = document.querySelectorAll('.pronoun-button');
+const questionsColumn = document.getElementById('questionsColumn');
+const translationsColumn = document.getElementById('translationsColumn');
+
+let selectedPronoun = 'yo'; // Default selected pronoun
+let selectedQuestion = null;
+let selectedTranslation = null;
+let isGameStarted = false;
+
+function updateQuestions() {
+    clearElement(questionsColumn);
+    clearElement(translationsColumn);
+
+    const selectedQuestions = questions.get(selectedPronoun);
+
+    selectedQuestions.forEach((item, index) => {
+        const questionBtn = document.createElement('button');
+        questionBtn.innerText = item.question;
+        questionBtn.dataset.index = index;
+        questionBtn.addEventListener('click', () => selectButton(questionBtn, 'question'));
+        questionsColumn.appendChild(questionBtn);
+
+        const translationBtn = document.createElement('button');
+        translationBtn.innerText = item.translation;
+        translationBtn.dataset.index = index;
+        translationBtn.addEventListener('click', () => selectButton(translationBtn, 'translation'));
+        translationsColumn.appendChild(translationBtn);
+    });
+
+    shuffleTranslations();
+    highlightSelectedPronoun();
+}
+
+function clearElement(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}
+
+function selectButton(button, type) {
+    if (button.classList.contains('matched')) return;
+
+    if (type === 'question') {
+        if (selectedQuestion) selectedQuestion.classList.remove('selected');
+        selectedQuestion = button === selectedQuestion ? null : button;
+    } else if (type === 'translation') {
+        if (selectedTranslation) selectedTranslation.classList.remove('selected');
+        selectedTranslation = button === selectedTranslation ? null : button;
+    }
+
+    button.classList.toggle('selected');
+
+    if (selectedQuestion && selectedTranslation) {
+        checkMatch();
+    }
+}
+
+function speakTranslation(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-ES';
+    speechSynthesis.speak(utterance);
+}
+
+function checkMatch() {
+    const questionIndex = selectedQuestion.dataset.index;
+    const translationIndex = selectedTranslation.dataset.index;
+
+    if (questionIndex === translationIndex) {
+        selectedQuestion.classList.add('matched');
+        selectedTranslation.classList.add('matched');
+        selectedQuestion.classList.remove('selected');
+        selectedTranslation.classList.remove('selected');
+
+        speakTranslation(selectedTranslation.innerText);
+
+        selectedQuestion = null;
+        selectedTranslation = null;
+        checkCompletion();
+    } else {
+        selectedQuestion.classList.add('wrong');
+        selectedTranslation.classList.add('wrong');
+        setTimeout(() => {
+            selectedQuestion.classList.remove('wrong');
+            selectedTranslation.classList.remove('wrong');
+            selectedQuestion.classList.remove('selected');
+            selectedTranslation.classList.remove('selected');
+            selectedQuestion = null;
+            selectedTranslation = null;
+
+            shuffleTranslations();
+        }, 1000);
+    }
+}
+
+function checkCompletion() {
+    const matchedButtons = document.querySelectorAll('.matched');
+    if (matchedButtons.length === questions.get(selectedPronoun).length * 2) {
+        setTimeout(() => {
+            alert("Congratulations! You've matched all pairs.");
+            startNextLevel();
+        }, 1000);
+    }
+}
+
+function startNextLevel() {
+    const pronounOrder = Array.from(pronounButtons).map(button => button.dataset.pronoun);
+    const currentIndex = pronounOrder.indexOf(selectedPronoun);
+    const nextIndex = (currentIndex + 1) % pronounOrder.length;
+    selectedPronoun = pronounOrder[nextIndex];
+
+    updateQuestions();
+}
+
+function shuffleTranslations() {
+    const translationsButtons = Array.from(translationsColumn.children);
+
+    for (let i = translationsButtons.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [translationsButtons[i], translationsButtons[j]] = [translationsButtons[j], translationsButtons[i]];
+    }
+
+    translationsButtons.forEach(button => translationsColumn.appendChild(button));
+}
+
+function highlightSelectedPronoun() {
+    pronounButtons.forEach(button => button.classList.remove('selected'));
+    const selectedButton = document.querySelector(`.pronoun-button[data-pronoun="${selectedPronoun}"]`);
+    if (selectedButton) selectedButton.classList.add('selected');
+}
+
+// Event listeners for pronoun buttons
+pronounButtons.forEach(button => {
+    button.addEventListener('click', function () {
+        if (isGameStarted) return; // Prevent changing pronouns after the game starts
+
+        pronounButtons.forEach(btn => btn.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedPronoun = this.dataset.pronoun;
+        updateQuestions();
+    });
+});
+
+// Start the game with the default pronoun
+updateQuestions();
+const initialPronounBtn = document.querySelector('.pronoun-button.selected');
+updateQuestions.call(initialPronounBtn);
+   
+   
+        function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+
+function navigateTomainCATCH() {
+    selectedQuestion = null;
+    selectedTranslation = null;
+    const questionsJSON = JSON.stringify(Array.from(questions.entries()));
+    const url = `mainCATCH.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+}
+   
+ function navigateTomainLISTEN() {
+    selectedQuestion = null;
+    selectedTranslation = null;
+    const questionsJSON = JSON.stringify(Array.from(questions.entries()));
+    const url = `mainLISTEN.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+}
+  function navigateTomainRECOGNIZER() {
+            // Convert the Map to a JSON string to pass via URL
+            const questionsJSON = JSON.stringify(Array.from(questions.entries()));
+            const url = `mainRECOGNIZER.html?questions=${encodeURIComponent(questionsJSON)}`;
+            window.location.href = url;
+        }
+      function navigateTomainCHOOSE() {
+            // Convert the Map to a JSON string to pass via URL
+            const questionsJSON = JSON.stringify(Array.from(questions.entries()));
+            const url = `mainCHOOSE.html?questions=${encodeURIComponent(questionsJSON)}`;
+            window.location.href = url;
+        }
+   function navigateTomainMATCH2() {
+const questionsObject = {};
+questions.forEach((value, key) => {
+    questionsObject[key] = value;
+});
+
+localStorage.setItem("questionsData", JSON.stringify(questionsObject));
+
+window.location.href = "mainMATCH2.html";
+   } 
+  
+    </script>
+
+
+         
+</body>
+</html>

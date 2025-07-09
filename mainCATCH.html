@@ -1,1607 +1,385 @@
 
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        background: #121313;
- width: 99%;
-        height: 100%;
-        margin-left:0.2vh;
-      }
-#initialMenu {
-    background-color: black;
-    text-align: center;
-          height: 94vh;
-        width:99%;
-color:white;font-weight:bold;
-      font-size: 3vh;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      background-color: #333;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow: hidden; /* Prevent scrolling */
 
-}
-h3 {
-      color: #FFD700;
- font-size: 2vh;
 
-}
-#initialMenu h2 {
-    font-size: 2vh;
-    margin-bottom: 2vh;
-  margin-top:2vh;color: #FFD700;
-}
-#logContainer  {
-    border: 1px solid #ccc;
-    border-radius: 1vh;
-    background-color: yellow;
-    text-align: center;
-  position:absolute;
-  top:60vh;
-  visibility: hidden;
-}
-#settingsContent {
-    transition: all 0.3s ease;
-      background-color: #360E0E;
-      border:5vh solid #360E0E;
-margin-top:-5vh;
-}
-
-#initialMenu p {
-    font-size: 2vh;
-    margin: 2vh 0;
-    margin-top:-5vh;
-
-}
-.speed-button {
-font-size: calc(2vh + 2vw);`
-      background-color: #292929;
-    color: white;
-  width: 100%;
-  background-color: #292929;
-color: #FFD700;    border:0.5vh solid #FFD700;
-  font-weight: bold;
-height:9vh;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-       .speed-button:not(.selected):hover {
-    background-color: brown; /* Hover background color */
-         color: white;
-         border:0.5vh solid white;
-}
-       .speed-button.selected:hover {
-    background-color: red; /* Maintain selected background color on hover */
-}
- #countdownSpeedButtons {
-  width: 100%;
-}
-/* Unique styles for each button */
-#speed-7 {
-  
-      width: 30%;
-
-}
-
-#speed-11 {
-
-          width: 30%;
-
-}
-
-#speed-15 {
-    
-          width: 30%;
-
-}
-#speed-0 {
-  
-      width: 90%;
-      margin-top:1vh;
-  font-size:3vh;
-
-}
-.speed-button.active {
-    background-color: red; /* Background color when selected */
-}
-.speed-button.selected {
-    background-color: red; /* Background color when selected */
-}
-.speed-button:hover {
-    background-color: BROWN; /* Hover background color */
-}
-      
-.duration-button {
-font-size: 1.8vh;`
-    font-weight: bold;
-    height:11vh;
-    
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-      
-
-#duration-2, #duration-3, #duration-4, #duration-5 {
-    background-color: #292929;
-    color: #FFD700;
-    border: 0.4vh solid #FFD700;
-  width:10vh;
-}
-#duration-1:hover, #duration-2:hover, #duration-3:hover, #duration-4:hover, #duration-5:hover  {
-    background-color: brown;
-    color: white;
-    border: 0.4vh solid white;
-}
-.duration-button span {
-    z-index: 1;
-    position: relative;
-}
-
-/* The circular progress will be applied as the border */
-.duration-button[data-progress] {
-    position: relative;
-    background: conic-gradient( #6A1B42 calc(var(--progress) * 1%), black 0);
-  
-}
-
-.duration-button[data-progress]::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 0.5vh solid #6A1B42; /* Inner border to make it look like a circle */
-    box-sizing: border-box;
-}
-     #duration-1 {
-    background-color: black;
-    color: TRANSPARENT;
-    border: 0.4vh solid white;
-      position:absolute;
-  top:80%;
-  left:1vh;
-        width:10vh;
-}    
-.start-button {
-    background-color: #292929;
-    color: #FFD700;;
-    border: 0.4vh solid #FFD700;;
-    width: 20vh;
-    margin-top: 4vh;
-    height: 20vh;
-    position: absolute;
-    top: 70%;
-left: 50%;   
-          font-weight: bold;
-
-  transform: translateX(-50%);
-  font-size: 4vh;
-    border-radius: 50%;
-}
-       .start-button:hover {
-    background-color: brown;
-    color: white;
-    border: 0.4vh solid white;
-    width: 20vh;
-    margin-top: 4vh;
-    height: 20vh;
-    position: absolute;
-    top: 70%;
-left: 50%;   
-          font-weight: bold;
-
-  transform: translateX(-50%);
-  font-size: 4vh;
-    border-radius: 50%;
-}
-         .start-button:active {
-    background-color: red;
-    color: white;
-    border: 0.4vh solid white;
-  
-}
-      #question {
-        font-size: 3vh;
-        background: #00002E;
-        color: cyan;
-        font-weight: bold;
-        height: 4vh;
-        position:absolute;
-        top:10.5%;
-        left:1vh;
-        width:96%;
-        padding:0vh 0vh;
-   justify-content: center;
-            align-items: center;
-        padding:1% 0%;
-   text-align: center;
-        border:0.5vh solid cyan
-      }
-     @keyframes rotate {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
     }
-       #playPauseButton {
-                 font-size: 4.2vh;
-position:absolute;
-         top:1vh;
-         left:1vh;
-      }
-#answers-container {
-    position: absolute;
-    top: 20%;
-    left: 1%;
-    width: 97.5%;
-}
 
-#answers {
-      position: relative;
-      width: 100%;
-      height: 68vh;
-      border: 0.2vh solid #ccc;
+    .question-area {
+      position: absolute;
+      top: 6%;
+      text-align: center;
+      font-size: 3vh;
+      font-weight: bold;
+      color: lime;
+      background-color: black;
+      text-transform: uppercase;
+    }
+
+    .screen {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: black;
+      width: 95vw;
+      height: 70vh;
+      border: 2px solid black;
       overflow: hidden;
-}
+                  border: 0.5vh solid white;
 
+    }
 
-.answer-btn {
-   position: absolute;
-      width:21vh;
-  height:8vh;
-      background-color: white;
-      color:black;
-      font-weight:bold;
-      border: 1px solid #000;
+    .rectangle {
+      position: absolute;
+      background-color: lightgrey;
+      color: black;
+      width:14vh;
+      padding: 0.5vh 0.5vw;
+      text-align: center;
+      font-size: 1.7vh;
+      font-weight: bold;
       cursor: pointer;
-            text-align: center;
-            font-size: 2vh;
+      transition: background-color 0.5s, border 0.5s;
+            border: 0.5vh solid white;
 
-}
-.answer-btn:hover {
-        transition: font-size 0.3s;
-        background-color: black;
-          border: 0.2vh solid yellow;
-
-        color:yellow; animation: soft-vibrate 0.3s infinite; /* Apply vibration animation */
-  animation-timing-function: ease-in-out; 
-      }
-      #feedback {
-        position:absolute;
-        top:1%;
-        right:2%;
-        width:28vh;
-          border: 0.2vh solid lightgrey;
-        visibility: hidden;
-
-          text-align: center; /* Centers text inside the buttons */
-  justify-content: center; /* Centers grid items horizontally */
-  align-items: center; /* Centers grid items vertically */
-              text-transform: uppercase;
- animation: soft-vibrate 0.3s infinite; /* Apply vibration animation */
-  animation-timing-function: ease-in-out; 
-        font-weight: bold;
-      }
-         
-    @keyframes soft-vibrate {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(-0.5px, 0.5px); }
-  50% { transform: translate(0.5px, -0.5px); }
-  75% { transform: translate(-0.5px, -0.5px); }
-  100% { transform: translate(0, 0); }
-}
-.correct {
-    color: lime;
-    font-weight: bold;
-        font-size: 4vh;
-         text-shadow: 0vh 0vh 0.5vh lime;
-
-}
-
-.incorrect {
-    color: #FF2400;
-    font-weight: bold;
-        font-size: 4vh;
-           text-shadow: 0vh 0vh 0.3vh yellow;
-
-}
-      #countdown-bar {
-        height: 2vh;
-        background-color: yellow;
-        transition: width 1s linear;
-        position:absolute;
-        top:8%;
-        left:1%;
-      }
-
-      #counters {
- position:absolute;
-        top:7.5%;        font-size: 2.5vh;
-        color: yellow;
-            text-align: left;     /* Centered text */
-visibility: hidden;
-      }
-
-      #gameResult {
-        position:absolute;
-        top:10.5%;
-        font-size: 2.5vh;
-        font-weight: bold;
-        color: white;
-      }
-
-      #consecutiveCounter {
-        position:absolute;
-        top:7.5%;
-        left:30%;
-        font-size: 2.5vh;
-        font-weight: bold;
-        color: lightgreen;
-                    text-align: left;   visibility: hidden;
-
-      }
-#questionCounter {
-        position:absolute;
-        top:12.5%;
-        left:30%;
-        font-size: 2.5vh;
-        font-weight: bold;
-        color: lightgreen;
-                    text-align: left;   visibility: hidden;
-
-      }
-      #controlButtons {
-      }
-
+    }
     
-      #pauseBtn {
-         font-size: 4vh;
-        cursor: pointer;
-        background-color: #420000;
-        color: pink;
-        width:25vh;
-        height:6.2vh;
-        border: 0.5vh solid pink;
-        border-radius: 1vh;
-       position:absolute;
-        top:1vh;
-        left:10vh;
-       padding:0% 0%;
-        font-weight:bold;
-      }
-#pauseBtn:hover {
-       
-    background-color: red; 
-    color: white;    
-    border: 0.5vh solid pink;   
-}
-      #pauseBtn[disabled] {
-        background-color: #212121;
-        color:white;
-                border: 0.5vh solid white;
-        height:6vh;
+    .rectangle:active {
+      background-color: lightgreen;
+    }
 
-        cursor: not-allowed;
-      }
-      .answer-btn.disabled {
-        background-color: #555; /* Greyed out color */
-        color: #aaa; 
-        
-        border: 0.5vh solid #aaa; /* Greyed out border */
-        cursor: not-allowed;
-      }
-        #quiz{
-           width: 95%;
-                  height: 100%;
+    .selected {
+      border: 0.8vh solid #ff0000;
+      color: darkred;
+    }
 
-}
-
-       
-          #endGameScreen {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-        height: 100%;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    color:black;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-family: 'Arial', sans-serif;
-    z-index: 999;
-}
-
-#gameOverMessage h2 {
-    font-size: 5vh;
-    margin-bottom: 4vh;
-    text-transform: uppercase;
-    color: #f44336; /* Vibrant red for emphasis */
-    text-shadow: 0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.7);
-}
-
-#resultsContainer {
-    text-align: center;
-    font-size: 5vh;
-      background: black;
-  color:white;
-
-}
-
-#finalResults {
-    border-radius: 1vh;
-        font-size:5vh;
-  
-
-}
-
-#saveScoreButton,
-#returnToMenuButton,
-#additionalOptions {
-    margin: 3vh 0;
-}
-
-#saveScoreButton button{
-    background: black; /* Green color for buttons */
-    color: yellow;
-font-size: calc(2vh + 2vw);`
-    padding: 0.5vh 0.5vh;
-    margin: 0.5vh;
-            border: 0.2vh solid yellow;
-animation: soft-vibrate 0.3s infinite;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 1vh 1.5vh rgba(0, 0, 0, 0.3);
-}
-#returnToMenuButton button{
-        background-color: #420000;
-    color: red;
-font-size: calc(2.5vh + 2.5vw);`
-    padding: 0.5vh 0.5vh;
-    margin: 0.5vh;
-        border: 0.2vh solid red;
-
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 1vh 1.5vh rgba(0, 0, 0, 0.3);
-}
-
-#saveScoreButton button:hover{
-     background-color: black;
-  color:white
-
-}
-#returnToMenuButton button:hover {
-     background-color: red;
-  color:#420000;
-
-}
-
-#saveScoreButton button:active,
-#returnToMenuButton button:active{
-    transform: translateY(0);
-    box-shadow: 0 1vh 1.5vh rgba(0, 0, 0, 0.3);
-}
-
-#additionalOptions {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-
-    justify-content: center;
-}
-
-
-         #endGameScreen {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-        height: 99%;
-    background-color: black;
-    display: flex;
-    flex-direction: column;
-    color:black;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-family: 'Arial', sans-serif;
-    z-index: 999;
-}
-
-#gameOverMessage h2 {
-    font-size: 5vh;
-    margin-bottom: 4vh;
-    text-transform: uppercase;
-    color: #f44336; /* Vibrant red for emphasis */
-    text-shadow: 0.5vh 0.5vh 1vh rgba(0, 0, 0, 0.7);
-}
-
-#resultsContainer {
-    text-align: center;
-    font-size: 3.5vh;
-        text-transform: uppercase;
-
-}
-
-#finalResults {
-    background: black;
-  color:white;
-    border-radius: 1vh;
-font-size: calc(1vh + 1vw);`
+    .mismatched {
+      background-color: darkred;
+      color: white;
+    }
+.recognized-text {
+      position: absolute;
+      bottom: 9%;
+      width: 100%;
+      text-align: center;
+            font-weight: bold;
       text-transform: uppercase;
 
+      font-size: 2.5vh;
+      color: red;
+      visibility: hidden;
+      opacity: 0;
+      background-color:lightgrey;
+      transition: opacity 0.5s;
+    }
+    .record-button {
+        background-color:transparent;
+         font-weight:bold;
+     font-size: 2vh;
+ border:none;
+position:absolute;
+bottom:2%      ;   left:45%;
+         height:10%;
 }
-
+      .microphone-icon {
+    color: red;
+    font-size: 8vh;
+    border-radius: 50%;
+    background-color: black;
+    border: 0.7vh solid #ff0000;
+    justify-content: space-between;
+    padding: 5% 25%;
+    transition: all 1s ease;
        
-        #endGameBtn {
-         position:absolute;
-left:0.01vh;
-width:20%;
-               bottom:1vh;
-    display: inline-block; /* Ensures it behaves like a button */
- font-size: calc(2vmin + 2vmax);      background-color: black; /* Red background */
-  color: #ff0027; /* White text color */
-            border: 0.2vh solid #ff0027;
-    border-radius: 5px; /* Adds rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    margin: 10px 0 0 10px; /* Adds spacing around the button */
-    text-align: center; /* Centers the text inside the button */
-}
-         button[onclick="playCatch()"]{
-}
- button[onclick="playListening()"]{
-}
-  button[onclick="playChoose()"]{
-}
-button[onclick="playVoiceRecognition()"]{
-}
- #additionalOptions button {
-     display: inline-block;
-    width: 24%;
-height:10vh;
-}
-       #pronounButtons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between; /* Adjusts spacing between buttons */
-  align-items: center;
-  width: 99%;
 }
 
-#pronounButtons h3 {color: #FFD700;
+.microphone-icon:hover {
+    background-color: darkred;
+    text-shadow: 0 0 0.5vh #F03200, 0 0 0.5vh #F00032, 0 0 0.7vh darkred;
+    box-shadow: 0 0 1vh #F03200, 0 0 3vh #F00032, 0 0 5vh red;
+}
+ 
+    .pronoun-buttons {
+      gap:0.4vh;
+  justify-content: center; 
+
+width:100%;    display: grid;          
+        grid-template-columns: repeat(6, 1fr);
+            font-weight:bold;
+margin-bottom:1vh;
+margin-TOP:1vh;
+
+    }
+
+    .pronoun-buttons button {
+      background-color: white;
+      border: 0.2vh solid white;
+      text-align: center;
+      text-decoration: none;
+      font-size: 2vh;
+      cursor: pointer;
+          text-transform: uppercase;
+            color: black;
+      font-weight: bold;
+
+
+    }
+
+    .pronoun-buttons button.active {
+      background-color: #ff0000;
+    }
+     .title-button0a {
+ 
+       transition: all 1s ease;
+ background-color:black; color:white;  font-size: 1.7vh;   border: 0.3VH solid cyan;border-radius: 50%;height:13vh;width:14vh;text-align:center;align-items: center;weight:bold; 
 }
 
-#pronounButtons button {
-  flex: 1; height:8vh;
-    color: #FFD700; /* Vibrant red for emphasis */
-        font-weight:bold;
-margin-left:0.6vh;
-font-size: calc(1.6vh + 1.6vw);`
-  text-align: center;
-  cursor: pointer;
-  border: 0.3VH solid #FFD700;
-  background-color: #292929;
+.title-button0a:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh lightblue, 0 0 0.5vh blue, 0 0 0.7vh darkblue;
+    box-shadow: 0 0 1vh lightblue, 0 0 3vh blue, 0 0 5vh darkblue;
   box-sizing: border-box;
+  color:lightblue;
 }
-
-#pronounButtons button:hover {
-  background-color:  brown; 
-  color:white;
-    border: 0.3VH solid white;
-
-}
-
-#pronounButtons button:active {
-  background-color: red; /* Active button click effect */
-}
-   #settingsContent {
-            display: none; /* Initially hidden */
-        } .settings-button { position:absolute; top:-2%; left:0vh;   font-size: 10vh;
- animation: rotate 12s linear infinite;
-            background-color: transparent;
-                border: 0.3VH solid transparent;
-        }
-     #game-timer-display {
-    position:absolute;
-    bottom:2vh;
-    left:20vh;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: pink;
-    text-align: center;
-    margin-bottom: 10px;
-}
-    </style>
+  </style>
 </head>
 <body>
-
-    <div id="initialMenu">
-                 OPTIONAL SETTINGS:
-
-        <button id="settingsButton" class="settings-button" onclick="toggleSettings()">⚙️<h2></h2></button>
-        <div id="settingsContent">
-            <h2>CHOOSE THE SPEED</h2>
-            <div id="countdownSpeedButtons">
-                <div id="speedOptions">
-                    <button id="speed-7" class="speed-button" onclick="setCountdown(7, 'FAST')">FAST</button>
-                    <button id="speed-11" class="speed-button" onclick="setCountdown(11, 'NORMAL')">NORMAL</button>
-                    <button id="speed-15" class="speed-button" onclick="setCountdown(15, 'SLOW')">SLOW</button>
-                </div>
-                <div id="noCountdownOption">
-                    <button id="speed-0" class="speed-button" onclick="setCountdown(0, 'NO COUNTDOWN')">NO COUNTDOWN</button>
-                </div>
-            </div>
-
-            <h2>TIME TO PLAY:</h2>
-            <div id="gameDurationButtons">
-         
-                <button id="duration-2" class="duration-button" onclick="setGameDuration(2)">2 Min</button>
-                <button id="duration-3" class="duration-button" onclick="setGameDuration(3)">3 Min</button>
-                <button id="duration-4" class="duration-button" onclick="setGameDuration(4)">4 Min</button>
-                <button id="duration-5" class="duration-button" onclick="setGameDuration(5)">5 Min</button>
-            </div>
-
-            <h3>CHOOSE A PRONOUN:</h3>
-            <div id="pronounButtons">
-                <button id="I" onclick="togglePronoun('I')">I</button>
-                <button id="YOU" onclick="togglePronoun('YOU')">YOU</button>
-                <button id="HE" onclick="togglePronoun('HE')">HE</button>
-              <button id="WE" onclick="togglePronoun('WE')">WE</button>
-                              <button id="YOU ALL" onclick="togglePronoun('YOU ALL')">YOU ALL</button>
-                <button id="THEY" onclick="togglePronoun('THEY')">THEY</button>
-
-            </div>
-        </div>
-        <button class="start-button" onclick="startGameFromMenu()">START</button>  
-        <button id="duration-1" class="duration-button" onclick="setGameDuration(1)">1 Min</button>
-    </div>
-
-<div id="quiz" style="display: none;"> 
-     <button id="playPauseButton">🎵</button>
-      
-
-    <div id="question"></div>
-    <div id="countdown-bar"></div>
-<div id="answers-container">
-    <div id="answers"></div>
+  <div class="pronoun-buttons">
+    <button id="btn-yo">Yo</button>
+    <button id="btn-tu">Tu</button>
+    <button id="btn-el">El</button>
+    <button id="btn-nosotros">Nosotros</button>
+    <button id="btn-vosotros">Vosotros</button>
+    <button id="btn-ellos">Ellos</button>
   </div>
-  <div id="feedback"></div>
-    <div id="counters"></div>
-    <div id="consecutiveCounter"></div> 
-    <div id="questionCounter"></div> 
-    <button id="pauseBtn" onclick="togglePause()">PAUSE</button>
-    <button id="endGameBtn" onclick="endGame()">END GAME</button>
-   <div id="game-timer-display"> <span id="game-timer">--:--</span></div>
-
-</div>
-<div id="logContainer">
-    <h3>Mistake Log</h3>
-    <textarea id="mistakeLog" rows="10" cols="50" readonly></textarea>
-</div>
-<div id="endGameScreen" style="display: none;">
-   <div id="returnToMenuButton">
-        <button onclick="resetToMenu()">BACK TO MENU</button>
-    </div>
-  <div id="gameOverMessage">
-        <h2>RESULTS:</h2>
-    </div>
-     
-
-    <div id="resultsContainer">
-        <div id="finalResults"></div>
-    </div>
-
-    <div id="saveScoreButton">
-        <button onclick="saveScore()">SAVE THIS SCORE</button>
-    </div>
-
-           <h3>PLAY WITH YOUR MISTAKES:</h3>
-    <div id="additionalOptions">
   
-
-        <button onclick="playCatch()">CATCH</button>
-        <button onclick="playListening()">LISTEN</button>
-        <button onclick="playChoose()">CHOOSE</button>
-        <button onclick="playVoiceRecognition()">SPEAK</button>
-    </div>
-</div>
+  <div class="question-area" id="question-area">Question will appear here</div>
+  
+  <button class="record-button" id="record-button"><i class="fas fa-microphone microphone-icon"></i></button>
+  <div class="recognized-text" id="recognized-text">Recognized text will appear here</div>
+  <div class="screen"></div>
+   
 
 <script>
-        window.onload = function () {
-            document.getElementById("startButton").addEventListener("click", generateRandomPhrase);
-        };
-   let settingsVisible = false;
+document.addEventListener("DOMContentLoaded", () => {
+  const screen = document.querySelector(".screen");
+  const questionArea = document.getElementById("question-area");
+  const recordButton = document.getElementById("record-button");
+  const recognizedText = document.getElementById("recognized-text");
 
-       function toggleSettings() {
-    const settingsContent = document.getElementById('settingsContent');
-    const settingsButton = document.getElementById('settingsButton'); // Assuming there's a button to toggle settings
-    settingsVisible = !settingsVisible;
+  let currentPronoun = 'yo'; // Default pronoun
+  let currentQuestionIndex = 0;
+  let matches = 0;
+  let rectangles = [];
+  let recognition;
 
-    // Toggle the visibility of the settings content
-    settingsContent.style.display = settingsVisible ? 'block' : 'none';
+  const params = new URLSearchParams(window.location.search);
+  const questionsJSON = params.get('questions');
+  const questions = new Map(JSON.parse(questionsJSON));
+  function initializeGame() {
+    let currentQuestions = questions.get(currentPronoun);
+    rectangles = [];
 
-    // Add or remove a class to change the background color when settings are displayed
-    if (settingsVisible) {
-        settingsButton.classList.add('settings-active'); // Add class when settings are shown
-    } else {
-        settingsButton.classList.remove('settings-active'); // Remove class when settings are hidden
-    }
-}
-const verbs = {
-    rest: { rootEn: "REST", rootEs: "DESCANS" },
-            work: { rootEn: "WORK", rootEs: "TRABAJ" },
-            walk: { rootEn: "WALK", rootEs: "CAMIN" },
-            study: { rootEn: "STUDY", rootEs: "ESTUDI" },
-            help: { rootEn: "HELP", rootEs: "AYUD" },
-            visit: { rootEn: "VISIT", rootEs: "VISIT" },
-            wait: { rootEn: "WAIT", rootEs: "ESPER" },
-};
-
-// Pronouns definitions
-const pronouns = ["I", "HE", "WE", "YOU ALL", "THEY", "YOU"]; // Example pronouns
-
-// Game configuration variables
-let countdownDuration = 11; 
-let gameDuration = 60000; // Set default to 1 minute
-let selectedDurationLabel = "1 Minute"; // Default label
-let selectedSpeedLabel = "11 seconds";
-
-// Stats and logic variables
-let usedVerbs = [];
-let usedPronouns = [];
-let currentQuestion = {};
-let correctAnswerCount = 0, incorrectAnswerCount = 0, notAnsweredCount = 0;
-let consecutiveCorrectAnswers = 0, maxConsecutiveCorrectAnswers = 0;
-let questionsPlayedCount = 0;
-let timer, gameTimer;
-let countdownPaused = false, quizRunning = false;
-let expectedQuestions = 10;
-
-function setGameDuration(minutes) { 
-    if (minutes > 0) {
-        gameDuration = minutes * 60000;
-        expectedQuestions = minutes * 10; // 10 correct answers per minute
-        selectedDurationLabel = `${minutes} Minute${minutes > 1 ? 's' : ''}`;
-    } else {
-        gameDuration = null; // No time limit
-        expectedQuestions = questionsPlayedCount; // Matches played questions
-        selectedDurationLabel = "Unlimited";
+    function createRectangle(text) {
+      const rectangle = document.createElement("div");
+      rectangle.classList.add("rectangle");
+      rectangle.innerText = text;
+      rectangles.push(rectangle);
+      screen.appendChild(rectangle);
     }
 
-    const durationButtons = document.querySelectorAll('.duration-button');
-    durationButtons.forEach(button => {
-        button.style.backgroundColor = "";  // Reset background color
-        button.style.transform = ""; // Reset transform (scale)
-    });
+    function positionRectangle(rectangle, screenWidth, screenHeight) {
+      const [minX, minY, maxX, maxY] = getBounds(screenWidth, screenHeight, rectangle);
+      let initialX, initialY;
 
-    const selectedButton = document.querySelector(`#duration-${minutes}`);
-    if (selectedButton) {
-        selectedButton.style.backgroundColor = "red";
-        selectedButton.style.transform = "scale(1.20)"; // Apply scale to selected button
+      do {
+        initialX = getRandom(minX, maxX);
+        initialY = getRandom(minY, maxY);
+        rectangle.style.left = `${initialX}px`;
+        rectangle.style.top = `${initialY}px`;
+      } while (checkCollision(rectangle, rectangles));
     }
-}
 
-
-function setCountdown(seconds, label) { 
-    countdownDuration = seconds;
-
-    // Get all speed buttons and remove the 'selected' class
-    const speedButtons = document.querySelectorAll('.speed-button');
-    speedButtons.forEach(button => {
-        button.classList.remove('selected'); // Remove 'selected' class
-    });
-
-    // Add the 'selected' class to the chosen button
-    const selectedButton = document.querySelector(`#speed-${seconds}`);
-    selectedButton.classList.add('selected'); // Add 'selected' class
-}
-
-function startGameFromMenu() {
-    toggleDisplay("initialMenu", false);
-    toggleDisplay("quiz", true);
-    startGame();
-}
-function resetToMenu() {
-    // Reload the page to reset the game
-    window.location.reload();
-}
-
-function toggleDisplay(elementId, show) {
-    const element = document.getElementById(elementId);
-    if (element) element.style.display = show ? "block" : "none";
-}
-
-function startGame() {
-    if (gameDuration !== null) {
-        startGameCountdown();
+    function getBounds(screenWidth, screenHeight, rectangle) {
+      const rectWidth = rectangle.offsetWidth;
+      const rectHeight = rectangle.offsetHeight;
+      return [0, 0, screenWidth - rectWidth, screenHeight - rectHeight];
     }
- 
-    resetGameStats();
-    quizRunning = true;
 
-    generateRandomPhrase();
-}
+    function getRandom(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
-function startGameCountdown() {
-    let timeLeft = gameDuration / 1000; // Convert to seconds
-    const timerDisplay = document.getElementById("game-timer");
-
-    gameTimer = setInterval(() => {
-        if (timeLeft <= 0) {
-            clearInterval(gameTimer);
-            endGame(); // End game when time reaches zero
-            return;
+    function checkCollision(rectangle, rectangles) {
+      const rect1 = rectangle.getBoundingClientRect();
+      return rectangles.some(otherRectangle => {
+        if (otherRectangle !== rectangle) {
+          const rect2 = otherRectangle.getBoundingClientRect();
+          return !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
         }
-
-        let minutes = Math.floor(timeLeft / 60);
-        let seconds = timeLeft % 60;
-        timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        timeLeft--;
-    }, 1000);
-}
-
-function endGame() {
-    clearInterval(gameTimer);  
-    clearInterval(timer); 
-
-    quizRunning = false;
-
-    toggleDisplay("quiz", false);
-    toggleDisplay("endGameScreen", true);
-    toggleDisplay("counters", true);
-    toggleDisplay("consecutiveCounter", true);
-    toggleDisplay("questionCounter", true);
-
-    // Calculate minutes played
-    let minutesPlayed = gameDuration / 60000; 
-
-    // New scoring logic
-    let qualification = ((correctAnswerCount - incorrectAnswerCount - notAnsweredCount) * 16.67) / minutesPlayed;
-
-    // Clamp score between 0 and 100
-    qualification = Math.max(0, Math.min(100, qualification));
-
-    document.getElementById("finalResults").innerHTML = `
-        <p>Questions Played: ${questionsPlayedCount}</p>
-        <p>Correct Answers: ${correctAnswerCount}</p>
-        <p>Consecutive Correct: ${maxConsecutiveCorrectAnswers}</p>
-        <p>Incorrect Answers: ${incorrectAnswerCount}</p>
-        <p>Not Answered: ${notAnsweredCount}</p>
-        <p>SCORE: ${Math.round(qualification)}%</p>
-    `;
-}
-
-
-function saveScore() {
-    // Discount one question for the last question that can't be answered
-    const totalAnswerableQuestions = questionsPlayedCount - 1;  // Exclude the last question
-
-    // Each correct answer is worth 10% of the total answerable questions
-    let qualification = (correctAnswerCount / totalAnswerableQuestions) * 100;
-    const roundedScore = Math.round(qualification);
-
-    // Save the score using the "catchgame" prefix and the duration as the key
-   
- const durationKey = `duration-${gameDuration / 60000}`; // Convert ms to minutes
-    localStorage.setItem(`catchgame-${durationKey}`, roundedScore);
-
-    alert(`Score of ${roundedScore}% saved for duration ${gameDuration / 60000} min.`);
-    resetToMenu();
-}
-
-function updateMenuWithScores() {
-    const durationButtons = document.querySelectorAll('.duration-button');
-    durationButtons.forEach(button => {
-        const duration = button.id.split('-')[1]; // Extract the duration (e.g., 1, 2, 3)
-        const durationKey = `duration-${duration}`;
-        const savedScore = localStorage.getItem(`catchgame-${durationKey}`);
-
-        if (savedScore !== null) {
-            // Update the button text to include the saved score
-            button.innerHTML = `${duration} Min <span style="color: yellow;"><br>${savedScore}%</span>`;
-
-            // Apply the circular progress to the border of the button
-            button.style.setProperty('--progress', savedScore); // Update the custom property
-            button.setAttribute('data-progress', savedScore); // Apply the progress as a data attribute for styling
-        }
-    });
-}
-
-// Call updateMenuWithScores when the page loads
-document.addEventListener('DOMContentLoaded', updateMenuWithScores);
-function updateHighestCatchGameScore() {
-    let highestScore = 0;
-
-    // Select all duration buttons
-    const durationButtons = document.querySelectorAll('.duration-button');
-
-    durationButtons.forEach(button => {
-        const scoreSpan = button.querySelector('span');
-
-        if (scoreSpan) {
-            // Extract the numerical score from the button text
-            const scoreText = scoreSpan.textContent.replace('%', '').trim();
-            const score = parseInt(scoreText, 10);
-
-            if (!isNaN(score) && score > highestScore) {
-                highestScore = score;
-            }
-        }
-    });
-
-    // Store the highest score in localStorage with the correct key
-    localStorage.setItem("score-catchgame", highestScore);
-
-    // Update the button span with the highest score
-    updateScoreDisplay("score-catchgame", "score-value-catchgame");
-}
-
-// Ensure scores are updated first, then find the highest score
-document.addEventListener("DOMContentLoaded", function () {
-    updateMenuWithScores(); // Update duration buttons first
-    setTimeout(updateHighestCatchGameScore, 100); // Fix the function name here
-});
-
-;
-  
-function resetGameStats() {
-    usedVerbs = [];
-    usedPronouns = [];
-    correctAnswerCount = 0;
-    incorrectAnswerCount = 0;
-    notAnsweredCount = 0;
-    consecutiveCorrectAnswers = 0;
-    maxConsecutiveCorrectAnswers = 0;
-    questionsPlayedCount = 0;
-}
-let selectedPronouns = [];
-
-function togglePronoun(pronoun) {
-    const button = document.getElementById(pronoun);
-
-    // Check if the pronoun is already selected
-    const isAlreadySelected = selectedPronouns.includes(pronoun);
-
-    if (isAlreadySelected) {
-        // If the pronoun is already selected, remove it
-        selectedPronouns = selectedPronouns.filter(p => p !== pronoun);
-        button.style.backgroundColor = ""; // Reset background color
-        button.style.color = ""; // Reset text color
-    } else {
-        // If the pronoun is not selected, add it
-        selectedPronouns.push(pronoun);
-        button.style.backgroundColor = "red"; // Highlight background color
-        button.style.color = "white"; // Highlight text color
+        return false;
+      });
     }
 
-    // Safeguard: Ensure selectedPronouns array is valid
-    if (selectedPronouns.length === 0) {
-        // Handle case when no pronouns are selected (optional behavior)
-        console.warn("No pronouns selected. Default behavior may be applied.");
-    }
+    function moveRectangle(rectangle) {
+      let [directionX, directionY] = [1, 1];
 
-    // Debugging: Log selected pronouns to confirm behavior
-    console.log("Selected Pronouns:", selectedPronouns);
+      function move() {
+        let currentX = parseInt(rectangle.style.left) || 0;
+        let currentY = parseInt(rectangle.style.top) || 0;
 
-    // After selecting or deselecting, generate questions for the selected pronouns
-    generateRandomPhrase(); // You can call this to refresh the question pool based on new pronouns
-}
+        if (currentX <= 0 || currentX >= screen.offsetWidth - rectangle.offsetWidth) directionX *= -1;
+        if (currentY <= 0 || currentY >= screen.offsetHeight - rectangle.offsetHeight) directionY *= -1;
 
+        rectangle.style.left = `${currentX + directionX}px`;
+        rectangle.style.top = `${currentY + directionY}px`;
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]]; // Swap elements
-    }
-    return array;
-}
-
-// Update your generateQuestions function to shuffle translations
-function generateQuestions(verb, pronoun) { 
-    const { rootEn, rootEs } = verb;
-
-    // Randomly select one set of questions based on the pronoun
-    let questionSet;
-    if (pronoun === "I") {
-        const randomSet = Math.floor(Math.random() * 3);
-        questionSet = randomSet === 0
-            ? [  { question: `I HAD ${rootEn}ED`, translation: `HABÍA ${rootEs}ADO` },
-            { question: `I ${rootEn}ED`, translation: `${rootEs}É` },
-            { question: `I USED TO ${rootEn}`, translation: `${rootEs}ABA` },
-            { question: `I HAVE ${rootEn}ED`, translation: `HE ${rootEs}ADO` }
-        ]
-        : randomSet === 1
-        ? [
-            { question: `I ${rootEn}`, translation: `${rootEs}O` },
-            { question: `I WILL ${rootEn}`, translation: `${rootEs}ARÉ` },
-            { question: `I WOULD ${rootEn}`, translation: `${rootEs}ARÍA` },
-            { question: `I WOULD HAVE ${rootEn}ED`, translation: `HABRÍA ${rootEs}ADO` }
-        ]
-        : [
-            { question: `IF I HAD ${rootEn}ED`, translation: `SI HUBIERA ${rootEs}ADO` },
-            { question: `IF I HAD BEEN ${rootEn}ING`, translation: `SI HUBIERA ESTADO ${rootEs}ANDO` },
-            { question: `IF I ${rootEn}ED`, translation: `SI ${rootEs}ARA` },
-            { question: `IF I WAS ${rootEn}ING`, translation: `SI ESTUVIERA ${rootEs}ANDO` }
-        ];
-
-
-    } else if (pronoun === "HE") {
-             const randomSet = Math.floor(Math.random() * 3);
-        questionSet = randomSet === 0
-            ? [
-               { question: `HE HAD ${rootEn}ED`, translation: `HABÍA ${rootEs}ADO` },
-        { question: `HE ${rootEn}ED`, translation: `${rootEs}Ó` },
-        { question: `HE USED TO ${rootEn}`, translation: `${rootEs}ABA` },
-        { question: `HE HAS ${rootEn}ED`, translation: `HA ${rootEs}ADO` }
-    ]
-    : randomSet === 1
-    ? [
-        { question: `HE ${rootEn}`, translation: `${rootEs}A` },
-        { question: `HE WILL ${rootEn}`, translation: `${rootEs}ARÁ` },
-        { question: `HE WOULD ${rootEn}`, translation: `${rootEs}ARÍA` },
-        { question: `HE WOULD HAVE ${rootEn}ED`, translation: `HABRÍA ${rootEs}ADO` }
-    ]
-    : [
-        { question: `IF HE HAD ${rootEn}ED`, translation: `SI HUBIERA ${rootEs}ADO` },
-        { question: `IF HE HAD BEEN ${rootEn}ING`, translation: `SI HUBIERA ESTADO ${rootEs}ANDO` },
-        { question: `IF HE ${rootEn}ED`, translation: `SI ${rootEs}ARA` },
-        { question: `IF HE WERE ${rootEn}ING`, translation: `SI ESTUVIERA ${rootEs}ANDO` }
-              ];
-        } else if (pronoun === "WE") {
-          const randomSet = Math.floor(Math.random() * 3);
-        questionSet = randomSet === 0
-            ? [
-               { question: `WE HAD ${rootEn}ED`, translation: `HABÍAMOS ${rootEs}ADO` },
-        { question: `WE ${rootEn}ED`, translation: `${rootEs}AMOS` },
-        { question: `WE USED TO ${rootEn}`, translation: `${rootEs}ÁBAMOS` },
-        { question: `WE HAVE ${rootEn}ED`, translation: `HEMOS ${rootEs}ADO` }
-    ]
-    : randomSet === 1
-    ? [
-        { question: `WE ${rootEn}`, translation: `${rootEs}AMOS` },
-        { question: `WE WILL ${rootEn}`, translation: `${rootEs}AREMOS` },
-        { question: `WE WOULD ${rootEn}`, translation: `${rootEs}ARÍAMOS` },
-        { question: `WE WOULD HAVE ${rootEn}ED`, translation: `HABRÍAMOS ${rootEs}ADO` }
-    ]
-    : [
-        { question: `IF WE HAD ${rootEn}ED`, translation: `SI HUBIÉRAMOS ${rootEs}ADO` },
-        { question: `IF WE HAD BEEN ${rootEn}ING`, translation: `SI HUBIÉRAMOS ESTADO ${rootEs}ANDO` },
-        { question: `IF WE ${rootEn}ED`, translation: `SI ${rootEs}ÁRAMOS` },
-        { question: `IF WE WERE ${rootEn}ING`, translation: `SI ESTUVIÉRAMOS ${rootEs}ANDO` }
-              ];
-           } else if (pronoun === "YOU ALL") {
-            const randomSet = Math.floor(Math.random() * 3);
-        questionSet = randomSet === 0
-            ? [
-                { question: `YOU ALL HAD ${rootEn}ED`, translation: `HABÍAIS ${rootEs}ADO` },
-        { question: `YOU ALL ${rootEn}ED`, translation: `${rootEs}ASTEIS` },
-        { question: `YOU ALL USED TO ${rootEn}`, translation: `${rootEs}ABAIS` },
-        { question: `YOU ALL HAVE ${rootEn}ED`, translation: `HABÉIS ${rootEs}ADO` }
-    ]
-    : randomSet === 1
-    ? [
-        { question: `YOU ALL ${rootEn}`, translation: `${rootEs}ÁIS` },
-        { question: `YOU ALL WILL ${rootEn}`, translation: `${rootEs}ARÉIS` },
-        { question: `YOU ALL WOULD ${rootEn}`, translation: `${rootEs}ARÍAIS` },
-        { question: `YOU ALL WOULD HAVE ${rootEn}ED`, translation: `HABRÍAIS ${rootEs}ADO` }
-    ]
-    : [
-        { question: `IF YOU ALL HAD ${rootEn}ED`, translation: `SI HUBIERAIS ${rootEs}ADO` },
-        { question: `IF YOU ALL HAD BEEN ${rootEn}ING`, translation: `SI HUBIERAIS ESTADO ${rootEs}ANDO` },
-        { question: `IF YOU ALL ${rootEn}ED`, translation: `SI ${rootEs}ARAIS` },
-        { question: `IF YOU ALL WERE ${rootEn}ING`, translation: `SI ESTUVIERAIS ${rootEs}ANDO` }
-              ];
-                } else if (pronoun === "THEY") {
-            const randomSet = Math.floor(Math.random() * 3);
-        questionSet = randomSet === 0
-            ? [
-                { question: `THEY HAD ${rootEn}ED`, translation: `HABÍAN ${rootEs}ADO` },
-        { question: `THEY ${rootEn}ED`, translation: `${rootEs}ARON` },
-        { question: `THEY USED TO ${rootEn}`, translation: `${rootEs}ABAN` },
-        { question: `THEY HAVE ${rootEn}ED`, translation: `HAN ${rootEs}ADO` }
-    ]
-    : randomSet === 1
-    ? [
-        { question: `THEY ${rootEn}`, translation: `${rootEs}AN` },
-        { question: `THEY WILL ${rootEn}`, translation: `${rootEs}ARÁN` },
-        { question: `THEY WOULD ${rootEn}`, translation: `${rootEs}ARÍAN` },
-        { question: `THEY WOULD HAVE ${rootEn}ED`, translation: `HABRÍAN ${rootEs}ADO` }
-    ]
-    : [
-        { question: `IF THEY HAD ${rootEn}ED`, translation: `SI HUBIERAN ${rootEs}ADO` },
-        { question: `IF THEY HAD BEEN ${rootEn}ING`, translation: `SI HUBIERAN ESTADO ${rootEs}ANDO` },
-        { question: `IF THEY ${rootEn}ED`, translation: `SI ${rootEs}ARAN` },
-        { question: `IF THEY WERE ${rootEn}ING`, translation: `SI ESTUVIERAN ${rootEs}ANDO` }
-              ];
-    } else if (pronoun === "YOU") {
-            const randomSet = Math.floor(Math.random() * 3);
-        questionSet = randomSet === 0
-            ? [
-               { question: `YOU HAD ${rootEn}ED`, translation: `HABÍAS ${rootEs}ADO` },
-        { question: `YOU ${rootEn}ED`, translation: `${rootEs}ASTE` },
-        { question: `YOU USED TO ${rootEn}`, translation: `${rootEs}ABAS` },
-        { question: `YOU HAVE ${rootEn}ED`, translation: `HAS ${rootEs}ADO` }
-    ]
-    : randomSet === 1
-    ? [
-        { question: `YOU ${rootEn}`, translation: `${rootEs}AS` },
-        { question: `YOU WILL ${rootEn}`, translation: `${rootEs}ARÁS` },
-        { question: `YOU WOULD ${rootEn}`, translation: `${rootEs}ARÍAS` },
-        { question: `YOU WOULD HAVE ${rootEn}ED`, translation: `HABRÍAS ${rootEs}ADO` }
-    ]
-    : [
-        { question: `IF YOU HAD ${rootEn}ED`, translation: `SI HUBIERAS ${rootEs}ADO` },
-        { question: `IF YOU HAD BEEN ${rootEn}ING`, translation: `SI HUBIERAS ESTADO ${rootEs}ANDO` },
-        { question: `IF YOU ${rootEn}ED`, translation: `SI ${rootEs}ARAS` },
-        { question: `IF YOU WERE ${rootEn}ING`, translation: `SI ESTUVIERAS ${rootEs}ANDO` }
-              ];
-    
-}
- questionSet.forEach(item => {
-        item.translations = [item.translation];  // Put the correct translation in an array
-    });
-
-    shuffleArray(questionSet);  // Shuffle the translation buttons
-
-    return questionSet;
-}
-function pickRandom(array, usedArray) {
-    // If there are no available options, reset the used array
-    if (usedArray.length === array.length) {
-        usedArray.length = 0; // Reset the used array
-    }
-
-    // Filter the available options that haven't been used yet
-    const availableOptions = array.filter(option => !usedArray.includes(option));
-
-    // If no available options are left (edge case), reset
-    if (availableOptions.length === 0) {
-        usedArray.length = 0;
-        return pickRandom(array, usedArray); // Recurse to get a new random item
-    }
-
-    const randomIndex = Math.floor(Math.random() * availableOptions.length);
-    const randomItem = availableOptions[randomIndex];
-
-    usedArray.push(randomItem); // Mark this item as used
-    return randomItem;
-}
-
-function generateRandomPhrase() {
-    if (usedVerbs.length === Object.keys(verbs).length) usedVerbs = [];
-   if (selectedPronouns.length === 0) {
-    selectedPronouns = [...pronouns]; // Include all pronouns if none are selected
-    console.warn("No pronouns selected. Defaulting to all pronouns.");
-}
-
-    // Pick a random verb and pronoun from the available options
-    const randomVerbKey = pickRandom(Object.keys(verbs), usedVerbs);
-    const randomPronoun = pickRandom(selectedPronouns, usedPronouns); // Use selected pronouns
-
-    const selectedVerb = verbs[randomVerbKey];
-    const generatedQuestions = generateQuestions(selectedVerb, randomPronoun);
-
-    // Flatten the array of questions (to handle multi-level arrays)
-    const flattenedQuestions = generatedQuestions.flat();
-
-    // Pick a random question from the flattened array
-    const randomIndex = Math.floor(Math.random() * flattenedQuestions.length);
-    currentQuestion = flattenedQuestions[randomIndex];
-
-    // Display the selected question on the page
-    document.getElementById("question").textContent = currentQuestion.question;
-
-    // Create translation buttons for all the questions and pass the flattened list
-    createTranslationButtons(flattenedQuestions.map(q => q.translation));
-
-    // Reset countdown for the game
-    resetCountdown();
-
-    // Update the questions played count
-    questionsPlayedCount++;
-    document.getElementById("questionCounter").textContent = `Questions Played: ${questionsPlayedCount}`;
-}
-function createTranslationButtons(translations) {
-    const answersDiv = document.getElementById("answers");
-    answersDiv.innerHTML = ''; // Clear existing content
-
-    const buttonCount = translations.length;
-    const columns = Math.ceil(Math.sqrt(buttonCount)); // Number of columns
-    const rows = Math.ceil(buttonCount / columns); // Number of rows
-
-    translations.forEach((translation, index) => {
-        const button = document.createElement("button");
-        button.className = "answer-btn";
-        button.textContent = translation;
-        button.onclick = () => checkAnswer(translation);
-
-        // Position the button at a fixed position based on its index
-        positionRectangle(button, index, columns, rows, answersDiv);
-
-        // Move the button in random directions with random speed
-        moveRectangle(button, answersDiv);
-
-        answersDiv.appendChild(button);
-    });
-}
-
-function positionRectangle(button, index, columns, rows, container) {
-    const containerRect = container.getBoundingClientRect();
-    
-    // Calculate the fixed position (grid-like arrangement)
-    const columnWidth = containerRect.width / columns;
-    const rowHeight = containerRect.height / rows;
-
-    // Calculate the x and y positions based on the button's index
-    const x = (index % columns) * columnWidth;
-    const y = Math.floor(index / columns) * rowHeight;
-
-    // Set the initial position of the button
-    button.style.position = 'absolute';
-    button.style.left = `${x}px`;
-    button.style.top = `${y}px`;
-}
-
-function moveRectangle(button, container) {
-    // Base speed factor in vh/vw
-    const baseSpeed = 0.2;
-    const speedX = baseSpeed * window.innerWidth / 100;
-    const speedY = baseSpeed * window.innerHeight / 100;
-
-    // Randomly assign a direction and speed for each button
-    let dx = (Math.random() * 2 - 1) * speedX; // Random direction for X (left or right)
-    let dy = (Math.random() * 2 - 1) * speedY; // Random direction for Y (up or down)
-
-    function move() {
-        let x = parseFloat(button.style.left) || 0.5;
-        let y = parseFloat(button.style.top) || 0.5;
-
-        // Get the bounds of the container (#answers)
-        const containerRect = container.getBoundingClientRect();
-
-        // Bounce off container edges (ensure it stays within the container bounds)
-        if (x + button.offsetWidth >= containerRect.width || x <= 0) dx *= -1;
-        if (y + button.offsetHeight >= containerRect.height || y <= 0) dy *= -1;
-
-        // Update the button's position
-        button.style.left = `${x + dx}px`;
-        button.style.top = `${y + dy}px`;
-
-        // Check for collisions with other buttons
-        const collision = checkOverlap(button);
-        if (collision) {
-            dx *= -1;
-            dy *= -1;
+        if (checkCollision(rectangle, rectangles)) {
+          directionX *= -1;
+          directionY *= -1;
         }
 
         requestAnimationFrame(move);
+      }
+
+      move();
     }
 
-    move();
-}
+    function handleRectangleClick(rectangle) {
+      const selectedText = rectangle.innerText;
+      const currentQuestion = currentQuestions[currentQuestionIndex].translation;
 
-function checkOverlap(button) {
-    const rect1 = button.getBoundingClientRect();
-    const buttons = Array.from(document.getElementsByClassName('answer-btn'));
+      if (selectedText === currentQuestion) {
+        rectangle.style.backgroundColor = "lightgreen";
+        setTimeout(() => {
+          rectangle.style.display = "none";
+        }, 500);
+        
+        matches++;
 
-    // Check for overlap with other buttons
-    return buttons.some((other) => {
-        if (other === button) return false;
-        const rect2 = other.getBoundingClientRect();
-        return !(rect1.right <= rect2.left || rect1.left >= rect2.right || rect1.bottom <= rect2.top || rect1.top >= rect2.bottom);
-    });
-}
-function checkAnswer(selectedTranslation) {
-    if (!quizRunning) return;
-
-    const feedbackElement = document.getElementById("feedback");
-    const mistakeLog = document.getElementById("mistakeLog");
-
-    // Get all translation buttons (dynamically generated)
-    const translationButtons = document.querySelectorAll("#answers button");
-
-    // Iterate through all translation buttons
-    translationButtons.forEach(button => {
-        if (button.textContent === selectedTranslation) {
-            // Check if the selected translation is correct or not and apply color
-            if (selectedTranslation === currentQuestion.translation) {
-                button.style.backgroundColor = "black";
-button.style.color = "lime";
-button.style.border = "0.2vh solid lime";
-            } else {
-                    button.style.backgroundColor = "black";
-button.style.color = "#FF3131";
-button.style.border = "0.2vh solid #FF3131";
-            }
+        if (matches < currentQuestions.length) {
+          currentQuestionIndex++;
+          displayNextQuestion();
         } else {
-            button.style.backgroundColor = '';  // Reset the color for other buttons
+          setTimeout(() => {
+            alert("Congratulations! You've completed all levels.");
+          }, 100);
         }
-    });
-
-    if (selectedTranslation === currentQuestion.translation) {
-        feedbackElement.className = "correct";
-        feedbackElement.textContent = "Correct";
-        consecutiveCorrectAnswers++;
-        maxConsecutiveCorrectAnswers = Math.max(maxConsecutiveCorrectAnswers, consecutiveCorrectAnswers);
-        correctAnswerCount++;
-        playAudio(selectedTranslation);
-    } else {
-        feedbackElement.className = "incorrect";
-        feedbackElement.textContent = "Incorrect";
-        consecutiveCorrectAnswers = 0;
-        incorrectAnswerCount++;
-
-        // Log the mistake if it doesn't already exist
-        const mistakeEntry = {
-            question: currentQuestion.question,
-            translation: currentQuestion.translation
-        };
-        let currentLog = mistakeLog.value ? JSON.parse(mistakeLog.value) : [];
-        
-        // Check if the mistakeEntry already exists
-        const exists = currentLog.some(
-            entry => entry.question === mistakeEntry.question && entry.translation === mistakeEntry.translation
-        );
-
-        if (!exists) {
-            currentLog.push(mistakeEntry);
-            mistakeLog.value = JSON.stringify(currentLog, null, 2);
-        }
-    }
-
-    updateCounters();
-    setTimeout(() => {
-        feedbackElement.textContent = "";
-        // Reset the button colors after feedback display
-        translationButtons.forEach(button => button.style.backgroundColor = '');
-    }, 2000);
-    setTimeout(generateRandomPhrase, 1000);
-}
-
-
-    function playAudio(answer) {
-        const utterance = new SpeechSynthesisUtterance(answer);
-        utterance.lang = "es-ES";
-        speechSynthesis.speak(utterance);
-    }
-
-
-    function updateCounters() {
-        document.getElementById("counters").innerHTML = `
-            Correct: ${correctAnswerCount}<br>
-            Incorrect: ${incorrectAnswerCount}<br>
-            Not Answered: ${notAnsweredCount}
-        `;
-        document.getElementById("consecutiveCounter").innerHTML = `
-            Consecutive: ${consecutiveCorrectAnswers}<br>
-            Max: ${maxConsecutiveCorrectAnswers}
-        `;
-    }
-
- function resetCountdown() {
-    clearInterval(timer);
-    if (!countdownDuration) return;
-
-    let width = 80;
-    const countdownBar = document.getElementById("countdown-bar");
-    countdownBar.style.width = "95%";
-
-    timer = setInterval(() => {
-        if (countdownPaused) return;
-
-        width -= 80 / countdownDuration;
-        countdownBar.style.width = `${width}%`;
-
-        if (width <= 0) {
-            clearInterval(timer);
-            notAnsweredCount++;
-            consecutiveCorrectAnswers = 0;
-            updateCounters();
-            const feedbackElement = document.getElementById("feedback");
-            feedbackElement.textContent = "Time's up!";
-            
-            setTimeout(() => {
-                feedbackElement.textContent = ""; // Clear the message after 1 second
-                generateRandomPhrase();
-            }, 1000);
-        }
-    }, 1000);
-}
-    function togglePause() {
-        countdownPaused = !countdownPaused;
-        document.getElementById("pauseBtn").textContent = countdownPaused ? "CONTINUE" : "PAUSE";
-    }
-  function playCatch() {
-    const mistakeLog = document.getElementById("mistakeLog").value;
-    if (mistakeLog) {
-        const parsedData = JSON.parse(mistakeLog);
-
-        localStorage.setItem('mistakeData', JSON.stringify(parsedData));
-
-        window.location.href = 'catch.html';
-    } else {
-        alert("No mistakes logged to play catch!");
-    }
-}
-
-function playListening() {
-    const mistakeLog = document.getElementById("mistakeLog").value;
-    if (mistakeLog) {
-        const parsedData = JSON.parse(mistakeLog);
-
-        localStorage.setItem('mistakeData', JSON.stringify(parsedData));
-
-        window.location.href = 'listen.html';
-    } else {
-        alert("No mistakes logged to play listening!");
-    }
-}
-
-function playChoose() {
-    const mistakeLog = document.getElementById("mistakeLog").value;
-    if (mistakeLog) {
-        const parsedData = JSON.parse(mistakeLog);
-
-        localStorage.setItem('mistakeData', JSON.stringify(parsedData));
-
-        window.location.href = 'choose.html';
-    } else {
-        alert("No mistakes logged to play choose!");
-    }
-}
-
-function playVoiceRecognition() {
-    const mistakeLog = document.getElementById("mistakeLog").value;
-    if (mistakeLog) {
-        const parsedData = JSON.parse(mistakeLog);
-
-        localStorage.setItem('mistakeData', JSON.stringify(parsedData));
-
-        window.location.href = 'voicerecognition.html';
-    } else {
-        alert("No mistakes logged for voice recognition!");
-    }
-}
-function makeAllButtonsResponsiveToBeat() {
-  let audioContext, analyser, dataArray, isPlaying = false;
-  let audio = null; // Declare the audio variable globally
-
-  // Set the default audio URL if no duration button is clicked
-  const defaultAudioUrl = "https://cdn.glitch.global/30d0db25-b202-45bb-b635-9b58601a408e/J.Rabbit%20-%20Tequila_%20Remix(MP3_160K)_1.mp3?v=1737651634075";
-
-  function initializeAudioContext(audioUrl) {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioContext.createAnalyser();
-    analyser.fftSize = 256;
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-    audio = new Audio(audioUrl);
-    audio.crossOrigin = "anonymous";
-    audio.loop = true;
-
-    const source = audioContext.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
-  } else {
-    // Change the audio source if already initialized
-    audio.src = audioUrl;
-  }
-}
-  function visualize() {
-    if (!isPlaying) return; // Stop visualization if not playing
-    requestAnimationFrame(visualize);
-    analyser.getByteFrequencyData(dataArray);
-
-    // Calculate the average volume
-    const avg = dataArray.reduce((sum, val) => sum + val, 0) / dataArray.length;
-
-    // Scale based on volume
-    const scale = 0.7 + avg / 400; // Adjust the scale to make it smoother
-
-    // Apply the scale to all buttons except the Play/Pause button
-    document.querySelectorAll("button").forEach((button) => {
-      if (button.id !== "playPauseButton") {
-        button.style.transform = `scale(${scale})`;
+      } else {
+        rectangle.classList.add("mismatched");
+        setTimeout(() => {
+          rectangle.classList.remove("mismatched");
+        }, 500);
       }
-    });
+    }
+
+    function displayNextQuestion() {
+      questionArea.innerText = currentQuestions[currentQuestionIndex].question;
+    }
+
+    function initializeNextLevel() {
+      screen.innerHTML = "";
+      rectangles.length = 0;
+      matches = 0;
+      currentQuestionIndex = 0;
+
+      currentQuestions.forEach(item => {
+        createRectangle(item.translation);
+      });
+
+      const screenWidth = screen.offsetWidth;
+      const screenHeight = screen.offsetHeight;
+
+      rectangles.forEach(rectangle => {
+        positionRectangle(rectangle, screenWidth, screenHeight);
+        rectangle.addEventListener("click", () => handleRectangleClick(rectangle));
+        moveRectangle(rectangle);
+      });
+
+      displayNextQuestion();
+    }
+
+    initializeNextLevel();
+
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.lang = "es-ES";
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onresult = (event) => {
+        const spokenText = event.results[0][0].transcript.trim().toLowerCase();
+        let matched = false;
+
+        rectangles.forEach(rectangle => {
+          if (rectangle.innerText.toLowerCase() === spokenText) {
+            rectangle.click();
+            matched = true;
+          }
+        });
+
+        if (!matched) {
+          recognizedText.innerText = ` ${spokenText}?`;
+          recognizedText.style.visibility = 'visible';
+          recognizedText.style.opacity = 1;
+          setTimeout(() => {
+            recognizedText.style.opacity = 0;
+          }, 5000);
+        }
+      };
+
+      recognition.onerror = (event) => {
+        recognizedText.innerText = `Error: ${event.error}`;
+        recognizedText.style.visibility = 'visible';
+        recognizedText.style.opacity = 1;
+        setTimeout(() => {
+          recognizedText.style.opacity = 0;
+        }, 5000);
+      };
+    }
+
+    recordButton.addEventListener('click', () => recognition.start());
   }
 
-  // Add functionality to the Play/Pause button
-  const playPauseButton = document.getElementById("playPauseButton");
- playPauseButton.addEventListener("click", () => {
-  if (audioContext.state === "suspended") {
-    audioContext.resume(); // Resume if the context is suspended
-  }
-
-  if (!isPlaying && audio) {
-    audio.play();
-    playPauseButton.textContent = "🔇";
-    isPlaying = true;
-    visualize(); // Start visualization
-  } else {
-    audio.pause();
-    playPauseButton.textContent = "🎵";
-    isPlaying = false;
-  }
-});
-
-  // Initialize with the default audio URL on page load
-  initializeAudioContext(defaultAudioUrl);
-
-  // Add functionality to each duration button
-  const durationButtons = document.querySelectorAll(".duration-button");
-  durationButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      // Change the audio URL based on the clicked button's ID
-      const audioUrls = {
-        "duration-1": "https://cdn.glitch.global/fd235a8b-e271-4778-ad80-0ff4ed9ff6e3/videoplayback%20(2)-%5BAudioTrimmer.com%5D%20(1).m4a?v=1738030195381",
-        "duration-2": "https://cdn.glitch.global/fd235a8b-e271-4778-ad80-0ff4ed9ff6e3/videoplayback%20(3)-%5BAudioTrimmer.com%5D%20(1).m4a?v=1738034664051",
-        "duration-3": "https://cdn.glitch.global/fd235a8b-e271-4778-ad80-0ff4ed9ff6e3/(FREE)%20Mexican%20x%20Spanish%20Guitar%20Type%20Beat%20-%20%20FIESTA%20%20%F0%9F%8C%B6%EF%B8%8F.mp4?v=1738035038669",
-        "duration-4": "https://cdn.glitch.global/30d0db25-b202-45bb-b635-9b58601a408e/audio4.mp3?v=1737651634075",
-        "duration-5": "https://cdn.glitch.global/2e6f8978-0e3b-4ebb-88a3-4f57aa5374d7/M%C3%8BSTIZA%20Live%20%26%20DJ%20session%20in%20tablao%20flamenco%20performing%20Compa%C3%B1era.mp3?v=1738203150261"
-    };
-function preloadAudio(url) {
-  const audio = new Audio(url);
-  audio.preload = 'auto'; // Preload the audio to avoid delays
-  return new Promise((resolve, reject) => {
-    audio.oncanplaythrough = () => resolve(audio); // Resolves when audio is ready to play
-    audio.onerror = () => reject(new Error('Error loading audio file: ' + url));
-  });
-}
-
-window.onload = async function () {
-  try {
-    const audioPromises = Object.values(audioUrls).map((url) => preloadAudio(url));
-    await Promise.all(audioPromises);
-    console.log("All audio files are preloaded and ready.");
-  } catch (error) {
-    console.error("Error preloading audio files:", error);
-  }
-};
-      const audioUrl = audioUrls[button.id];
-      if (audioUrl && !isPlaying) {
-        // Only update the audio source if audio is not already playing
-        initializeAudioContext(audioUrl);
-      }
+  // Pronoun selection logic
+  document.querySelectorAll('.pronoun-buttons button').forEach(button => {
+    button.addEventListener('click', (event) => {
+      currentPronoun = event.target.innerText.toLowerCase();
+      initializeGame();
     });
   });
-}
 
-// Call the function to make buttons responsive to the beat
-makeAllButtonsResponsiveToBeat();
-
-// Add dynamic buttons functionality
-const addButton = document.getElementById("addButton");
-let buttonCount = 1;
-
-addButton.addEventListener("click", () => {
-  const newButton = document.createElement("button");
-  newButton.textContent = `Dynamic Button ${buttonCount++}`;
-  document.body.appendChild(newButton);
+  initializeGame();
 });
-  
+    function navigateTomainCATCH2() {
+const questionsObject = {};
+questions.forEach((value, key) => {
+    questionsObject[key] = value;
+});
+
+localStorage.setItem("questionsData", JSON.stringify(questionsObject));
+
+window.location.href = "mainCATCH2.html";
+   }
         
+  function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+
+      
 </script>
-
-
 </body>
 </html>

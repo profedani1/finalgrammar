@@ -1,0 +1,408 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+            color: white;
+                  overflow: hidden;
+
+        }
+       
+     .containerpr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: 2vh; /* Adjust margin as needed */
+          
+        }
+     .pronoun-container {
+    display: flex;
+    gap: 0.2vh;
+    justify-content: center;
+    margin-bottom: 10px;
+              width: 99%;
+
+      }
+
+.pronoun-button {
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #f1f1f1;
+    font-size: 1.5vh;
+    text-transform: uppercase;
+    font-weight: bold;
+              width: 100%;
+HEIGHT:4VH;
+}
+.pronoun-button.selected {
+    background-color: #0c1c0c;
+    color: lime;
+    border: 0.25vh solid lime;
+}
+
+/* Button Styles for Question and Translation Columns */
+.columns-container {
+    display: flex;
+    justify-content: space-between;height: 70vh;             margin-top: 3vh; /* Adjust margin as needed */
+   width: 99%;
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;  
+}
+
+.questions-column button{
+    width: 99%;
+height: 80%;     margin-top: 0vh;
+    font-size: 2.4vh;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 0.2vh solid white;
+}
+.translations-column button {
+    width: 99%;
+height: 80%;     margin-top: 0vh;
+  font-size: clamp(3px, 3.2vw, 3.4rem);
+    cursor: pointer;
+    background-color: black;
+    color: transparent;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 0.2vh solid white;
+}
+
+/* Specific Button States for Questions and Translations */
+.questions-column button.selected{
+    background-color: #0c1c0c;
+    border: 0.25vh solid lime;    color: transparent;
+height: 100%; 
+}
+
+.translations-column button.selected {
+    background-color: magenta;
+    color: transparent;
+    border: 0.25vh solid pink;
+}
+
+.questions-column button.matched,
+.translations-column button.matched {
+    border: 0.3vh solid lime;
+    color: lime;
+}
+
+.questions-column button.wrong,
+.translations-column button.wrong {
+    background-color: darkred;
+    color: white;
+}
+
+.questions-column button:hover {
+    background-color: lime;
+    color: black;
+}
+.translations-column button:hover {
+    background-color: yellow;
+    color: transparent;
+}
+
+.questions-column button:active{
+    background-color: lime;
+    color: black;
+}
+
+
+.translations-column button:active {
+    background-color: #000C00;
+    color: transparent;
+        border: 0.3vh solid yellow;
+
+}
+
+/* Button Group for CATCH Button */
+.button {
+    background-color: darkblue;
+    border: 0.2vh solid gray;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition-duration: 0.4s;height: 100%; 
+}
+
+button[onclick="navigateTomainCATCH()"]:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #337ab7;
+}
+
+button[onclick="navigateTomainCATCH()"]:active {
+    background-color: #285e8e;
+    border: none;
+    color: white;
+}
+        .title-button0b:hover {
+      font-weight: bold;
+  background-color: #000018;
+   text-shadow: 0 0 0.5vh red, 0 0 0.5vh #ff10f0, 0 0 0.7vh blue;
+    box-shadow: 0 0 1vh darkred, 0 0 3vh purple, 0 0 5vh #ffe4fd
+;
+  box-sizing: border-box;
+  color:yellow;
+}
+    </style>
+</head>
+<body>
+    <div class="containerpr">
+  <div class="pronoun-container">
+            <button class="pronoun-button selected" data-pronoun="yo">yo</button>
+            <button class="pronoun-button" data-pronoun="tu">tú</button>
+            <button class="pronoun-button" data-pronoun="el">él</button>
+            <button class="pronoun-button" data-pronoun="nosotros">nosotros</button>
+            <button class="pronoun-button" data-pronoun="vosotros">vosotros</button>
+            <button class="pronoun-button" data-pronoun="ellos">ellos</button>
+    </div>
+    
+    <div class="columns-container">
+        <div class="column questions-column" id="questionsColumn">
+            <!-- Questions will be added here dynamically -->
+        </div>
+        <div class="column translations-column" id="translationsColumn">
+            <!-- Translations will be added here dynamically -->
+        </div>
+    </div>
+</div>
+ 
+ <button
+          class="title-button0b" onclick="navigateTomainLISTEN2()"
+         style="position:absolute; bottom:1%;right:1%;font-size:1.6vh;font-weight:bold;height:10vh;width:14vh; border:0.3vh solid #ffcafc; color: #ffcafc;;border-radius: 50%;background-color:black;text-align:center;align-items: center; transition: all 1s ease;">PLAY QUICK</button>
+      
+ <script>
+  const pronouns = [
+            'yo',
+            'tu',
+            'el',
+            'nosotros',
+            'vosotros',
+            'ellos'
+        ];
+
+
+    // Fetch the 'questions' data from the URL parameters
+  const params = new URLSearchParams(window.location.search);
+  const questionsJSON = params.get('questions');
+  const questions = new Map(JSON.parse(questionsJSON));
+   
+const pronounButtons = document.querySelectorAll('.pronoun-button');
+const questionsColumn = document.getElementById('questionsColumn');
+const translationsColumn = document.getElementById('translationsColumn');
+
+let selectedPronoun = 'yo'; // Default selected pronoun
+let selectedQuestion = null;
+let selectedTranslation = null;
+let isGameStarted = false;
+
+function updateQuestions() {
+    clearElement(questionsColumn);
+    clearElement(translationsColumn);
+
+    const selectedQuestions = questions.get(selectedPronoun);
+
+    selectedQuestions.forEach((item, index) => {
+        const questionBtn = document.createElement('button');
+        questionBtn.innerText = item.question;
+        questionBtn.dataset.index = index;
+        questionBtn.addEventListener('click', () => selectButton(questionBtn, 'question'));
+        questionsColumn.appendChild(questionBtn);
+
+         const translationBtn = document.createElement('button');
+    translationBtn.innerText = item.translation;
+    translationBtn.dataset.index = index;
+    translationBtn.clickedOnce = false; // Initialize the click state
+    translationBtn.addEventListener('click', () => selectButton(translationBtn, 'translation'));
+    translationsColumn.appendChild(translationBtn);
+});
+    shuffleTranslations();
+    highlightSelectedPronoun();
+}
+
+function clearElement(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}
+
+function selectButton(button, type) {
+    if (button.classList.contains('matched')) return;
+
+    if (type === 'translation') {
+        if (button === selectedTranslation) {
+            // If the same button is clicked twice consecutively, select it
+            button.classList.add('selected');
+            selectedTranslation = button;
+        } else {
+            // Deselect the previously selected button (if any)
+            if (selectedTranslation) {
+                selectedTranslation.classList.remove('selected');
+                selectedTranslation.clickedOnce = false; // Reset the clicked state of the previous button
+            }
+
+            // Handle the new button
+            selectedTranslation = button;
+
+            if (!button.clickedOnce) {
+                // First click: Speak the translation
+                speakTranslation(button.innerText);
+                button.clickedOnce = true;
+            } else {
+                // Second click: Select the button
+                button.classList.add('selected');
+            }
+        }
+    } else if (type === 'question') {
+        if (selectedQuestion) selectedQuestion.classList.remove('selected');
+        selectedQuestion = button === selectedQuestion ? null : button;
+
+        button.classList.toggle('selected');
+
+        if (selectedQuestion && selectedTranslation) {
+            checkMatch();
+        }
+    }
+}
+function speakTranslation(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-ES';
+    speechSynthesis.speak(utterance);
+}
+
+function checkMatch() {
+    const questionIndex = selectedQuestion.dataset.index;
+    const translationIndex = selectedTranslation.dataset.index;
+
+    if (questionIndex === translationIndex) {
+        selectedQuestion.classList.add('matched');
+        selectedTranslation.classList.add('matched');
+        selectedQuestion.classList.remove('selected');
+        selectedTranslation.classList.remove('selected');
+
+        speakTranslation(selectedTranslation.innerText);
+
+        selectedQuestion = null;
+        selectedTranslation = null;
+        checkCompletion();
+    } else {
+        selectedQuestion.classList.add('wrong');
+        selectedTranslation.classList.add('wrong');
+        setTimeout(() => {
+            selectedQuestion.classList.remove('wrong');
+            selectedTranslation.classList.remove('wrong');
+            selectedQuestion.classList.remove('selected');
+            selectedTranslation.classList.remove('selected');
+            selectedQuestion = null;
+            selectedTranslation = null;
+
+            shuffleTranslations();
+        }, 1000);
+    }
+}
+
+function checkCompletion() {
+    const matchedButtons = document.querySelectorAll('.matched');
+    if (matchedButtons.length === questions.get(selectedPronoun).length * 2) {
+        setTimeout(() => {
+            alert("Congratulations! You've matched all pairs.");
+            startNextLevel();
+        }, 1000);
+    }
+}
+
+function startNextLevel() {
+    const pronounOrder = Array.from(pronounButtons).map(button => button.dataset.pronoun);
+    const currentIndex = pronounOrder.indexOf(selectedPronoun);
+    const nextIndex = (currentIndex + 1) % pronounOrder.length;
+    selectedPronoun = pronounOrder[nextIndex];
+
+    updateQuestions();
+}
+
+function shuffleTranslations() {
+    const translationsButtons = Array.from(translationsColumn.children);
+
+    for (let i = translationsButtons.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [translationsButtons[i], translationsButtons[j]] = [translationsButtons[j], translationsButtons[i]];
+    }
+
+    translationsButtons.forEach(button => translationsColumn.appendChild(button));
+}
+
+function highlightSelectedPronoun() {
+    pronounButtons.forEach(button => button.classList.remove('selected'));
+    const selectedButton = document.querySelector(`.pronoun-button[data-pronoun="${selectedPronoun}"]`);
+    if (selectedButton) selectedButton.classList.add('selected');
+}
+
+// Event listeners for pronoun buttons
+pronounButtons.forEach(button => {
+    button.addEventListener('click', function () {
+        if (isGameStarted) return; // Prevent changing pronouns after the game starts
+
+        pronounButtons.forEach(btn => btn.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedPronoun = this.dataset.pronoun;
+        updateQuestions();
+    });
+});
+
+// Start the game with the default pronoun
+updateQuestions();
+const initialPronounBtn = document.querySelector('.pronoun-button.selected');
+updateQuestions.call(initialPronounBtn);
+   
+        function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+
+ 
+     function navigateTomainLISTEN2() {
+const questionsObject = {};
+questions.forEach((value, key) => {
+    questionsObject[key] = value;
+});
+
+localStorage.setItem("questionsData", JSON.stringify(questionsObject));
+
+window.location.href = "mainLISTEN2.html";
+   } 
+  
+    </script>
+
+
+         
+</body>
+</html>

@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+       body {
+    background: black;
+    width: 93%;
+    margin-right:1vh;
+    font-family: Arial, sans-serif;
+}
+#question {
+    color: white;
+    font-size: 2.2vh;
+    font-weight: bold;
+    text-align: center;
+    height: auto;
+    border: 0.1vh solid darkgrey;
+    padding:2vh;
+    width: auto;
+    text-transform: uppercase;
+
+    
+}
+#question:hover {
+    cursor: default;
+}
+#interim-text {
+    display: none; /* Initially hide */
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    width: 97.9%;
+    height: 9vh;
+    margin: 2.5vh 0;
+    border: 0.1vh solid darkgrey;
+    border-radius: 0.5vh;
+    resize: none;
+}
+#interim-text.show {
+    display: block; /* Show when there's content */
+}
+#interim-text:hover {
+    cursor: default;
+}
+#askButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    background-color: black;
+    padding: 1vh 3vh;
+    border: 1vh solid red;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: 3vh;
+    transition: box-shadow 0.3s ease, font-size 0.3s ease;
+}
+#askButton:hover {
+    box-shadow: 0 0 5vh red;
+    font-size: 10.5vh;
+}
+#askButton.recording {
+    background-color: darkred;
+    border-color: #640b0b;
+    text-shadow: 0vh 0vh 1vh black;
+}
+#nextButton {
+    display: inline-block;
+    background-color: black;
+    color: cyan;
+    border: 0.1vh solid cyan;
+    width: 100%;
+    cursor: pointer;
+    font-size: 3vh;
+    transition: background-color 0.3s ease, border 0.3s ease;
+    text-align: center;
+    padding: 4vh;
+    margin-bottom: 2vh;
+}
+#prevButton:hover, #nextButton:hover {
+    background-color: #030019;
+    border-color: cyan;
+}
+#answer {
+    color: #ff0000;
+    font-weight: bold;
+    text-align: center;
+    margin: 2vh 0;
+}
+.microphone-icon {
+    color: red;
+    font-size: 10vh;
+}
+.microphone-icon:hover {
+    color: red;
+    font-size: 10.2vh;
+}
+#expected-phrase {
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    border: 0.1vh solid darkgrey;
+    text-align: center;
+    width: 100%;
+    height: 4vh;
+}
+#audio-container {
+    margin: 2vh 0;
+    text-align: center;
+}
+#checkButton {
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    border: 0.1vh solid darkgrey;
+    margin-bottom: 2vh;
+    width: 100%;
+    height: 10vh;
+}
+#listenButton {
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    width: 100%;
+    height: 4vh;
+}
+audio {
+    width: 95%;
+    background-color: #191919;
+    padding: 1vh;
+}
+.code-container {
+    width: 95.5%;
+    margin-top: 1vh;
+}
+#toggleActivitiesBtn {
+    padding: 10px 20px;
+    background-color: green;
+    color: lime;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+#activitiesContainer {
+    display: none;
+}
+.activity-btn {
+    margin-right: 0.1vh;
+    background-color: black;
+    color: lime;
+    font-weight: bold;
+    padding: 0vw;
+}
+.activity-img {
+    width: 15vw;
+    height: 15vh;
+    border: 0.4vh solid lime;
+}
+.title-button {
+    background-color: black;
+    color: yellow;
+    font-weight: bold;
+    padding: 2vh 1vh;
+    margin-bottom:2vh;
+        border: 0.4vh solid yellow;
+width:99%;
+}
+#automaticPlayButton {
+    display: inline-block;
+      text-align: center;
+    height: 15vh;
+
+    background-color: black;
+    color: orange;
+    border: 0.1vh solid orange;
+    width: 60%;
+    cursor: pointer;
+    font-size: 3vh;
+    transition: background-color 0.3s ease, border 0.3s ease;
+    text-align: center;
+}
+#automaticPlayButton:hover {
+    background-color: #6e5224;
+    color: #ff9a00;
+}
+button[onclick="increaseSpeed()"] {
+  background-color: black; /* Green background */
+  color: lime; /* White text */
+  font-size: 8vh; /* Font size */
+  cursor: pointer; 
+      border: 0.5vh solid lime;
+    width: 18%;
+    height: 12vh;
+
+  border-radius: 1vh; /* Rounded corners */
+}
+
+button[onclick="decreaseSpeed()"] {
+  background-color: black; /* Red background */
+      width: 18%;
+    height: 12vh;
+
+  color: red; /* White text */
+      border: 0.5vh solid red;
+  font-size: 8vh; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 1vh; /* Rounded corners */
+}
+
+button[onclick="increaseSpeed()"]:hover {
+  background-color: #2a4b21;
+  color:lime;
+  
+}
+
+button[onclick="decreaseSpeed()"]:hover {
+  background-color: #411319; /* Darker red on hover */
+}
+#speedIndicator {
+    margin-top: 1vh;
+      margin-bottom: 1vh;
+
+    height: 2vh; /* Set the height of the speedometer */
+    background: linear-gradient(to right, #ff0000 0%, #00ff00 100%);
+    overflow: hidden;
+    transition: width 0.5s ease;
+}
+         .pc-version-button {
+  position: fixed; /* or absolute */
+  top: 85vh; /* Distance from the top of the viewport */
+  left: 1vh; /* Distance from the right of the viewport */
+  background-color: black;
+  color: #fff;
+  border: 0.5vh solid white;
+  border-radius: 10vh;
+  cursor: pointer;
+}
+      
+#pronounContainer {
+     display: flex;
+            width: 100%;
+            justify-content: space-around;
+            margin-bottom: 1vh;
+        
+}
+
+/* Button Styles */
+.pronoun-buttons button {
+  height: 4vh;
+              width: 100%;
+text-transform: uppercase;
+
+            font-size: 1.8vh;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            border: 0.2vh solid white;
+}
+
+.pronoun-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.pronoun-buttons button:active {
+    background-color: #003d80;
+}
+   </style>
+</head>
+<body>
+     <div id="pronounContainer" class="pronoun-buttons">
+    <button id="yoButton">yo</button>
+    <button id="tuButton">tu</button>
+    <button id="elButton">el</button>
+    <button id="nosotrosButton">nosotros</button>
+    <button id="vosotrosButton">vosotros</button>
+    <button id="ellosButton">ellos</button>
+</div>
+    <h1 id="question">Question will appear here</h1>
+
+    <button id="askButton"><i class="fas fa-microphone microphone-icon"></i></button>
+   <button id="checkButton">CHECK</button>
+    <p id="expected-phrase" style="display: none;width: 96%;
+padding: 1vh;
+height: 8vh;}
+">Expected phrase will appear here</p>
+
+    <button id="nextButton">Next</button>
+    <p id="answer">Answer will appear here</p>
+    
+    <p id="interim-text">Interim text will appear here</p>
+   
+ <script>
+          const params = new URLSearchParams(window.location.search);
+    const questionsJSON = params.get('questions');
+    const questions = new Map(JSON.parse(questionsJSON));
+
+    // Rest of your existing code
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES'; // Set language to Spanish
+
+    const pronouns = [
+        'yo',
+        'tu',
+        'el',
+        'nosotros',
+        'vosotros',
+        'ellos'
+    ];
+
+    let currentQuestions = [];
+    let currentQuestion = {};
+
+   function getRandomElement(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function createRandomQuestion() {
+        document.getElementById('interim-text').textContent = "";
+        document.getElementById('askButton').innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
+        document.getElementById('answer').textContent = "";
+        document.getElementById('expected-phrase').textContent = "";
+
+        const { question, translation } = getRandomElement(currentQuestions);
+        currentQuestion = { question, translation };
+
+        document.getElementById('question').textContent = question;
+        document.getElementById('expected-phrase').textContent = translation;
+    }
+
+    function loadQuestions(pronoun) {
+        currentQuestions = questions.get(pronoun);
+        createRandomQuestion();
+    }
+
+    function normalizeString(str) {
+        const accentsMap = {
+            'á': 'a',
+            'é': 'e',
+            'í': 'i',
+            'ó': 'o',
+            'ú': 'u',
+            'ñ': 'n'
+        };
+
+        const numbersMap = {
+            'uno': '1',
+            'dos': '2',
+            'tres': '3',
+            'cuatro': '4',
+            'cinco': '5',
+            'eis': '6',
+            'iete': '7',
+            'ocho': '8',
+            'nueve': '9',
+            'diez': '10',
+            'once': '11',
+            'doce':'12',
+            'trece': '13',
+            'catorce': '14',
+            'quince': '15',
+            'dieciséis': '16',
+            'diecisiete': '17',
+            'dieciocho': '18',
+            'diecinueve': '19',
+            'veinte': '20',
+            'veintiuno': '21',
+            'veintidós': '22',
+            'veintitrés': '23',
+            'veinticuatro': '24',
+            'veinticinco': '25',
+            'veintiséis': '26',
+            'veintisiete': '27',
+            'veintiocho': '28',
+            'veintinueve': '29',
+            'treinta': '30',
+            'cuarenta': '40',
+            'cincuenta': '50',
+            'sesenta': '60',
+            'setenta': '70',
+            'ochenta': '80',
+            'noventa': '90',
+            'cien': '100'
+        };
+
+        const pronouns = ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos'];
+
+        return str.toLowerCase()
+            .split('')
+            .map(char => accentsMap[char] || char)
+            .join('')
+            .split(' ')
+            .map(word => numbersMap[word] || word)
+            .filter(word => !pronouns.includes(word))
+            .join(' ')
+            .replace(/[,\.\...]/g, '')
+            .trim();
+    }
+
+    function highlightText(transcript, translation) {
+        const transcriptWords = normalizeString(transcript).split(' ');
+        const translationWords = normalizeString(translation).split(' ');
+
+        const highlightedText = transcriptWords.map((word, index) => {
+            if (translationWords[index] && word === translationWords[index]) {
+                return `<span style="color: lime;">${word}</span>`;
+            } else {
+                return `<span style="color: red;">${word}</span>`;
+            }
+        }).join(' ');
+
+        const interimTextArea = document.getElementById('interim-text');
+        interimTextArea.innerHTML = highlightedText;
+
+        if (highlightedText.trim() !== '') {
+            interimTextArea.classList.add('show');
+        } else {
+            interimTextArea.classList.remove('show');
+        }
+
+        document.getElementById('expected-phrase').innerHTML = translation;
+    }
+
+    function askQuestion() {
+        document.getElementById('interim-text').textContent = "";
+        document.getElementById('interim-text').classList.remove('show');
+        document.getElementById('answer').textContent = "";
+
+        recognition.start();
+    }
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        const interimTranscript = event.results[0][0].transcript;
+        const answer = document.getElementById('answer');
+        const expectedTranslation = normalizeString(currentQuestion.translation);
+
+        const normalizedTranscript = normalizeString(transcript);
+
+        if (normalizedTranscript === expectedTranslation) {
+            answer.textContent = interimTranscript;
+            answer.style.color = "lime";
+            answer.style.fontWeight = "bold";
+            answer.style.backgroundColor = "#011A11";
+        } else {
+            answer.innerHTML = `INCORRECT.<br>EXPECTED ANSWER:<br>${currentQuestion.translation}`;
+            answer.style.color = "WHITE";
+            answer.style.fontWeight = "bold";
+            answer.style.backgroundColor = "darkred";
+            highlightText(interimTranscript, currentQuestion.translation);
+        }
+    };
+
+    recognition.onstart = function() {
+        //startRecording();
+    };
+
+    recognition.onend = function() {
+       //stopRecording();
+    };
+
+    function playExpectedPhraseAudio() {
+        const expectedPhrase = document.getElementById('expected-phrase').textContent.trim();
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(expectedPhrase);
+        utterance.lang = 'es-ES';
+        
+        // Play audio
+        synth.speak(utterance);
+        
+        // After audio ends, toggle back to "CHECK"
+        utterance.onend = function() {
+            const checkButton = document.getElementById('checkButton');
+            const expectedPhraseElement = document.getElementById('expected-phrase');
+            expectedPhraseElement.style.display = 'none';
+            checkButton.style.display = 'inline-block';
+            checkButton.textContent = 'CHECK';
+        };
+    }
+
+    document.getElementById('checkButton').addEventListener('click', function() {
+        const checkButton = document.getElementById('checkButton');
+        const expectedPhraseElement = document.getElementById('expected-phrase');
+
+        if (checkButton.textContent === 'CHECK') {
+            expectedPhraseElement.style.display = 'block';
+            checkButton.style.display = 'none'; // Hide the "CHECK" button
+            playExpectedPhraseAudio();
+        }
+    });
+
+    function nextQuestion() {
+        createRandomQuestion();
+        document.getElementById('answer').textContent = "";
+        document.getElementById('interim-text').textContent = "";
+    }
+
+    // Add event listeners to pronoun buttons
+    document.getElementById('yoButton').addEventListener('click', () => loadQuestions('yo'));
+    document.getElementById('tuButton').addEventListener('click', () => loadQuestions('tu'));
+    document.getElementById('elButton').addEventListener('click', () => loadQuestions('el'));
+    document.getElementById('nosotrosButton').addEventListener('click', () => loadQuestions('nosotros'));
+    document.getElementById('vosotrosButton').addEventListener('click', () => loadQuestions('vosotros'));
+    document.getElementById('ellosButton').addEventListener('click', () => loadQuestions('ellos'));
+
+    document.getElementById('askButton').addEventListener('click', askQuestion);
+    document.getElementById('nextButton').addEventListener('click', nextQuestion);
+
+    // Load default pronoun questions
+    loadQuestions('yo');
+</script>
+
+</body>
+</html>

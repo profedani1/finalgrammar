@@ -1,0 +1,375 @@
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game</title>
+     <link rel="stylesheet" href="shared-styles.css">
+
+  
+    </head>
+
+<body>
+<button onclick="toggleVerbsList()" class="check-verbs-button">CHECK VERBS LIST</button>
+
+<div id="buttonContainer1" class="button-container1">
+          <button
+          class="title-button0"
+ onclick="loadInnerActivity('index2.html')"><span style=" color: red;">TO BE</span><br>(SITUATION)<br>
+ESTAR</button>   
+      <button
+          class="title-button0"
+ onclick="loadInnerActivity('REST.html')" ><span style=" color: red;">TO BE</span><br>(DEFINITION)<br>SER</button>
+   <button
+          class="title-button0"
+ onclick="loadInnerActivity('BUY.html')"><span style=" color: red;">WANT</span><br>QUERER</button>
+       <button
+          class="title-button0"
+ onclick="loadInnerActivity('WALK.html')"><span style=" color: red;">CAN</span><br>PODER</button>
+       <button
+          class="title-button0"
+ onclick="loadInnerActivity('WAIT.html')"><span style=" color: red;">DO</span><br>HACER</button>
+     <button
+          class="title-button0"
+ onclick="loadInnerActivity('SPEAK.html')"><span style=" color: red;">PUT</span><br>PONER</button>
+      <button
+          class="title-button0"
+ onclick="loadInnerActivity('HELP.html')"><span style=" color: red;">SAY</span><br>DECIR</button> 
+      <button
+          class="title-button0"
+ onclick="loadInnerActivity('STUDY.html')"><span style=" color: red;">GO</span><br>IR</button>
+     <button
+          class="title-button0"
+ onclick="loadInnerActivity('come.html')"><span style=" color: red;">COME</span><br>VENIR</button>
+       <button
+          class="title-button0"
+ onclick="loadInnerActivity('have.html')"><span style=" color: red;">HAVE</span> <br>TENER</button>
+       <button
+          class="title-button0"
+ onclick="loadInnerActivity('give.html')"><span style=" color: red;">GIVE</span> <br>DAR</button>
+           <button
+          class="title-button0"
+ onclick="loadInnerActivity('see.html')"><span style=" color: red;">SEE</span> <br>VER</button>
+          </div>
+    <div class="container">
+        <div class="pronoun-container">
+            <button class="pronoun-button selected" data-pronoun="yo">yo</button>
+                   <button class="pronoun-button" data-pronoun="tu">tú</button>
+            <button class="pronoun-button" data-pronoun="el">él</button>
+            <button class="pronoun-button" data-pronoun="nosotros">nosotros</button>
+            <button class="pronoun-button" data-pronoun="vosotros">vosotros</button>
+            <button class="pronoun-button" data-pronoun="ellos">ellos</button>
+        </div>
+        <div class="shuffle-container">
+            <button id="shuffleBtn">Shuffle</button>
+        </div>
+        <div class="columns-container">
+            <div class="column" id="questionsColumn">
+                <!-- Questions will be added here dynamically -->
+            </div>
+            <div class="column" id="translationsColumn">
+                <!-- Translations will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+    <div class="containerx">
+
+ <button
+          class="title-button0a" onclick="navigateTomainCHOOSE()">CHOOSE</button>
+  
+      <button
+          class="title-button0a" onclick="navigateTomainCATCH()">CATCH</button>
+     <button
+          class="title-button0a" onclick="navigateTomainRECOGNIZER()">VOICE<br>RECOGNIZER</button>
+      <button
+          class="title-button0a" onclick="navigateTomainLISTEN()">LISTEN</button>
+      </div>
+
+  
+ <script>
+    function toggleVerbsList() {
+    const container = document.getElementById('buttonContainer1');
+    container.classList.toggle('open');
+  }
+
+    const pronouns = [
+        'yo',
+        'tu',
+        'el',
+        'nosotros',
+        'vosotros',
+        'ellos'
+    ];
+
+const questions = new Map();
+
+questions.set('yo', [
+  { question: 'I had said', translation: 'HABÍA DICHO' },
+  { question: 'I said', translation: 'DIJE' },
+  { question: 'I used to say', translation: 'DECÍA' },
+  { question: 'I have said', translation: 'HE DICHO' },
+  { question: 'I say', translation: 'DIG0' },
+  { question: 'I will say', translation: 'DIRÉ' },
+  { question: 'I would say', translation: 'DIRÍA' },
+  { question: 'If I said', translation: 'SI DIJERA' },
+  { question: 'I would have said', translation: 'HABRÍA DICHO' },
+  { question: 'If I had said', translation: 'SI HUBIERA DICHO' }
+]);
+
+questions.set('tu', [
+  { question: 'You had said', translation: 'HABÍAS DICHO' },
+  { question: 'You said', translation: 'DIJISTE' },
+  { question: 'You used to say', translation: 'DECÍAS' },
+  { question: 'You have said', translation: 'HAS DICHO' },
+  { question: 'You say', translation: 'DICES' },
+  { question: 'You will say', translation: 'DIRÁS' },
+  { question: 'You would say', translation: 'DIRÍAS' },
+  { question: 'If you said', translation: 'SI DIJERAS' },
+  { question: 'You would have said', translation: 'HABRÍAS DICHO' },
+  { question: 'If you had said', translation: 'SI HUBIERAS DICHO' }
+]);
+
+questions.set('el', [
+  { question: 'He had said', translation: 'HABÍA DICHO' },
+  { question: 'He said', translation: 'DIJO' },
+  { question: 'He used to say', translation: 'DECÍA' },
+  { question: 'He has said', translation: 'HA DICHO' },
+  { question: 'He says', translation: 'DICE' },
+  { question: 'He will say', translation: 'DIRÁ' },
+  { question: 'He would say', translation: 'DIRÍA' },
+  { question: 'If he said', translation: 'SI DIJERA' },
+  { question: 'He would have said', translation: 'HABRÍA DICHO' },
+  { question: 'If he had said', translation: 'SI HUBIERA DICHO' }
+]);
+
+questions.set('nosotros', [
+  { question: 'We had said', translation: 'HABÍAMOS DICHO' },
+  { question: 'We said', translation: 'DIJIMOS' },
+  { question: 'We used to say', translation: 'DECÍAMOS' },
+  { question: 'We have said', translation: 'HEMOS DICHO' },
+  { question: 'We say', translation: 'DECIMOS' },
+  { question: 'We will say', translation: 'DIREMOS' },
+  { question: 'We would say', translation: 'DIRÍAMOS' },
+  { question: 'If we said', translation: 'SI DIJÉRAMOS' },
+  { question: 'We would have said', translation: 'HABRÍAMOS DICHO' },
+  { question: 'If we had said', translation: 'SI HUBIÉRAMOS DICHO' }
+]);
+
+questions.set('vosotros', [
+  { question: 'You guys had said', translation: 'HABÍAIS DICHO' },
+  { question: 'You guys said', translation: 'DIJISTEIS' },
+  { question: 'You guys used to say', translation: 'DECÍAIS' },
+  { question: 'You guys have said', translation: 'HABÉIS DICHO' },
+  { question: 'You guys say', translation: 'DECÍS' },
+  { question: 'You guys will say', translation: 'DIRÉIS' },
+  { question: 'You guys would say', translation: 'DIRÍAIS' },
+  { question: 'If you guys said', translation: 'SI DIJERAIS' },
+  { question: 'You guys would have said', translation: 'HABRÍAIS DICHO' },
+  { question: 'If you guys had said', translation: 'SI HUBIERAIS DICHO' }
+]);
+
+questions.set('ellos', [
+  { question: 'They had said', translation: 'HABÍAN DICHO' },
+  { question: 'They said', translation: 'DIJERON' },
+  { question: 'They used to say', translation: 'DECÍAN' },
+  { question: 'They have said', translation: 'HAN DICHO' },
+  { question: 'They say', translation: 'DICEN' },
+  { question: 'They will say', translation: 'DIRÁN' },
+  { question: 'They would say', translation: 'DIRÍAN' },
+  { question: 'If they said', translation: 'SI DIJERAN' },
+  { question: 'They would have said', translation: 'HABRÍAN DICHO' },
+  { question: 'If they had said', translation: 'SI HUBIERAN DICHO' }
+]);
+
+
+
+
+const pronounButtons = document.querySelectorAll('.pronoun-button');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const questionsColumn = document.getElementById('questionsColumn');
+const translationsColumn = document.getElementById('translationsColumn');
+
+let selectedPronoun = 'yo'; // Default selected pronoun
+let selectedQuestion = null;
+let selectedTranslation = null;
+let isShuffled = false; // Flag to track if the game is ready
+
+
+function updateQuestions() {
+    clearElement(questionsColumn);
+    clearElement(translationsColumn);
+
+    selectedPronoun = this.getAttribute('data-pronoun');
+    const selectedQuestions = questions.get(selectedPronoun);
+
+    selectedQuestions.forEach((item, index) => {
+        const questionBtn = document.createElement('button');
+        questionBtn.innerText = item.question;
+        questionBtn.dataset.index = index;
+        questionBtn.disabled = true; // Disable until shuffled
+        questionBtn.addEventListener('click', () => selectButton(questionBtn, 'question'));
+        questionsColumn.appendChild(questionBtn);
+
+        const translationBtn = document.createElement('button');
+        translationBtn.innerText = item.translation;
+        translationBtn.dataset.index = index;
+        translationBtn.disabled = true; // Disable until shuffled
+        translationBtn.addEventListener('click', () => selectButton(translationBtn, 'translation'));
+        translationsColumn.appendChild(translationBtn);
+    });
+}
+
+
+ function clearElement(element) {
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
+}
+
+
+ function selectButton(button, type) {
+    if (!isShuffled || button.classList.contains('matched')) return; // Only allow selection after shuffle
+
+    if (type === 'question') {
+        if (selectedQuestion) selectedQuestion.classList.remove('selected');
+        selectedQuestion = button === selectedQuestion ? null : button;
+    } else if (type === 'translation') {
+        if (selectedTranslation) selectedTranslation.classList.remove('selected');
+        selectedTranslation = button === selectedTranslation ? null : button;
+    }
+
+    button.classList.toggle('selected');
+
+    if (selectedQuestion && selectedTranslation) {
+        checkMatch();
+    }
+}
+
+
+ function checkMatch() {
+    const questionIndex = selectedQuestion.dataset.index;
+    const translationIndex = selectedTranslation.dataset.index;
+
+    if (questionIndex === translationIndex) {
+        selectedQuestion.classList.add('matched');
+        selectedTranslation.classList.add('matched');
+        selectedQuestion.classList.remove('selected');
+        selectedTranslation.classList.remove('selected');
+        selectedQuestion = null;
+        selectedTranslation = null;
+        checkCompletion();
+    } else {
+        selectedQuestion.classList.add('wrong');
+        selectedTranslation.classList.add('wrong');
+        setTimeout(() => {
+            selectedQuestion.classList.remove('wrong');
+            selectedTranslation.classList.remove('wrong');
+            selectedQuestion.classList.remove('selected');
+            selectedTranslation.classList.remove('selected');
+            selectedQuestion = null;
+            selectedTranslation = null;
+        }, 1000);
+    }
+}
+
+ function checkCompletion() {
+    const matchedButtons = document.querySelectorAll('.matched');
+    if (matchedButtons.length === questions.get(selectedPronoun).length * 2) {
+        alert("Congratulations! You've matched all pairs.");
+    }
+}
+shuffleBtn.textContent = 'PRESS TO PLAY';
+function shuffleTranslations() {
+    // Add the class and reset the animation
+    shuffleBtn.classList.add('shuffle-white-border');
+    shuffleBtn.style.animation = 'none';
+
+    const translationsButtons = Array.from(translationsColumn.children);
+    for (let i = translationsButtons.length - 1; i >= 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        translationsColumn.appendChild(translationsButtons[j]);
+    }
+
+    // Enable question and translation buttons after shuffle
+    const questionButtons = questionsColumn.querySelectorAll('button');
+    const translationButtons = translationsColumn.querySelectorAll('button');
+    questionButtons.forEach(btn => btn.disabled = false);
+    translationButtons.forEach(btn => btn.disabled = false);
+
+    isShuffled = true; // Enable game logic after shuffle
+
+    // Change button text after first click
+    shuffleBtn.textContent = 'SHUFFLE AGAIN';
+}
+
+shuffleBtn.addEventListener('click', shuffleTranslations);
+
+// Initialize event listeners for pronoun buttons
+pronounButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        pronounButtons.forEach(btn => btn.classList.remove('selected'));
+        this.classList.add('selected');
+        updateQuestions.call(this); // Call updateQuestions with the context of the clicked button
+
+        // Reset shuffled state and disable buttons after selecting a new pronoun
+        isShuffled = false;
+        const questionButtons = questionsColumn.querySelectorAll('button');
+        const translationButtons = translationsColumn.querySelectorAll('button');
+        questionButtons.forEach(btn => btn.disabled = true);
+        translationButtons.forEach(btn => btn.disabled = true);
+    });
+});
+
+    // Initial setup: select default 'yo' pronoun and update questions
+    const initialPronounBtn = document.querySelector('.pronoun-button.selected');
+    updateQuestions.call(initialPronounBtn);
+   
+     function loadInnerActivity(activityUrl) {
+  window.location.href = activityUrl;
+
+      }
+    
+function navigateTomainCATCH() {
+    selectedQuestion = null;
+    selectedTranslation = null;
+    const questionsJSON = JSON.stringify(Array.from(questions.entries()));
+    const url = `mainCATCH.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+}
+   
+ function navigateTomainLISTEN() {
+    selectedQuestion = null;
+    selectedTranslation = null;
+    const questionsJSON = JSON.stringify(Array.from(questions.entries()));
+    const url = `mainLISTEN.html?questions=${encodeURIComponent(questionsJSON)}`;
+    window.location.href = url;
+}
+  function navigateTomainRECOGNIZER() {
+            // Convert the Map to a JSON string to pass via URL
+            const questionsJSON = JSON.stringify(Array.from(questions.entries()));
+            const url = `mainRECOGNIZER.html?questions=${encodeURIComponent(questionsJSON)}`;
+            window.location.href = url;
+        }
+      function navigateTomainCHOOSE() {
+            // Convert the Map to a JSON string to pass via URL
+            const questionsJSON = JSON.stringify(Array.from(questions.entries()));
+            const url = `mainCHOOSE.html?questions=${encodeURIComponent(questionsJSON)}`;
+            window.location.href = url;
+        }
+   
+   
+    function navigateTomainMATCH2() {
+const questionsObject = {};
+questions.forEach((value, key) => {
+    questionsObject[key] = value;
+});
+
+localStorage.setItem("questionsData", JSON.stringify(questionsObject));
+
+window.location.href = "mainMATCH2.html";
+   } 
+      </script>
+
+</body>
+</html>

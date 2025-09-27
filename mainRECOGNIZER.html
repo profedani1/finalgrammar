@@ -7,7 +7,8 @@
     <style>
        body {
     background: black;
-    width: 97%;
+    width: 93%;
+    margin-right:1vh;
     font-family: Arial, sans-serif;
 }
 #question {
@@ -15,10 +16,13 @@
     font-size: 2.2vh;
     font-weight: bold;
     text-align: center;
-    height: 7vh;
+    height: auto;
     border: 0.1vh solid darkgrey;
-    padding: 1vh;
-    width: 97%;
+    padding:2vh;
+    width: auto;
+    text-transform: uppercase;
+
+    
 }
 #question:hover {
     cursor: default;
@@ -101,6 +105,7 @@
     border: 0.1vh solid darkgrey;
     text-align: center;
     width: 100%;
+    height: 4vh;
 }
 #audio-container {
     margin: 2vh 0;
@@ -235,268 +240,281 @@ button[onclick="decreaseSpeed()"]:hover {
   cursor: pointer;
 }
       
-    </style>
+#pronounContainer {
+     display: flex;
+            width: 100%;
+            justify-content: space-around;
+            margin-bottom: 1vh;
+        
+}
+
+/* Button Styles */
+.pronoun-buttons button {
+  height: 4vh;
+              width: 100%;
+text-transform: uppercase;
+
+            font-size: 1.8vh;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            border: 0.2vh solid white;
+}
+
+.pronoun-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.pronoun-buttons button:active {
+    background-color: #003d80;
+}
+   </style>
 </head>
 <body>
-    
- 
-   <div class="containerx">
-
-  <div id="speedControls">
-    <button onclick="increaseSpeed()">+</button>
-        <button id="automaticPlayButton">AUTOMATIC PLAY</button>
-
-    <button onclick="decreaseSpeed()">-</button>
-
-
-<div id="speedIndicator"></div>
+     <div id="pronounContainer" class="pronoun-buttons">
+    <button id="yoButton">yo</button>
+    <button id="tuButton">tu</button>
+    <button id="elButton">el</button>
+    <button id="nosotrosButton">nosotros</button>
+    <button id="vosotrosButton">vosotros</button>
+    <button id="ellosButton">ellos</button>
 </div>
-  </div>
-<button id="nextButton">GENERATE PHRASE</button>
-    <h1 id="question"></h1>
+    <h1 id="question">Question will appear here</h1>
+
     <button id="askButton"><i class="fas fa-microphone microphone-icon"></i></button>
-    
-    <button id="checkButton">CHECK</button>
-   <p id="expected-phrase" style="display: none; background-color: #0a0a0a;
-    color: white;
-    font-size: 2.7vh;
-    border: 0.1vh solid darkgrey;
-    text-align: center; /* Center text horizontally */
-    width: 98%;
-    line-height: 5vh; /* Set line-height to match the height for vertical centering */
-    text-transform: uppercase;"></p>
-  
+   <button id="checkButton">CHECK</button>
+    <p id="expected-phrase" style="display: none;width: 96%;
+padding: 1vh;
+height: 8vh;}
+">Expected phrase will appear here</p>
+
+    <button id="nextButton">Next</button>
     <p id="answer">Answer will appear here</p>
+    
     <p id="interim-text">Interim text will appear here</p>
-    <p id="recognized-phrase" style="display: none; width: 98.5%; padding: 1vh; height: 8vh;">Recognized text will appear here</p>
+   
+ <script>
+          const params = new URLSearchParams(window.location.search);
+    const questionsJSON = params.get('questions');
+    const questions = new Map(JSON.parse(questionsJSON));
 
-<script>
-window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-recognition.lang = 'es-ES'; // Set to Spanish for speech recognition
+    // Rest of your existing code
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-// Parse the JSON data passed via the URL
-const params = new URLSearchParams(window.location.search);
-const dataJSON = params.get('data');
-let phraseGroups = [];
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES'; // Set language to Spanish
 
-if (dataJSON) {
-    try {
-        const data = JSON.parse(decodeURIComponent(dataJSON));
-        phraseGroups = data.map(group => ({
-            phrases: group.phrases,
-            translations: group.translations
-        }));
-    } catch (error) {
-        console.error('Failed to parse data JSON:', error);
-        alert('Error loading phrase data. Please try again.');
+    const pronouns = [
+        'yo',
+        'tu',
+        'el',
+        'nosotros',
+        'vosotros',
+        'ellos'
+    ];
+
+    let currentQuestions = [];
+    let currentQuestion = {};
+
+   function getRandomElement(array) {
+        return array[Math.floor(Math.random() * array.length)];
     }
-}
 
-let currentQuestion = { question: "", translation: "" };
-let isPlaying = false;
-let utterance = new SpeechSynthesisUtterance();
+    function createRandomQuestion() {
+        document.getElementById('interim-text').textContent = "";
+        document.getElementById('askButton').innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
+        document.getElementById('answer').textContent = "";
+        document.getElementById('expected-phrase').textContent = "";
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (phraseGroups.length > 0) {
-        createQuestion();
-    } else {
-        console.warn('Phrase groups are empty.');
+        const { question, translation } = getRandomElement(currentQuestions);
+        currentQuestion = { question, translation };
+
+        document.getElementById('question').textContent = question;
+        document.getElementById('expected-phrase').textContent = translation;
     }
-});
 
+    function loadQuestions(pronoun) {
+        currentQuestions = questions.get(pronoun);
+        createRandomQuestion();
+    }
 
-function getRandomElement(array) {
-    return array[Math.floor(Math.random() * array.length)];
-}
+    function normalizeString(str) {
+        const accentsMap = {
+            'á': 'a',
+            'é': 'e',
+            'í': 'i',
+            'ó': 'o',
+            'ú': 'u',
+            'ñ': 'n'
+        };
 
-function createQuestion() {
-    document.getElementById('interim-text').textContent = "";
-    document.getElementById('askButton').innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
-    document.getElementById('answer').textContent = "";
-    document.getElementById('expected-phrase').textContent = "";
+        const numbersMap = {
+            'uno': '1',
+            'dos': '2',
+            'tres': '3',
+            'cuatro': '4',
+            'cinco': '5',
+            'eis': '6',
+            'iete': '7',
+            'ocho': '8',
+            'nueve': '9',
+            'diez': '10',
+            'once': '11',
+            'doce':'12',
+            'trece': '13',
+            'catorce': '14',
+            'quince': '15',
+            'dieciséis': '16',
+            'diecisiete': '17',
+            'dieciocho': '18',
+            'diecinueve': '19',
+            'veinte': '20',
+            'veintiuno': '21',
+            'veintidós': '22',
+            'veintitrés': '23',
+            'veinticuatro': '24',
+            'veinticinco': '25',
+            'veintiséis': '26',
+            'veintisiete': '27',
+            'veintiocho': '28',
+            'veintinueve': '29',
+            'treinta': '30',
+            'cuarenta': '40',
+            'cincuenta': '50',
+            'sesenta': '60',
+            'setenta': '70',
+            'ochenta': '80',
+            'noventa': '90',
+            'cien': '100'
+        };
 
-    const randomPhrases = phraseGroups.map(group => getRandomElement(group.phrases));
-    const randomTranslations = phraseGroups.map((group, index) => 
-        group.translations[group.phrases.indexOf(randomPhrases[index])]
-    );
+        const pronouns = ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos'];
 
-    const question = randomPhrases.join(' ');
-    const expectedTranslation = randomTranslations.join(' ');
+        return str.toLowerCase()
+            .split('')
+            .map(char => accentsMap[char] || char)
+            .join('')
+            .split(' ')
+            .map(word => numbersMap[word] || word)
+            .filter(word => !pronouns.includes(word))
+            .join(' ')
+            .replace(/[,\.\...]/g, '')
+            .trim();
+    }
 
-    currentQuestion = { question, expectedTranslation };
+    function highlightText(transcript, translation) {
+        const transcriptWords = normalizeString(transcript).split(' ');
+        const translationWords = normalizeString(translation).split(' ');
 
-    document.getElementById('question').textContent = question;
-    document.getElementById('expected-phrase').textContent = expectedTranslation;
+        const highlightedText = transcriptWords.map((word, index) => {
+            if (translationWords[index] && word === translationWords[index]) {
+                return `<span style="color: lime;">${word}</span>`;
+            } else {
+                return `<span style="color: red;">${word}</span>`;
+            }
+        }).join(' ');
 
-    playRandomPhraseAudio(question);
-}
+        const interimTextArea = document.getElementById('interim-text');
+        interimTextArea.innerHTML = highlightedText;
 
-function playRandomPhraseAudio(phrase) {
-    const utterance = new SpeechSynthesisUtterance(phrase);
-    utterance.lang = 'en-US';
-    speechSynthesis.speak(utterance);
-}
+        if (highlightedText.trim() !== '') {
+            interimTextArea.classList.add('show');
+        } else {
+            interimTextArea.classList.remove('show');
+        }
 
-function playExpectedPhraseAudio() {
-    const expectedPhrase = document.getElementById('expected-phrase').textContent.trim();
+        document.getElementById('expected-phrase').innerHTML = translation;
+    }
 
-    utterance.text = expectedPhrase;
-    utterance.lang = 'es-ES';
-    speechSynthesis.speak(utterance);
+    function askQuestion() {
+        document.getElementById('interim-text').textContent = "";
+        document.getElementById('interim-text').classList.remove('show');
+        document.getElementById('answer').textContent = "";
 
-    utterance.onend = function() {
-        document.getElementById('expected-phrase').style.display = 'none';
-        document.getElementById('checkButton').style.display = 'inline-block';
-        document.getElementById('checkButton').textContent = 'CHECK';
+        recognition.start();
+    }
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        const interimTranscript = event.results[0][0].transcript;
+        const answer = document.getElementById('answer');
+        const expectedTranslation = normalizeString(currentQuestion.translation);
+
+        const normalizedTranscript = normalizeString(transcript);
+
+        if (normalizedTranscript === expectedTranslation) {
+            answer.textContent = interimTranscript;
+            answer.style.color = "lime";
+            answer.style.fontWeight = "bold";
+            answer.style.backgroundColor = "#011A11";
+        } else {
+            answer.innerHTML = `INCORRECT.<br>EXPECTED ANSWER:<br>${currentQuestion.translation}`;
+            answer.style.color = "WHITE";
+            answer.style.fontWeight = "bold";
+            answer.style.backgroundColor = "darkred";
+            highlightText(interimTranscript, currentQuestion.translation);
+        }
     };
 
-    updateSpeedIndicator();
-}
+    recognition.onstart = function() {
+        //startRecording();
+    };
 
-function increaseSpeed() {
-    utterance.rate += 0.1;
-    if (utterance.rate > 2.0) utterance.rate = 2.0;
-    updateSpeedIndicator();
-}
+    recognition.onend = function() {
+       //stopRecording();
+    };
 
-function decreaseSpeed() {
-    utterance.rate -= 0.1;
-    if (utterance.rate < 0.1) utterance.rate = 0.1;
-    updateSpeedIndicator();
-}
-
-function updateSpeedIndicator() {
-    const speedometer = document.getElementById('speedIndicator');
-    const speed = utterance.rate;
-    const widthPercentage = ((speed - 0.1) / (2.0 - 0.1)) * 100;
-    speedometer.style.width = `${widthPercentage}%`;
-}
-
-function handleAutomaticPlay() {
-    const automaticPlayButton = document.getElementById('automaticPlayButton');
-    const nextButton = document.getElementById('nextButton');
-    const checkButton = document.getElementById('checkButton');
-    const askButton = document.getElementById('askButton');
-
-    if (!isPlaying) {
-        isPlaying = true;
-        automaticPlayButton.textContent = "Stop";
-
-        nextButton.style.display = 'none';
-        checkButton.style.display = 'none';
-        askButton.style.display = 'none';
-
-        function playCycle() {
-            if (isPlaying) {
-                createQuestion();
-                setTimeout(() => {
-                    document.getElementById('checkButton').click();
-                    setTimeout(() => {
-                        playCycle();
-                    }, 4000);
-                }, 4000);
-            }
-        }
-
-        playCycle();
-    } else {
-        isPlaying = false;
-        automaticPlayButton.textContent = "Automatic Play";
-        nextButton.style.display = 'inline-block';
-        checkButton.style.display = 'inline-block';
-        askButton.style.display = 'inline-block';
-    }
-}
-
-function filterOutNumbers(transcript) {
-    return transcript.replace(/\d+/g, ''); 
-}
-
-function highlightText(transcript, translation) {
-    const transcriptWords = transcript.toUpperCase().split(' ');
-    const translationWords = translation.toUpperCase().split(' ');
-
-    const highlightedText = transcriptWords.map((word, index) => {
-        if (translationWords[index] && word.toUpperCase() === translationWords[index].toUpperCase()) {
-            return '<span style="color: green;">' + word + '</span>';
-        } else {
-            return '<span style="color: red;">' + word + '</span>';
-        }
-    }).join(' ');
-
-    document.getElementById('recognized-phrase').innerHTML = highlightedText;
-}
-
-function clearRecognizedPhrase() {
-    document.getElementById('recognized-phrase').innerHTML = '';
-}
-
-document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', clearRecognizedPhrase);
-});
-
-function showExpectedPhrase() {
-    const expectedPhrase = document.getElementById('expected-phrase').textContent.trim();
-    document.getElementById('expected-phrase').style.display = 'block';
-    setTimeout(() => {
-        document.getElementById('expected-phrase').style.display = 'none';
-    }, 4000);
-}
-
-document.getElementById('askButton').addEventListener('click', function() {
-    recognition.start();
-    this.innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
-    this.classList.add('recording');
-});
-
-recognition.onresult = function(event) {
-    const transcript = filterOutNumbers(event.results[0][0].transcript.toLowerCase());
-    const interimTranscript = event.results[0][0].transcript;
-    const answer = document.getElementById('answer');
-    const recognizedPhraseElem = document.getElementById('recognized-phrase');
-
-    recognizedPhraseElem.textContent = transcript;
-    recognizedPhraseElem.style.display = 'block';
-
-    if (transcript === currentQuestion.expectedTranslation.toLowerCase()) {
-        answer.textContent = "Correct!";
-        answer.style.color = "lime";
-        answer.style.fontWeight = "bold";
-        answer.style.backgroundColor = "darkgreen";
-    } else {
-        answer.textContent = "Incorrect, try again.";
-        answer.style.color = "red";
-        answer.style.fontWeight = "bold";
-        answer.style.backgroundColor = "darkred";
+    function playExpectedPhraseAudio() {
+        const expectedPhrase = document.getElementById('expected-phrase').textContent.trim();
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(expectedPhrase);
+        utterance.lang = 'es-ES';
+        
+        // Play audio
+        synth.speak(utterance);
+        
+        // After audio ends, toggle back to "CHECK"
+        utterance.onend = function() {
+            const checkButton = document.getElementById('checkButton');
+            const expectedPhraseElement = document.getElementById('expected-phrase');
+            expectedPhraseElement.style.display = 'none';
+            checkButton.style.display = 'inline-block';
+            checkButton.textContent = 'CHECK';
+        };
     }
 
-    highlightText(interimTranscript, currentQuestion.expectedTranslation);
-    document.getElementById('interim-text').textContent = interimTranscript;
-};
+    document.getElementById('checkButton').addEventListener('click', function() {
+        const checkButton = document.getElementById('checkButton');
+        const expectedPhraseElement = document.getElementById('expected-phrase');
 
-recognition.onend = function() {
-    document.getElementById('askButton').classList.remove('recording');
-};
+        if (checkButton.textContent === 'CHECK') {
+            expectedPhraseElement.style.display = 'block';
+            checkButton.style.display = 'none'; // Hide the "CHECK" button
+            playExpectedPhraseAudio();
+        }
+    });
 
-document.getElementById('nextButton').addEventListener('click', createQuestion);
-document.getElementById('checkButton').addEventListener('click', function() {
-    showExpectedPhrase();
-    playExpectedPhraseAudio();
-});
-document.getElementById('automaticPlayButton').addEventListener('click', handleAutomaticPlay);
-document.getElementById('speedIncreaseButton').addEventListener('click', increaseSpeed);
-document.getElementById('speedDecreaseButton').addEventListener('click', decreaseSpeed);
+    function nextQuestion() {
+        createRandomQuestion();
+        document.getElementById('answer').textContent = "";
+        document.getElementById('interim-text').textContent = "";
+    }
 
-function loadInnerActivity(url) {
-    window.location.href = url;
-}
+    // Add event listeners to pronoun buttons
+    document.getElementById('yoButton').addEventListener('click', () => loadQuestions('yo'));
+    document.getElementById('tuButton').addEventListener('click', () => loadQuestions('tu'));
+    document.getElementById('elButton').addEventListener('click', () => loadQuestions('el'));
+    document.getElementById('nosotrosButton').addEventListener('click', () => loadQuestions('nosotros'));
+    document.getElementById('vosotrosButton').addEventListener('click', () => loadQuestions('vosotros'));
+    document.getElementById('ellosButton').addEventListener('click', () => loadQuestions('ellos'));
 
+    document.getElementById('askButton').addEventListener('click', askQuestion);
+    document.getElementById('nextButton').addEventListener('click', nextQuestion);
+
+    // Load default pronoun questions
+    loadQuestions('yo');
 </script>
-
-
-
-
 
 </body>
 </html>

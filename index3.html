@@ -629,7 +629,6 @@ bottom:10vh;
 <div class="games">
 
 
-
 <!-- New Play Game 2 Button -->
 <button id="playGame2Button" onclick="playGame2()"
  style="
@@ -3134,6 +3133,7 @@ function produceTemplate() {
 
   document.getElementById("playGameButton").style.display = "block";
   document.getElementById("playGame2Button").style.display = "block"; // Show the new button
+  document.getElementById("playGame3Button").style.display = "block"; 
   document.getElementById("output").textContent = JSON.stringify(
     output,
     null,
@@ -3166,7 +3166,15 @@ function playGame2() {
     alert("Please produce content before starting the game.");
   }
 }
-
+function playGame3() {
+  const outputContent = document.getElementById("output").textContent;
+  if (outputContent) {
+    localStorage.setItem("phraseGroups", outputContent);
+    window.location.href = "learn.html"; // Redirect to buttons.html
+  } else {
+    alert("Please produce content before starting the game.");
+  }
+}
       
       function loadInnerActivity(url) {
         window.location.href = url;

@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -626,14 +627,6 @@ bottom:10vh;
 "
 >READY</button>
 <div class="games">
-
-<button id="playGame3Button" onclick="playGame3()"
-style="
-
-
-"
->LEARNING</button>
-
 
 
 <!-- New Play Game 2 Button -->
@@ -3173,15 +3166,7 @@ function playGame2() {
     alert("Please produce content before starting the game.");
   }
 }
-function playGame3() {
-  const outputContent = document.getElementById("output").textContent;
-  if (outputContent) {
-    localStorage.setItem("phraseGroups", outputContent);
-    window.location.href = "learn.html"; // Redirect to buttons.html
-  } else {
-    alert("Please produce content before starting the game.");
-  }
-}
+
       
       function loadInnerActivity(url) {
         window.location.href = url;

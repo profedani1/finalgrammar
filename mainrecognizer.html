@@ -1,39 +1,505 @@
-
-!DOCTYPE html
-html lang=en
-head
-    meta charset=UTF-8
-    meta name=viewport content=width=device-width, initial-scale=1.0
-    link rel=stylesheet href=httpscdnjs.cloudflare.comajaxlibsfont-awesome5.15.3cssall.min.css
-    style
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
        body {
-    background black;
-    width 97%;
-    font-family Arial, sans-serif;
+    background: black;
+    width: 97%;
+    font-family: Arial, sans-serif;
 }
 #question {
-    color white;
-    font-size 2.2vh;
-    font-weight bold;
-    text-align center;
-    height 7vh;
-    border 0.1vh solid darkgrey;
-    padding 1vh;
-    width 97%;
+    color: white;
+    font-size: 2.2vh;
+    font-weight: bold;
+    text-align: center;
+    height: 7vh;
+    border: 0.1vh solid darkgrey;
+    padding: 1vh;
+    width: 97%;
 }
-#questionhover {
-    cursor default;
+#question:hover {
+    cursor: default;
 }
 #interim-text {
-    display none;  Initially hide 
-    background-color #0a0a0a;
-    color white;
-    font-size 2.7vh;
-    width 97.9%;
-    height 9vh;
-    margin 2.5vh 0;
-    border 0.1vh solid darkgrey;
-    border-radius 0.5vh;
+    display: none; /* Initially hide */
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    width: 97.9%;
+    height: 9vh;
+    margin: 2.5vh 0;
+    border: 0.1vh solid darkgrey;
+    border-radius: 0.5vh;
+    resize: none;
+}
+#interim-text.show {
+    display: block; /* Show when there's content */
+}
+#interim-text:hover {
+    cursor: default;
+}
+#askButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    background-color: black;
+    padding: 1vh 3vh;
+    border: 1vh solid red;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-bottom: 3vh;
+    transition: box-shadow 0.3s ease, font-size 0.3s ease;
+}
+#askButton:hover {
+    box-shadow: 0 0 5vh red;
+    font-size: 10.5vh;
+}
+#askButton.recording {
+    background-color: darkred;
+    border-color: #640b0b;
+    text-shadow: 0vh 0vh 1vh black;
+}
+#nextButton {
+    display: inline-block;
+    background-color: black;
+    color: cyan;
+    border: 0.1vh solid cyan;
+    width: 100%;
+    cursor: pointer;
+    font-size: 3vh;
+    transition: background-color 0.3s ease, border 0.3s ease;
+    text-align: center;
+    padding: 4vh;
+    margin-bottom: 2vh;
+}
+#prevButton:hover, #nextButton:hover {
+    background-color: #030019;
+    border-color: cyan;
+}
+#answer {
+    color: #ff0000;
+    font-weight: bold;
+    text-align: center;
+    margin: 2vh 0;
+}
+.microphone-icon {
+    color: red;
+    font-size: 10vh;
+}
+.microphone-icon:hover {
+    color: red;
+    font-size: 10.2vh;
+}
+#expected-phrase {
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    border: 0.1vh solid darkgrey;
+    text-align: center;
+    width: 100%;
+}
+#audio-container {
+    margin: 2vh 0;
+    text-align: center;
+}
+#checkButton {
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    border: 0.1vh solid darkgrey;
+    margin-bottom: 2vh;
+    width: 100%;
+    height: 10vh;
+}
+#listenButton {
+    background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    width: 100%;
+    height: 4vh;
+}
+audio {
+    width: 95%;
+    background-color: #191919;
+    padding: 1vh;
+}
+.code-container {
+    width: 95.5%;
+    margin-top: 1vh;
+}
+#toggleActivitiesBtn {
+    padding: 10px 20px;
+    background-color: green;
+    color: lime;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+#activitiesContainer {
+    display: none;
+}
+.activity-btn {
+    margin-right: 0.1vh;
+    background-color: black;
+    color: lime;
+    font-weight: bold;
+    padding: 0vw;
+}
+.activity-img {
+    width: 15vw;
+    height: 15vh;
+    border: 0.4vh solid lime;
+}
+.title-button {
+    background-color: black;
+    color: yellow;
+    font-weight: bold;
+    padding: 2vh 1vh;
+    margin-bottom:2vh;
+        border: 0.4vh solid yellow;
+width:99%;
+}
+#automaticPlayButton {
+    display: inline-block;
+      text-align: center;
+    height: 15vh;
+
+    background-color: black;
+    color: orange;
+    border: 0.1vh solid orange;
+    width: 60%;
+    cursor: pointer;
+    font-size: 3vh;
+    transition: background-color 0.3s ease, border 0.3s ease;
+    text-align: center;
+}
+#automaticPlayButton:hover {
+    background-color: #6e5224;
+    color: #ff9a00;
+}
+button[onclick="increaseSpeed()"] {
+  background-color: black; /* Green background */
+  color: lime; /* White text */
+  font-size: 8vh; /* Font size */
+  cursor: pointer; 
+      border: 0.5vh solid lime;
+    width: 18%;
+    height: 12vh;
+
+  border-radius: 1vh; /* Rounded corners */
+}
+
+button[onclick="decreaseSpeed()"] {
+  background-color: black; /* Red background */
+      width: 18%;
+    height: 12vh;
+
+  color: red; /* White text */
+      border: 0.5vh solid red;
+  font-size: 8vh; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 1vh; /* Rounded corners */
+}
+
+button[onclick="increaseSpeed()"]:hover {
+  background-color: #2a4b21;
+  color:lime;
+  
+}
+
+button[onclick="decreaseSpeed()"]:hover {
+  background-color: #411319; /* Darker red on hover */
+}
+#speedIndicator {
+    margin-top: 1vh;
+      margin-bottom: 1vh;
+
+    height: 2vh; /* Set the height of the speedometer */
+    background: linear-gradient(to right, #ff0000 0%, #00ff00 100%);
+    overflow: hidden;
+    transition: width 0.5s ease;
+}
+         .pc-version-button {
+  position: fixed; /* or absolute */
+  top: 85vh; /* Distance from the top of the viewport */
+  left: 1vh; /* Distance from the right of the viewport */
+  background-color: black;
+  color: #fff;
+  border: 0.5vh solid white;
+  border-radius: 10vh;
+  cursor: pointer;
+}
+      
+    </style>
+</head>
+<body>
+    
+ 
+   <div class="containerx">
+
+  <div id="speedControls">
+    <button onclick="increaseSpeed()">+</button>
+        <button id="automaticPlayButton">AUTOMATIC PLAY</button>
+
+    <button onclick="decreaseSpeed()">-</button>
+
+
+<div id="speedIndicator"></div>
+</div>
+  </div>
+<button id="nextButton">GENERATE PHRASE</button>
+    <h1 id="question"></h1>
+    <button id="askButton"><i class="fas fa-microphone microphone-icon"></i></button>
+    
+    <button id="checkButton">CHECK</button>
+   <p id="expected-phrase" style="display: none; background-color: #0a0a0a;
+    color: white;
+    font-size: 2.7vh;
+    border: 0.1vh solid darkgrey;
+    text-align: center; /* Center text horizontally */
+    width: 98%;
+    line-height: 5vh; /* Set line-height to match the height for vertical centering */
+    text-transform: uppercase;"></p>
+  
+    <p id="answer">Answer will appear here</p>
+    <p id="interim-text">Interim text will appear here</p>
+    <p id="recognized-phrase" style="display: none; width: 98.5%; padding: 1vh; height: 8vh;">Recognized text will appear here</p>
+
+<script>
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.lang = 'es-ES'; // Set to Spanish for speech recognition
+
+// Parse the JSON data passed via the URL
+const params = new URLSearchParams(window.location.search);
+const dataJSON = params.get('data');
+let phraseGroups = [];
+
+if (dataJSON) {
+    try {
+        const data = JSON.parse(decodeURIComponent(dataJSON));
+        phraseGroups = data.map(group => ({
+            phrases: group.phrases,
+            translations: group.translations
+        }));
+    } catch (error) {
+        console.error('Failed to parse data JSON:', error);
+        alert('Error loading phrase data. Please try again.');
+    }
+}
+
+let currentQuestion = { question: "", translation: "" };
+let isPlaying = false;
+let utterance = new SpeechSynthesisUtterance();
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (phraseGroups.length > 0) {
+        createQuestion();
+    } else {
+        console.warn('Phrase groups are empty.');
+    }
+});
+
+
+function getRandomElement(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function createQuestion() {
+    document.getElementById('interim-text').textContent = "";
+    document.getElementById('askButton').innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
+    document.getElementById('answer').textContent = "";
+    document.getElementById('expected-phrase').textContent = "";
+
+    const randomPhrases = phraseGroups.map(group => getRandomElement(group.phrases));
+    const randomTranslations = phraseGroups.map((group, index) => 
+        group.translations[group.phrases.indexOf(randomPhrases[index])]
+    );
+
+    const question = randomPhrases.join(' ');
+    const expectedTranslation = randomTranslations.join(' ');
+
+    currentQuestion = { question, expectedTranslation };
+
+    document.getElementById('question').textContent = question;
+    document.getElementById('expected-phrase').textContent = expectedTranslation;
+
+    playRandomPhraseAudio(question);
+}
+
+function playRandomPhraseAudio(phrase) {
+    const utterance = new SpeechSynthesisUtterance(phrase);
+    utterance.lang = 'en-US';
+    speechSynthesis.speak(utterance);
+}
+
+function playExpectedPhraseAudio() {
+    const expectedPhrase = document.getElementById('expected-phrase').textContent.trim();
+
+    utterance.text = expectedPhrase;
+    utterance.lang = 'es-ES';
+    speechSynthesis.speak(utterance);
+
+    utterance.onend = function() {
+        document.getElementById('expected-phrase').style.display = 'none';
+        document.getElementById('checkButton').style.display = 'inline-block';
+        document.getElementById('checkButton').textContent = 'CHECK';
+    };
+
+    updateSpeedIndicator();
+}
+
+function increaseSpeed() {
+    utterance.rate += 0.1;
+    if (utterance.rate > 2.0) utterance.rate = 2.0;
+    updateSpeedIndicator();
+}
+
+function decreaseSpeed() {
+    utterance.rate -= 0.1;
+    if (utterance.rate < 0.1) utterance.rate = 0.1;
+    updateSpeedIndicator();
+}
+
+function updateSpeedIndicator() {
+    const speedometer = document.getElementById('speedIndicator');
+    const speed = utterance.rate;
+    const widthPercentage = ((speed - 0.1) / (2.0 - 0.1)) * 100;
+    speedometer.style.width = `${widthPercentage}%`;
+}
+
+function handleAutomaticPlay() {
+    const automaticPlayButton = document.getElementById('automaticPlayButton');
+    const nextButton = document.getElementById('nextButton');
+    const checkButton = document.getElementById('checkButton');
+    const askButton = document.getElementById('askButton');
+
+    if (!isPlaying) {
+        isPlaying = true;
+        automaticPlayButton.textContent = "Stop";
+
+        nextButton.style.display = 'none';
+        checkButton.style.display = 'none';
+        askButton.style.display = 'none';
+
+        function playCycle() {
+            if (isPlaying) {
+                createQuestion();
+                setTimeout(() => {
+                    document.getElementById('checkButton').click();
+                    setTimeout(() => {
+                        playCycle();
+                    }, 4000);
+                }, 4000);
+            }
+        }
+
+        playCycle();
+    } else {
+        isPlaying = false;
+        automaticPlayButton.textContent = "Automatic Play";
+        nextButton.style.display = 'inline-block';
+        checkButton.style.display = 'inline-block';
+        askButton.style.display = 'inline-block';
+    }
+}
+
+function filterOutNumbers(transcript) {
+    return transcript.replace(/\d+/g, ''); 
+}
+
+function highlightText(transcript, translation) {
+    const transcriptWords = transcript.toUpperCase().split(' ');
+    const translationWords = translation.toUpperCase().split(' ');
+
+    const highlightedText = transcriptWords.map((word, index) => {
+        if (translationWords[index] && word.toUpperCase() === translationWords[index].toUpperCase()) {
+            return '<span style="color: green;">' + word + '</span>';
+        } else {
+            return '<span style="color: red;">' + word + '</span>';
+        }
+    }).join(' ');
+
+    document.getElementById('recognized-phrase').innerHTML = highlightedText;
+}
+
+function clearRecognizedPhrase() {
+    document.getElementById('recognized-phrase').innerHTML = '';
+}
+
+document.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', clearRecognizedPhrase);
+});
+
+function showExpectedPhrase() {
+    const expectedPhrase = document.getElementById('expected-phrase').textContent.trim();
+    document.getElementById('expected-phrase').style.display = 'block';
+    setTimeout(() => {
+        document.getElementById('expected-phrase').style.display = 'none';
+    }, 4000);
+}
+
+document.getElementById('askButton').addEventListener('click', function() {
+    recognition.start();
+    this.innerHTML = '<i class="fas fa-microphone microphone-icon"></i>';
+    this.classList.add('recording');
+});
+
+recognition.onresult = function(event) {
+    const transcript = filterOutNumbers(event.results[0][0].transcript.toLowerCase());
+    const interimTranscript = event.results[0][0].transcript;
+    const answer = document.getElementById('answer');
+    const recognizedPhraseElem = document.getElementById('recognized-phrase');
+
+    recognizedPhraseElem.textContent = transcript;
+    recognizedPhraseElem.style.display = 'block';
+
+    if (transcript === currentQuestion.expectedTranslation.toLowerCase()) {
+        answer.textContent = "Correct!";
+        answer.style.color = "lime";
+        answer.style.fontWeight = "bold";
+        answer.style.backgroundColor = "darkgreen";
+    } else {
+        answer.textContent = "Incorrect, try again.";
+        answer.style.color = "red";
+        answer.style.fontWeight = "bold";
+        answer.style.backgroundColor = "darkred";
+    }
+
+    highlightText(interimTranscript, currentQuestion.expectedTranslation);
+    document.getElementById('interim-text').textContent = interimTranscript;
+};
+
+recognition.onend = function() {
+    document.getElementById('askButton').classList.remove('recording');
+};
+
+document.getElementById('nextButton').addEventListener('click', createQuestion);
+document.getElementById('checkButton').addEventListener('click', function() {
+    showExpectedPhrase();
+    playExpectedPhraseAudio();
+});
+document.getElementById('automaticPlayButton').addEventListener('click', handleAutomaticPlay);
+document.getElementById('speedIncreaseButton').addEventListener('click', increaseSpeed);
+document.getElementById('speedDecreaseButton').addEventListener('click', decreaseSpeed);
+
+function loadInnerActivity(url) {
+    window.location.href = url;
+}
+
+</script>
+
+
+
+
+
+</body>
+</html>
     resize none;
 }
 #interim-text.show {
@@ -540,3 +1006,4 @@ script
 
 body
 html
+
